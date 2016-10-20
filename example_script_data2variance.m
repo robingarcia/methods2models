@@ -1,7 +1,16 @@
 
+%% Load data
 
+datafolder	= '../Data/';
+datafile	= 'data.mat';
+
+load(fullfile(datafolder,datafile))
+
+% load options for ERA and wanderlust
+load_options
 
 %% Find a path through the population 
+% wanderlust options
 start = [-3,-1.2];
 startballsize = [0.02,0.02];
 wanderlust_weights = [1,1];
