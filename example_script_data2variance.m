@@ -1,11 +1,11 @@
 
 %% Load data
 
-datafolder	= '../Data/';
+datafolder	= './';
 datafile	= 'data.mat';
 
 load(fullfile(datafolder,datafile))
-
+data = newdata;
 % load options for ERA and wanderlust
 load_options
 
