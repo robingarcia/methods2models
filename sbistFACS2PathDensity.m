@@ -5,7 +5,7 @@ function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts)
 % bla
 %
 %% Inputs
-% data				- dxN matrix with of the d-dimensional flow dataset with Events
+% data				- nxd matrix with of the d-dimensional flow dataset with Events
 % path_coordinates	- dxp matrix of p points on the path_curve or G struct from wanderlust
 % opts				- options
 %
@@ -19,7 +19,7 @@ function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts)
 fs = 12; % Font size
 % gaussbandwidth = [0.000653,0.0049];
 % data_DAPI_Gemini  = data(opts.PathIndex,:);
-[d,N]	= size(data);
+[n,d]	= size(data);
 
 % Do Plots  (default = 1)
 if isfield(opts,'doplots')
@@ -32,7 +32,7 @@ end
 if isfield(opts,'yIndex')
 	yID = opts.yIndex;
 else
-	yID = 1:size(data,1);
+	yID = 1:size(data,2);
 end
 
 % Do Y IDs  (default = all)
@@ -50,7 +50,7 @@ else
 	bws = zeros(d,d);
 	for i=1:d
 		for j=1:d
-			bandwidth = kde2d([data(i,:);data(j,:)]');   % Nx2
+			bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2
 			bws(i,j) = bandwidth(1);
 		end
 	end
@@ -98,10 +98,10 @@ else
 % new method to get the pdf with probability density of each datapoint on s
 % function handle for each gaussian (taken from p_dimensional_Gaussian2)
 
-mu = data(opts.PathIndex,:);
-Sigma = diag(gaussbandwidth(opts.PathIndex).*path_weights).^2;
+mu = data(:,opts.PathIndex);
+Sigma = diag(gaussbandwidth(opts.PathIndex).*path_weights').^2;
 % [fh,jh,hh,fk,jk,hiik] = p_dimensional_Gaussian2(mu,Sigma,0);
-fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x-mu(:,n))' * (Sigma\(x-mu(:,n))) ),1:N);
+fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x-mu(n,:)')' * (Sigma\(x-mu(n,:)')) ),1:n);
 
 % function to get x coordinates dependent on s for the evaluation of gaussion on s
 % remove doublicates in the path coordinates
@@ -134,7 +134,7 @@ end
 weights = trapz(Sout,testmat);
 testmatnormed = testmat * diag(1./weights);
 
-s_single_cell = mat2cell(testmatnormed,length(Sout),ones(N,1));
+s_single_cell = mat2cell(testmatnormed,length(Sout),ones(n,1));
 
 fh_spdf_single = @(s) interp1(Sout,testmatnormed,s,'linear',eps);
 
@@ -190,7 +190,7 @@ PathDensity.f_scdf_inv		= fh_scdf_inv;
 PathDensity.f_sdpdf			= fh_sdpdf;
 PathDensity.bandwidth		= gaussbandwidth;
 
-PathDensity.N			= N;
+PathDensity.N			= n;
 
 PathDensity.s_single_cell_Expectation	= s_single_cell_Expectation;
 PathDensity.s_single_cell_Variance	= s_single_cell_Variance;

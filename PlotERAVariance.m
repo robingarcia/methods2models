@@ -7,7 +7,7 @@ if opts.doplots
 rect = [20 20 800 600];
 fh(1) = figure('Color','w','Position',rect);
 subplot(1,2,1)
-scatter(data(opts.PathIndex(1),:),data(opts.PathIndex(2),:),8,ERA.a_single_cell_Variance)
+scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.a_single_cell_Variance)
 colormap('copper')
 set(gca,'CLim',[0,prctile(ERA.a_single_cell_Variance,95)*1.2])
 shading interp
@@ -26,7 +26,7 @@ suptitle('Variance in age of single cells')
 rect = [20 20 800 600];
 fh(2) = figure('Color','w','Position',rect);
 subplot(1,2,1)
-scatter(data(opts.PathIndex(1),:),data(opts.PathIndex(2),:),8,ERA.s_single_cell_Variance)
+scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.s_single_cell_Variance)
 colormap('copper')
 set(gca,'CLim',[0,prctile(ERA.s_single_cell_Variance,95)*1.2])
 shading interp

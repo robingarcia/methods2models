@@ -9,7 +9,7 @@ function G = PathfromWanderlust(wdata,opts)
 % 
 %% INPUT
 %
-% wdata		- dxn data matrix of n single cells and d dimensional readout
+% wdata		- nxd data matrix of n single cells and d dimensional readout
 % opts		- options struct for wanderlust
 %
 %% Output
@@ -29,7 +29,7 @@ if ~isfield(params,'wanderlust_weights')
 end
 
 % prepare data for wanderlust  (nxd)
-o_data	= wdata(opts.PathIndex,:)';
+o_data	= wdata(:,opts.PathIndex);
 data	= o_data;
 
 % set start point
