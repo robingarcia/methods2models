@@ -1,7 +1,8 @@
 ********** MODEL NAME
-Modell von Toettcher et. al 2008
+Toettcher Model
 
 ********** MODEL NOTES
+Toettcher cell cycle model, described in PNAS (2008) Vol. 106, No. 3, 785-790
 This is an implementation of the cell cycle model from Toettcher et. al. 2008
 
 ********** MODEL STATES
