@@ -182,11 +182,22 @@ ksTFI     =0.018644672
 ksd       =0.008385074
 kdd       =0.142773874
 
+
 ********** MODEL VARIABLES
+M
+p534np
+chk2p
+Dko
+Eko
+CHX
+p53_basal
+arrest_I
+arrest_II
+arrest_III
 
 
 ********** MODEL REACTIONS
-CHX = 1-CHX
+CHX=1-CHX
 Cdc14 = Cdc20A
 Vsd = CHX*ksd*M*(1-Dko)
 Vdd = kdd
