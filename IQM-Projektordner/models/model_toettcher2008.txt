@@ -6,80 +6,70 @@ Toettcher cell cycle model, described in PNAS (2008) Vol. 106, No. 3, 785-790
 This is an implementation of the cell cycle model from Toettcher et. al. 2008
 
 ********** MODEL STATES
-d/dt(A) = Vsd-Vdd*CycD+p21D+Vd21*TriD21
-d/dt(B) = Vsa-Vda*CycA-kassa*CKI*CycA+kdissa*TriA+Vdi*TriA+p21A+Vd21*TriA21
-d/dt(C) = Vsb-Vdb*CycB+V25*pB-Vwee*CycB-kassb*CycB*CKI+kdissb*BCKI+Vdi*BCKI+p21B+Vd21*TriB21
-d/dt(D) = -Vdb*pB-V25*pB+Vwee*CycB-kassb*pB*CKI+kdissb*pBCKI+Vdi*pBCKI
-d/dt(E) = Vse-Vde*CycE-kasse*CKI*CycE+kdisse*TriE+Vdi*TriE+p21E+Vd21*TriE21
-
-d/dt(F) = VsAPC-VdAPC*APC-kaie*CycB*APC/(Jaie+APC)+kiie*APCP/(Jiie+APCP)
-d/dt(G)= -VdAPC*APCP+kaie*CycB*APC/(Jaie+APC)-kiie*APCP/(Jiie+APCP)
-d/dt(H) = Vsi-Vdi*CKI-kassb*CycB*CKI+kdissb*BCKI-kassb*pB*CKI+kdissb*pBCKI-kassa*CKI*CycA+kdissa*TriA-kasse*CKI*CycE+kdisse*TriE+Vdb*BCKI+Vdb*pBCKI+Vda*TriA+Vde*TriE
-d/dt(I) = -Vdi*BCKI-Vdb*BCKI+kassb*CycB*CKI-kdissb*BCKI+V25*pBCKI-Vwee*BCKI
-d/dt(J) = -Vdi*pBCKI-Vdb*pBCKI+kassb*pB*CKI-kdissb*pBCKI-V25*pBCKI+Vwee*BCKI
-
-d/dt(K) = Vs20-Vd20*Cdc20i-ka20*APCP*Cdc20i/(Ja20+Cdc20i)+ki20*Cdc20A/(Ji20+Cdc20A)
-d/dt(L) = -Vd20*Cdc20A+ka20*APCP*Cdc20i/(Ja20+Cdc20i)-ki20*Cdc20A/(Ji20+Cdc20A)
-d/dt(M) = Vsh1-Vdh1*Cdh1+Vah1*Cdh1i/(Jah1+Cdh1i)-Vih1*Cdh1/(Jih1+Cdh1)
-d/dt(N) = -Vdh1*Cdh1i-Vah1*Cdh1i/(Jah1+Cdh1i)+Vih1*Cdh1/(Jih1+Cdh1)
-d/dt(O) = -Vdi*TriA+kassa*CKI*CycA-kdissa*TriA-Vda*TriA
-
-d/dt(P) = -Vde*TriE+kasse*CKI*CycE-kdisse*TriE-Vdi*TriE
-d/dt(Q) = Vswee-Vdwee*Wee1+(kawee_p+kawee_pp*Cdc14)*Wee1i/(Jawee+Wee1i)-(kiwee_p+kiwee_pp*CycB)*Wee1/(Jiwee+Wee1)
-d/dt(R) = -Vdwee*Wee1i-(kawee_p+kawee_pp*Cdc14)*Wee1i/(Jawee+Wee1i)+(kiwee_p+kiwee_pp*CycB)*Wee1/(Jiwee+Wee1)
-d/dt(S) = Vs25T-Vd25T*Cdc25+Va25*Cdc25i/(Ja25+Cdc25i)-Vi25*Cdc25/(Ji25+Cdc25)
-d/dt(T) = -Vd25T*Cdc25i-Va25*Cdc25i/(Ja25+Cdc25i)+Vi25*Cdc25/(Ji25+Cdc25)
-
-d/dt(U) = -VdTFB*TFB+(kafb*CycB)*TFBi/(Jafb+TFBi)-kifb*TFB/(Jifb+TFB)
-d/dt(V) = VsTFB-VdTFB*TFBi-(kafb*CycB)*TFBi/(Jafb+TFBi)+kifb*TFB/(Jifb+TFB)
-d/dt(W) = VsTFE-VdTFE*TFE+Vatf*TFEi/(Jatf+TFEi)-Vitf*TFE/(Jitf+TFE)
-d/dt(X) = -VdTFE*TFEi-Vatf*TFEi/(Jatf+TFEi)+Vitf*TFE/(Jitf+TFE)
-d/dt(Y) = -VdTFI*TFI+kafi*Cdc14*TFIi/(Jafi+TFIi)-(kifi_p+kifib_pp*CycB)*TFI/(Jifi+TFI)
-
-d/dt(Z) = VsTFI-VdTFI*TFIi-kafi*Cdc14*TFIi/(Jafi+TFIi)+(kifi_p+kifib_pp*CycB)*TFI/(Jifi+TFI)
-d/dt(A1) = Vs21-Vd21*p21+p21D+Vdd*TriD21+p21A+Vda*TriA21+p21B+Vdb*TriB21+p21E+Vde*TriE21
-d/dt(B1) = -Vd21*TriD21-p21D-Vdd*TriD21
-d/dt(C1) = -Vd21*TriA21-p21A-Vda*TriA21
-d/dt(D1) = -Vd21*TriB21-p21B-Vdb*TriB21
-
-d/dt(E1) = -Vd21*TriE21-p21E-Vde*TriE21
+d/dt(CycD) = Vsd-Vdd*CycD+p21D+Vd21*TriD21
+d/dt(CycA) = Vsa-Vda*CycA-kassa*CKI*CycA+kdissa*TriA+Vdi*TriA+p21A+Vd21*TriA21
+d/dt(CycB) = Vsb-Vdb*CycB+V25*pB-Vwee*CycB-kassb*CycB*CKI+kdissb*BCKI+Vdi*BCKI+p21B+Vd21*TriB21
+d/dt(pB) = -Vdb*pB-V25*pB+Vwee*CycB-kassb*pB*CKI+kdissb*pBCKI+Vdi*pBCKI
+d/dt(CycE) = Vse-Vde*CycE-kasse*CKI*CycE+kdisse*TriE+Vdi*TriE+p21E+Vd21*TriE21
+d/dt(APC) = VsAPC-VdAPC*APC-kaie*CycB*APC/(Jaie+APC)+kiie*APCP/(Jiie+APCP)
+d/dt(APCP)= -VdAPC*APCP+kaie*CycB*APC/(Jaie+APC)-kiie*APCP/(Jiie+APCP)
+d/dt(CKI) = Vsi-Vdi*CKI-kassb*CycB*CKI+kdissb*BCKI-kassb*pB*CKI+kdissb*pBCKI-kassa*CKI*CycA+kdissa*TriA-kasse*CKI*CycE+kdisse*TriE+Vdb*BCKI+Vdb*pBCKI+Vda*TriA+Vde*TriE
+d/dt(BCKI) = -Vdi*BCKI-Vdb*BCKI+kassb*CycB*CKI-kdissb*BCKI+V25*pBCKI-Vwee*BCKI
+d/dt(pBCKI) = -Vdi*pBCKI-Vdb*pBCKI+kassb*pB*CKI-kdissb*pBCKI-V25*pBCKI+Vwee*BCKI
+d/dt(Cdc20i) = Vs20-Vd20*Cdc20i-ka20*APCP*Cdc20i/(Ja20+Cdc20i)+ki20*Cdc20A/(Ji20+Cdc20A)
+d/dt(Cdc20A) = -Vd20*Cdc20A+ka20*APCP*Cdc20i/(Ja20+Cdc20i)-ki20*Cdc20A/(Ji20+Cdc20A)
+d/dt(Cdh1) = Vsh1-Vdh1*Cdh1+Vah1*Cdh1i/(Jah1+Cdh1i)-Vih1*Cdh1/(Jih1+Cdh1)
+d/dt(Cdh1i) = -Vdh1*Cdh1i-Vah1*Cdh1i/(Jah1+Cdh1i)+Vih1*Cdh1/(Jih1+Cdh1)
+d/dt(TriA) = -Vdi*TriA+kassa*CKI*CycA-kdissa*TriA-Vda*TriA
+d/dt(TriE) = -Vde*TriE+kasse*CKI*CycE-kdisse*TriE-Vdi*TriE
+d/dt(Wee1) = Vswee-Vdwee*Wee1+(kawee_p+kawee_pp*Cdc14)*Wee1i/(Jawee+Wee1i)-(kiwee_p+kiwee_pp*CycB)*Wee1/(Jiwee+Wee1)
+d/dt(Wee1i) = -Vdwee*Wee1i-(kawee_p+kawee_pp*Cdc14)*Wee1i/(Jawee+Wee1i)+(kiwee_p+kiwee_pp*CycB)*Wee1/(Jiwee+Wee1)
+d/dt(Cdc25) = Vs25T-Vd25T*Cdc25+Va25*Cdc25i/(Ja25+Cdc25i)-Vi25*Cdc25/(Ji25+Cdc25)
+d/dt(Cdc25i) = -Vd25T*Cdc25i-Va25*Cdc25i/(Ja25+Cdc25i)+Vi25*Cdc25/(Ji25+Cdc25)
+d/dt(TFB) = -VdTFB*TFB+(kafb*CycB)*TFBi/(Jafb+TFBi)-kifb*TFB/(Jifb+TFB)
+d/dt(TFBi) = VsTFB-VdTFB*TFBi-(kafb*CycB)*TFBi/(Jafb+TFBi)+kifb*TFB/(Jifb+TFB)
+d/dt(TFE) = VsTFE-VdTFE*TFE+Vatf*TFEi/(Jatf+TFEi)-Vitf*TFE/(Jitf+TFE)
+d/dt(TFEi) = -VdTFE*TFEi-Vatf*TFEi/(Jatf+TFEi)+Vitf*TFE/(Jitf+TFE)
+d/dt(TFI) = -VdTFI*TFI+kafi*Cdc14*TFIi/(Jafi+TFIi)-(kifi_p+kifib_pp*CycB)*TFI/(Jifi+TFI)
+d/dt(TFIi) = VsTFI-VdTFI*TFIi-kafi*Cdc14*TFIi/(Jafi+TFIi)+(kifi_p+kifib_pp*CycB)*TFI/(Jifi+TFI)
+d/dt(p21) = Vs21-Vd21*p21+p21D+Vdd*TriD21+p21A+Vda*TriA21+p21B+Vdb*TriB21+p21E+Vde*TriE21
+d/dt(TriD21) = -Vd21*TriD21-p21D-Vdd*TriD21
+d/dt(TriA21) = -Vd21*TriA21-p21A-Vda*TriA21
+d/dt(TriB21) = -Vd21*TriB21-p21B-Vdb*TriB21
+d/dt(TriE21) = -Vd21*TriE21-p21E-Vde*TriE21
 
 
-A(0) = 0.10571352107562
-B(0) = 0.38312623418874
-C(0) =0.48276208546527
-D(0) =0.12059080828035
-E(0) =0.05298624194329
-F(0) =0.27622795992648
-G(0) =0.72377204007352
-H(0) =0.10800000246523
-I(0) =0
-J(0) =0
-
-K(0) =0.82314432446375
-L(0) =0.23039787827759
-M(0) =0.86550355241630
-N(0) =0.13449644758370
-O(0) =0.12853421194054
-
-P(0) =0.03171918381790
-Q(0) =0.00364798277897
-R(0) =0.99635201722103
-S(0) =0.29154163033354
-T(0) =0.84525873847663
-
-U(0) =0.69366395362820
-V(0) =0.30633604637180
-W(0) =0.48022736534955
-X(0) =0.51977263465045
-Y(0) =0.13102942915972
-
-Z(0) =0.86897057084029
-A1(0) =0.00000000000105
-B1(0) =0.00000000000486
-C1(0) =0
-D1(0) =0
-E1(0) = 0.00000000000112
+A(CycD) = 0.10571352107562
+B(CycA) = 0.38312623418874
+C(CycB) =0.48276208546527
+D(pB) =0.12059080828035
+E(CycE) =0.05298624194329
+F(APC) =0.27622795992648
+G(APCP) =0.72377204007352
+H(CKI) =0.10800000246523
+I(BCKI) =0
+J(pBCKI) =0
+K(Cdc20i) =0.82314432446375
+L(Cdc20A) =0.23039787827759
+M(Cdh1) =0.86550355241630
+N(Cdh1i) =0.13449644758370
+O(TriA) =0.12853421194054
+P(TriE) =0.03171918381790
+Q(Wee1) =0.00364798277897
+R(Wee1i) =0.99635201722103
+S(Cdc25) =0.29154163033354
+T(Cdc25i) =0.84525873847663
+U(TFB) =0.69366395362820
+V(TFBi) =0.30633604637180
+W(TFE) =0.48022736534955
+X(TFEi) =0.51977263465045
+Y(TFI) =0.13102942915972
+Z(TFIi) =0.86897057084029
+A1(p21) =0.00000000000105
+B1(TriD21) =0.00000000000486
+C1(TriA21) =0
+D1(TriB21) =0
+E1(TriE21) = 0.00000000000112
 
 
 

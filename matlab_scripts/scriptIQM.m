@@ -3,9 +3,9 @@
 %
 % Required previous scripts to be run:
 %
-% Author:
+% Author: Robin Garcia Victoria
 %
-% Date:
+% Date: 08.11.2016
 %
 
 %% Installation of IQM Tools
