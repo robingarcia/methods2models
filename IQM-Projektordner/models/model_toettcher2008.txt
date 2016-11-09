@@ -186,11 +186,21 @@ t_r       =50
 
 
 ********** MODEL VARIABLES
+M = 1.8
+p534np = t_d+4
+chk2p = t_d
+Dko = 0
+Eko = 0
+CHX = 0
+p53_basal = 0.75
+arrest_I = 1
+arrest_II = 1
+arrest_III = 1
 
 
 
 ********** MODEL REACTIONS
-CHX=1-CHX
+CHX = 1-CHX
 Cdc14 = Cdc20A
 Vsd = CHX*ksd*M*(1-Dko)
 Vdd = kdd
@@ -234,16 +244,7 @@ p21B = 0
 p21E = -kass21e*p21*CycE+kdiss21e*TriE21
 
 ********** MODEL FUNCTIONS
-M = 1.8
-p534np = t>t_d+4
-chk2p = t>t_d & t < t_r
-Dko = 0
-Eko = 0
-CHX = 0
-p53_basal = 0.75
-arrest_I = 1
-arrest_II = 1
-arrest_III = 1
+
 
 ********** MODEL EVENTS
 
