@@ -3,7 +3,7 @@ model2008 = IQMmodel('model_toettcher2008.txt')
 % simulate
 tspan = [0,120];
 
-sim_out = IQMsimulate(model2008,tspan);at
+sim_out = IQMsimulate(model2008,tspan);
 
 % states to plot
 statenames = {'CycET','Cdc20A','CycA'};
