@@ -251,10 +251,19 @@ Cdc20ATotal = transpose(Cdc20ATot);
 disp('      CycA     TriA     TriA21')
 disp(ATotal)
 
+disp('      CycE     TriE     TriE21')
+disp(ETotal)
+
+disp('      Cyc20A')
+disp(Cdc20ATotal)
+
+disp('      CycB       pB       BCKI     pBCKI     TriB21')
+disp(BTotal)
 
 
 
-function dxdt = final_model_eqns(t, x, p, u)
+
+function [dxdt] = final_model_eqns(t, x, p, u)
 
 % Inputs (as described in Supplementary Table 1)
 % 1     -   mitogen levels
@@ -360,7 +369,7 @@ dxdt = [
         -Vd21*TriE21-p21E-Vde*TriE21;
 	   ];
 
-function Jx = final_model_jacobian(t, x, p, u)
+function [Jx] = final_model_jacobian(t, x, p, u)
 
 % Inputs (as described in Supplementary Table 1)
 % 1     -   mitogen levels
@@ -422,7 +431,7 @@ Jx =   [
             0,-kdea_pp*TriE21,-kdeb_pp*TriE21,0,kass21e*p21-kdee_pp*TriE21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,kass21e*CycE,0,0,0,-kd21_p-kdiss21e-kde_p-kdee_pp*CycE-kdea_pp*CycA-kdeb_pp*CycB
         ];
 
-function varargout = deal_args(u, pad)
+function [varargout] = deal_args(u, pad)
 % function [a b c ...] = jdeal(v)
 %
 % A very simple function that deals the elements of a vector 'v' to
