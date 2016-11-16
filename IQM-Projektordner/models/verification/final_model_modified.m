@@ -1,8 +1,9 @@
-function final_model_modified_sim
-%% Final model of the cell cycle
+function [xSol] = final_model_modified
+%% Modified final model of the cell cycle from Toettcher et. al. 2008
 
 % This file simulates the final model that has been optimized to data of
 % p53-/- and wild-type HCT116 cells, along with prior experimental results.
+
 
 
 %% 1 - Set initial conditions and parameters
@@ -199,10 +200,13 @@ u = @(t) [1.8               % M
 % an amount of time tF.
 % *************************************************************************
 
+
 tic
-tF = 120;    % the final timepoint of simulation
-xSol = ode15s(@final_model_eqns, [0 tF], ic, odeset('Jacobian', @final_model_jacobian), p, u)
+tF = 0:120;    % the final timepoint of simulation
+xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
 toc
+
+
 
 
 %% 4 - Plot the resulting trajectory
@@ -225,6 +229,7 @@ plot(xSol.x, c*xSol.y, 'LineWidth', 2);
 set(gca, 'YLim', [0 3])
 legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
 xlabel('time (h)'), ylabel('concentration (AU)')
+title('Zellzyklusmodell in MATLAB implementiert von Toettcher et. al ')
 
 %% 9 Output grabber
 
@@ -236,61 +241,186 @@ xlabel('time (h)'), ylabel('concentration (AU)')
 
 
 
-BTot = xSol.y([3 4 9 10 30],:);
-ATot = xSol.y([2 15 29],:);
-ETot = xSol.y([5 16 31],:);
-Cdc20ATot = xSol.y(12,:);
+BTot = xSol.y([3 4 9 10 30],:); % CycB, pB, BCKI, pBCKI, TriB21
+ATot = xSol.y([2 15 29],:); % CycA,TriA, TriA21 
+ETot = xSol.y([5 16 31],:); % CycE, TriE, TriE21
+outCycD = xSol.y(1,:); % CycD
+outCycA = xSol.y(2,:); % CycA
+outCycB = xSol.y(3,:); % CycB
+outpB = xSol.y(4,:); % pB
+outCycE = xSol.y(5,:); % CycE
+outAPC = xSol.y(6,:); % APC
+outAPCP = xSol.y(7,:); % APCP
+outCKI = xSol.y(8,:); % CKI
+outBCKI = xSol.y(9,:); % BCKI
+outpBCKI = xSol.y(10,:);% pBCKI
+outCdc20i = xSol.y(11,:);% Cdc20i
+outCdc20A = xSol.y(12,:);% Cdc20A
+outCdk1 = xSol.y(13,:);% Cdk1
+outCdk1i = xSol.y(14,:);% Cdk1i
+outTriA = xSol.y(15,:);% TriA
+outTriE = xSol.y(16,:);% TriE
+outWee1 = xSol.y(17,:);% Wee1
+outWee1i = xSol.y(18,:);% Wee1i
+outCdc25 = xSol.y(19,:);% Cdc25
+outCdc25i = xSol.y(20,:);% Cdc25i
+outTFB = xSol.y(21,:);% TFB
+outTFBi = xSol.y(22,:);% TFBi
+outTFE = xSol.y(23,:);% TFE
+outTFEi = xSol.y(24,:);% TFEi
+outTFI = xSol.y(25,:);% TFI
+outTFIi = xSol.y(26,:);% TFIi
+outp21 = xSol.y(27,:);% p21
+outTriD21 = xSol.y(28,:);% TriD21
+outTriA21 = xSol.y(29,:);% TriA21
+outTriB21 = xSol.y(30,:);% TriB21
+outTriE21 = xSol.y(31,:);% TriE21
+
 
 BTotal = transpose(BTot);
 ATotal = transpose(ATot);
 ETotal = transpose(ETot);
-Cdc20ATotal = transpose(Cdc20ATot);
+CycDTotal = transpose(outCycD);
+CycATotal = transpose(outCycA);
+CycBTotal = transpose(outCycB);
+pBTotal = transpose(outpB);
+CycETotal = transpose(outCycE);
+APCTotal = transpose(outAPC);
+APCPTotal = transpose(outAPCP);
+CKITotal = transpose(outCKI);
+BCKITotal = transpose(outBCKI);
+pBCKITotal = transpose(outpBCKI);
+Cdc20iTotal = transpose(outCdc20i);
+Cdc20ATotal = transpose(outCdc20A);
+Cdk1Total = transpose(outCdk1);
+Cdk1iTotal = transpose(outCdk1i);
+TriATotal = transpose(outTriA);
+TriETotal = transpose(outTriE);
+Wee1Total = transpose(outWee1);
+Wee1iTotal = transpose(outWee1i);
+Cdc25Total = transpose(outCdc25);
+Cdc25iTotal = transpose(outCdc25i);
+TFBTotal = transpose(outTFB);
+TFBiTotal = transpose(outTFBi);
+TFETotal = transpose(outTFE);
+TFEiTotal = transpose(outTFEi);
+TFITotal = transpose(outTFI);
+TFIiTotal = transpose(outTFIi);
+p21Total = transpose(outp21);
+TriD21Total = transpose(outTriD21);
+TriA21Total = transpose(outTriA21);
+TriB21Total = transpose(outTriB21);
+TriE21Total = transpose(outTriE21);
 
 
 
-disp('      CycA     TriA     TriA21')
-disp(ATotal)
 
-disp('      CycE     TriE     TriE21')
-disp(ETotal)
+% disp('      CycA     TriA     TriA21');
+%disp(ATotal);
 
-disp('      Cyc20A')
-disp(Cdc20ATotal)
+% disp('      CycE     TriE     TriE21');
+%disp(ETotal);
 
-disp('      CycB       pB       BCKI     pBCKI     TriB21')
-disp(BTotal)
+% disp('      CycB       pB       BCKI     pBCKI     TriB21');
+%disp(BTotal);
+
+% disp('      CycD');
+%disp(CycDTotal);
+% disp('CycA      ');
+%disp(CycATotal);
+% disp('CycB      ');
+%disp(CycBTotal);
+% disp('pB      ');
+%disp(pBTotal);
+% disp('CycE      ');
+%disp(CycETotal);
+% disp('APC      ');
+%disp(APCTotal);
+% disp('APCP      ');
+%disp(APCPTotal);
+% disp('CKI      ');
+%disp(CKITotal);
+% disp('BCKI      ');
+%disp(BCKITotal);
+% disp('pBCKI      ');
+% disp(pBCKITotal);
+% disp('Cdc20i      ');
+% disp(Cdc20iTotal);
+% disp('Cdc20A      ');
+% disp(Cdc20ATotal);
+% disp('Cdk1      ');
+% disp(Cdk1Total);
+% disp('Cdk1i      ');
+% disp(Cdk1iTotal);
+% disp('TriA      ');
+% disp(TriATotal);
+% disp('TriE      ');
+% disp(TriETotal);
+% disp('Wee1      ');
+% disp(Wee1Total);
+% disp('Wee1i      ');
+% disp(Wee1iTotal);
+% disp('Cdc25      ');
+% disp(Cdc25Total);
+% disp('Cdc25i      ');
+% disp(Cdc25iTotal);
+% disp('TFB      ');
+% disp(TFBTotal);
+% disp('TFBi      ');
+% disp(TFBiTotal);
+% disp('TFE      ');
+% disp(TFETotal);
+% disp('TFEi      ');
+% disp(TFEiTotal);
+% disp('TFI      ');
+% disp(TFITotal);
+% disp('TFIi      ');
+% disp(TFIiTotal);
+% disp('p21      ');
+% disp(p21Total);
+% disp('TriD21      ');
+% disp(TriD21Total);
+% disp('TriA21      ');
+% disp(TriA21Total);
+% disp('TriB21      ');
+% disp(TriB21Total);
+% disp('TriE21      ');
+% disp(TriE21Total);
+end
 
 
 
 
-function [dxdt] = final_model_eqns(t, x, p, u)
 
-% Inputs (as described in Supplementary Table 1)
-% 1     -   mitogen levels
-% 2,3   -   DNA damage (modeled by p53 and chk2p activation)
-% 4,5   -   cyclin D and E knockouts
-% 6     -   cycloheximide treatment
-% 7     -   p53 basal activation (0.75 for wild-type cells, 0 for p53-/- cells)
-% 8-10  -   arrest mechanisms I-III
+
+ function [dxdt] = final_model_eqns(t, x, p, u)
+% 
+% % Inputs (as described in Supplementary Table 1)
+% % 1     -   mitogen levels
+% % 2,3   -   DNA damage (modeled by p53 and chk2p activation)
+% % 4,5   -   cyclin D and E knockouts
+% % 6     -   cycloheximide treatment
+% % 7     -   p53 basal activation (0.75 for wild-type cells, 0 for p53-/- cells)
+% % 8-10  -   arrest mechanisms I-III
 
 u = u(t);
-[M p534np chk2p Dko Eko CHX p53_basal arrest_I arrest_II arrest_III] = deal_args(u);
+[M, p534np, chk2p, Dko, Eko, CHX, p53_basal, arrest_I, arrest_II, arrest_III] = deal_args(u);
 
 % All model species. Time derivatives are calculated for species in the order listed here.
-[CycD CycA CycB pB CycE APC APCP CKI BCKI pBCKI Cdc20i Cdc20A Cdh1 Cdh1i TriA TriE Wee1 Wee1i ...
- Cdc25 Cdc25i TFB TFBi TFE TFEi TFI TFIi p21 TriD21 TriA21 TriB21 TriE21] = deal_args(x);
+[CycD, CycA, CycB, pB, CycE, APC, APCP, CKI, BCKI, pBCKI, Cdc20i, Cdc20A, Cdh1, Cdh1i, TriA, TriE, Wee1, Wee1i, ...
+ Cdc25, Cdc25i, TFB, TFBi, TFE, TFEi, TFI, TFIi, p21, TriD21, TriA21, TriB21, TriE21] = deal_args(x);
 
-% All model parameters.
-[kse_p kse_pp kde_p kdea_pp kdeb_pp kdee_pp kasse kdisse katf_p katfa_pp katfd_pp katfe_pp kitf_p ...
- kitfa_pp kitfb_pp Jatf Jitf ksb_p ksb_pp kdb_p kdbh_pp kdbc_pp kassb kdissb kwee_p kwee_pp k25_p ...
- k25_pp kafb kifb Jafb Jifb ksa_p ksa_pp kda_p kda_pp kda_ppp kassa kdissa ksi_p ksi_pp kdi_p kdia_pp ...
- kdib_pp kdid_pp kdie_pp k14di kafi kifi_p kifib_pp Jafi Jifi kaie kiie Jaie Jiie ks20_p ks20_pp n20 J20 ...
- kd20 ka20 ki20 Ja20 Ji20 kah1_p kah1_pp kih1_p kih1a_pp kih1b_pp kih1d_pp kih1e_pp Jah1 Jih1 kawee_p ...
- kawee_pp kiwee_p kiwee_pp Jawee Jiwee ka25_p ka25_pp ki25_p ki25_pp Ja25 Ji25 KEZ ks21_p ks21_pp kd21_p ...
- kass21d kass21e kdiss21d kdiss21e ks25 kd25 Kp53b Kp53a ki25_ppp ksh1 ksAPC ...
- kswee ksTFB ksTFE ksTFI ksd kdd] = deal_args(p);
+% % All model parameters.
+[kse_p, kse_pp, kde_p, kdea_pp, kdeb_pp, kdee_pp, kasse, kdisse, katf_p, katfa_pp, katfd_pp, katfe_pp, kitf_p, ...
+ kitfa_pp, kitfb_pp, Jatf, Jitf, ksb_p, ksb_pp, kdb_p, kdbh_pp, kdbc_pp, kassb, kdissb, kwee_p, kwee_pp, k25_p, ...
+ k25_pp, kafb, kifb, Jafb, Jifb, ksa_p, ksa_pp, kda_p, kda_pp, kda_ppp, kassa, kdissa, ksi_p, ksi_pp, kdi_p, kdia_pp, ...
+ kdib_pp, kdid_pp, kdie_pp, k14di, kafi, kifi_p, kifib_pp, Jafi, Jifi, kaie, kiie, Jaie, Jiie, ks20_p, ks20_pp, n20, J20, ...
+ kd20, ka20, ki20, Ja20, Ji20, kah1_p, kah1_pp, kih1_p, kih1a_pp, kih1b_pp, kih1d_pp, kih1e_pp, Jah1 ,Jih1 ,kawee_p, ...
+ kawee_pp, kiwee_p, kiwee_pp, Jawee, Jiwee, ka25_p, ka25_pp, ki25_p, ki25_pp, Ja25, Ji25, KEZ,ks21_p ,ks21_pp ,kd21_p, ...
+ kass21d, kass21e, kdiss21d, kdiss21e, ks25, kd25, Kp53b, Kp53a, ki25_ppp, ksh1, ksAPC, ...
+ kswee, ksTFB, ksTFE, ksTFI, ksd, kdd] = deal_args(p);
 
-% ********************          ALGEBRAIC EQUATIONS          ********************
+% % ********************          ALGEBRAIC EQUATIONS          ********************
 CHX = 1-CHX;
 Cdc14 = Cdc20A;
 Vsd = CHX*ksd*M*(1-Dko);
@@ -334,7 +464,7 @@ p21A = 0;
 p21B = 0;
 p21E = -kass21e*p21*CycE+kdiss21e*TriE21;
 
-% ********************          DIFFERENTIAL EQUATIONS          ********************
+% % ********************          DIFFERENTIAL EQUATIONS          ********************
 dxdt = [
         Vsd-Vdd*CycD+p21D+Vd21*TriD21;
         Vsa-Vda*CycA-kassa*CKI*CycA+kdissa*TriA+Vdi*TriA+p21A+Vd21*TriA21;
@@ -368,7 +498,7 @@ dxdt = [
         -Vd21*TriB21-p21B-Vdb*TriB21;
         -Vd21*TriE21-p21E-Vde*TriE21;
 	   ];
-
+ end
 function [Jx] = final_model_jacobian(t, x, p, u)
 
 % Inputs (as described in Supplementary Table 1)
@@ -380,21 +510,21 @@ function [Jx] = final_model_jacobian(t, x, p, u)
 % 8-10  -   arrest mechanisms I-III
 
 u = u(t);
-[M p534np chk2p Dko Eko CHX p53_basal arrest_I arrest_II arrest_III] = deal_args(u);
+[M, p534np, chk2p, Dko, Eko, CHX, p53_basal, arrest_I, arrest_II, arrest_III] = deal_args(u);
 
 % All model species. Time derivatives are calculated for species in the order listed here.
-[CycD CycA CycB pB CycE APC APCP CKI BCKI pBCKI Cdc20i Cdc20A Cdh1 Cdh1i TriA TriE Wee1 Wee1i ...
- Cdc25 Cdc25i TFB TFBi TFE TFEi TFI TFIi p21 TriD21 TriA21 TriB21 TriE21] = deal_args(x);
+[CycD, CycA, CycB, pB ,CycE, APC, APCP, CKI, BCKI, pBCKI, Cdc20i, Cdc20A, Cdh1, Cdh1i, TriA, TriE, Wee1, Wee1i, ...
+ Cdc25, Cdc25i, TFB, TFBi, TFE, TFEi, TFI, TFIi, p21, TriD21, TriA21, TriB21, TriE21] = deal_args(x);
 
 % All model parameters.
-[kse_p kse_pp kde_p kdea_pp kdeb_pp kdee_pp kasse kdisse katf_p katfa_pp katfd_pp katfe_pp kitf_p ...
- kitfa_pp kitfb_pp Jatf Jitf ksb_p ksb_pp kdb_p kdbh_pp kdbc_pp kassb kdissb kwee_p kwee_pp k25_p ...
- k25_pp kafb kifb Jafb Jifb ksa_p ksa_pp kda_p kda_pp kda_ppp kassa kdissa ksi_p ksi_pp kdi_p kdia_pp ...
- kdib_pp kdid_pp kdie_pp k14di kafi kifi_p kifib_pp Jafi Jifi kaie kiie Jaie Jiie ks20_p ks20_pp n20 J20 ...
- kd20 ka20 ki20 Ja20 Ji20 kah1_p kah1_pp kih1_p kih1a_pp kih1b_pp kih1d_pp kih1e_pp Jah1 Jih1 kawee_p ...
- kawee_pp kiwee_p kiwee_pp Jawee Jiwee ka25_p ka25_pp ki25_p ki25_pp Ja25 Ji25 KEZ ks21_p ks21_pp kd21_p ...
- kass21d kass21e kdiss21d kdiss21e ks25 kd25 Kp53b Kp53a ki25_ppp ksh1 ksAPC ...
- kswee ksTFB ksTFE ksTFI ksd kdd] = deal_args(p);
+[kse_p, kse_pp, kde_p, kdea_pp, kdeb_pp, kdee_pp, kasse, kdisse, katf_p, katfa_pp, katfd_pp, katfe_pp, kitf_p, ...
+ kitfa_pp, kitfb_pp, Jatf, Jitf , ~, ksb_pp, kdb_p, kdbh_pp, kdbc_pp, kassb, kdissb, kwee_p, kwee_pp, k25_p, ...
+ k25_pp, kafb, kifb, Jafb, Jifb , ~, ksa_pp, kda_p, kda_pp, kda_ppp, kassa, kdissa, ksi_p, ksi_pp, kdi_p, kdia_pp, ...
+ kdib_pp, kdid_pp, kdie_pp, k14di, kafi, kifi_p, kifib_pp, Jafi, Jifi, kaie, kiie, Jaie, Jiie, ks20_p, ks20_pp, n20, J20, ...
+ kd20, ka20, ki20, Ja20, Ji20, kah1_p, kah1_pp, kih1_p, kih1a_pp, kih1b_pp, kih1d_pp, kih1e_pp, Jah1, Jih1, kawee_p, ...
+ kawee_pp, kiwee_p, kiwee_pp, Jawee, Jiwee, ka25_p, ka25_pp, ki25_p, ki25_pp, Ja25, Ji25, KEZ, ks21_p, ks21_pp, kd21_p, ...
+ kass21d, kass21e, kdiss21d, kdiss21e ks25, kd25, Kp53b, Kp53a, ki25_ppp, ksh1, ksAPC, ...
+ kswee, ksTFB, ksTFE, ksTFI ksd, kdd] = deal_args(p);
 
 % the Jacobian of the cell cycle model
 Jx =   [
@@ -430,7 +560,7 @@ Jx =   [
             0,0,0,0,0,0,0,0,0,0,0,-kdbc_pp*TriB21,-kdbh_pp*TriB21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-kd21_p-kdb_p-kdbh_pp*Cdh1-kdbc_pp*Cdc20A,0
             0,-kdea_pp*TriE21,-kdeb_pp*TriE21,0,kass21e*p21-kdee_pp*TriE21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,kass21e*CycE,0,0,0,-kd21_p-kdiss21e-kde_p-kdee_pp*CycE-kdea_pp*CycA-kdeb_pp*CycB
         ];
-
+end
 function [varargout] = deal_args(u, pad)
 % function [a b c ...] = jdeal(v)
 %
@@ -459,3 +589,8 @@ if pad
 
 
 end
+end
+
+
+
+
