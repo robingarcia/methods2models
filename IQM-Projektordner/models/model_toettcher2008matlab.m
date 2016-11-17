@@ -1,4 +1,4 @@
-function [xSol] = final_model_modified
+function [xSol] = model_toettcher2008matlab
 %% Modified final model of the cell cycle from Toettcher et. al. 2008
 
 % This file simulates the final model that has been optimized to data of
@@ -183,8 +183,8 @@ t_d = 10;
 t_r = 50;
 
 u = @(t) [1.8               % M
-          t>t_d+4           % p534np (phosphorylated p53 tetramers)
-          t>t_d & t < t_r   % Chk2p  (phosphorylated Chk2)
+          0                 % p534np (phosphorylated p53 tetramers)
+          0                 % Chk2p  (phosphorylated Chk2)
           0                 % Dko
           0                 % Eko
           0                 % CHX
@@ -219,7 +219,7 @@ toc
 
 % c - a matrix defining some outputs for plotting
 c = zeros(4, 31);
-c(1,[3 4 9 10 30]) = 1; % CycBT
+c(1,[3 4 9 10 30]) = 1;    % CycBT
 c(2,[2 15 29]) = 1;        % CycAT
 c(3,[5 16 31]) = 1;        % CycET
 c(4,12) = 1;               % Cdc20A
@@ -229,163 +229,9 @@ plot(xSol.x, c*xSol.y, 'LineWidth', 2);
 set(gca, 'YLim', [0 3])
 legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
 xlabel('time (h)'), ylabel('concentration (AU)')
-title('Zellzyklusmodell in MATLAB implementiert von Toettcher et. al ')
-
-%% 9 Output grabber
-
-%********************************************************************
-% This part grabs the outputs of the simulation for verification
-%
-%********************************************************************
+title('MATLAB cell cycle model')
 
 
-
-
-BTot = xSol.y([3 4 9 10 30],:); % CycB, pB, BCKI, pBCKI, TriB21
-ATot = xSol.y([2 15 29],:); % CycA,TriA, TriA21 
-ETot = xSol.y([5 16 31],:); % CycE, TriE, TriE21
-outCycD = xSol.y(1,:); % CycD
-outCycA = xSol.y(2,:); % CycA
-outCycB = xSol.y(3,:); % CycB
-outpB = xSol.y(4,:); % pB
-outCycE = xSol.y(5,:); % CycE
-outAPC = xSol.y(6,:); % APC
-outAPCP = xSol.y(7,:); % APCP
-outCKI = xSol.y(8,:); % CKI
-outBCKI = xSol.y(9,:); % BCKI
-outpBCKI = xSol.y(10,:);% pBCKI
-outCdc20i = xSol.y(11,:);% Cdc20i
-outCdc20A = xSol.y(12,:);% Cdc20A
-outCdk1 = xSol.y(13,:);% Cdk1
-outCdk1i = xSol.y(14,:);% Cdk1i
-outTriA = xSol.y(15,:);% TriA
-outTriE = xSol.y(16,:);% TriE
-outWee1 = xSol.y(17,:);% Wee1
-outWee1i = xSol.y(18,:);% Wee1i
-outCdc25 = xSol.y(19,:);% Cdc25
-outCdc25i = xSol.y(20,:);% Cdc25i
-outTFB = xSol.y(21,:);% TFB
-outTFBi = xSol.y(22,:);% TFBi
-outTFE = xSol.y(23,:);% TFE
-outTFEi = xSol.y(24,:);% TFEi
-outTFI = xSol.y(25,:);% TFI
-outTFIi = xSol.y(26,:);% TFIi
-outp21 = xSol.y(27,:);% p21
-outTriD21 = xSol.y(28,:);% TriD21
-outTriA21 = xSol.y(29,:);% TriA21
-outTriB21 = xSol.y(30,:);% TriB21
-outTriE21 = xSol.y(31,:);% TriE21
-
-
-BTotal = transpose(BTot);
-ATotal = transpose(ATot);
-ETotal = transpose(ETot);
-CycDTotal = transpose(outCycD);
-CycATotal = transpose(outCycA);
-CycBTotal = transpose(outCycB);
-pBTotal = transpose(outpB);
-CycETotal = transpose(outCycE);
-APCTotal = transpose(outAPC);
-APCPTotal = transpose(outAPCP);
-CKITotal = transpose(outCKI);
-BCKITotal = transpose(outBCKI);
-pBCKITotal = transpose(outpBCKI);
-Cdc20iTotal = transpose(outCdc20i);
-Cdc20ATotal = transpose(outCdc20A);
-Cdk1Total = transpose(outCdk1);
-Cdk1iTotal = transpose(outCdk1i);
-TriATotal = transpose(outTriA);
-TriETotal = transpose(outTriE);
-Wee1Total = transpose(outWee1);
-Wee1iTotal = transpose(outWee1i);
-Cdc25Total = transpose(outCdc25);
-Cdc25iTotal = transpose(outCdc25i);
-TFBTotal = transpose(outTFB);
-TFBiTotal = transpose(outTFBi);
-TFETotal = transpose(outTFE);
-TFEiTotal = transpose(outTFEi);
-TFITotal = transpose(outTFI);
-TFIiTotal = transpose(outTFIi);
-p21Total = transpose(outp21);
-TriD21Total = transpose(outTriD21);
-TriA21Total = transpose(outTriA21);
-TriB21Total = transpose(outTriB21);
-TriE21Total = transpose(outTriE21);
-
-
-
-
-% disp('      CycA     TriA     TriA21');
-%disp(ATotal);
-
-% disp('      CycE     TriE     TriE21');
-%disp(ETotal);
-
-% disp('      CycB       pB       BCKI     pBCKI     TriB21');
-%disp(BTotal);
-
-% disp('      CycD');
-%disp(CycDTotal);
-% disp('CycA      ');
-%disp(CycATotal);
-% disp('CycB      ');
-%disp(CycBTotal);
-% disp('pB      ');
-%disp(pBTotal);
-% disp('CycE      ');
-%disp(CycETotal);
-% disp('APC      ');
-%disp(APCTotal);
-% disp('APCP      ');
-%disp(APCPTotal);
-% disp('CKI      ');
-%disp(CKITotal);
-% disp('BCKI      ');
-%disp(BCKITotal);
-% disp('pBCKI      ');
-% disp(pBCKITotal);
-% disp('Cdc20i      ');
-% disp(Cdc20iTotal);
-% disp('Cdc20A      ');
-% disp(Cdc20ATotal);
-% disp('Cdk1      ');
-% disp(Cdk1Total);
-% disp('Cdk1i      ');
-% disp(Cdk1iTotal);
-% disp('TriA      ');
-% disp(TriATotal);
-% disp('TriE      ');
-% disp(TriETotal);
-% disp('Wee1      ');
-% disp(Wee1Total);
-% disp('Wee1i      ');
-% disp(Wee1iTotal);
-% disp('Cdc25      ');
-% disp(Cdc25Total);
-% disp('Cdc25i      ');
-% disp(Cdc25iTotal);
-% disp('TFB      ');
-% disp(TFBTotal);
-% disp('TFBi      ');
-% disp(TFBiTotal);
-% disp('TFE      ');
-% disp(TFETotal);
-% disp('TFEi      ');
-% disp(TFEiTotal);
-% disp('TFI      ');
-% disp(TFITotal);
-% disp('TFIi      ');
-% disp(TFIiTotal);
-% disp('p21      ');
-% disp(p21Total);
-% disp('TriD21      ');
-% disp(TriD21Total);
-% disp('TriA21      ');
-% disp(TriA21Total);
-% disp('TriB21      ');
-% disp(TriB21Total);
-% disp('TriE21      ');
-% disp(TriE21Total);
 end
 
 
@@ -393,7 +239,7 @@ end
 
 
 
- function [dxdt] = final_model_eqns(t, x, p, u)
+function [dxdt] = final_model_eqns(t, x, p, u)
 % 
 % % Inputs (as described in Supplementary Table 1)
 % % 1     -   mitogen levels

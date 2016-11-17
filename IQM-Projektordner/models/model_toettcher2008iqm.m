@@ -1,12 +1,21 @@
-function [toettcher2008] = model_toettcher2008iqm
+%Simulate IQM-Model
+function [toet2008] = model_toettcher2008iqm
+grab = evalin('base', 'x_T'); %fetch x_T from base workspace and use it within caller workspace
+toettcher2008 = IQMmodel('model_toettcher2008.txt'); %Load the model
+toet2008 = IQMsimulate(toettcher2008, grab); %Simulate the loaded model
 
-% Lade Zeitvektor vom m-Model
-%timev=final_model_modified();
+% b - a matrix defining some outputs for plotting (IQM-Model)
+b = zeros(4, 31);
+b(1,[3 4 9 10 30]) = 1;    % CycBT
+b(2,[2 15 29]) = 1;        % CycAT
+b(3,[5 16 31]) = 1;        % CycET
+b(4,12) = 1;               % Cdc20A
 
-
-% Importiere Zellmodell
-toettcher2008 = IQMmodel('model_toettcher2008.txt');
-
-% Starte Simulation
-toettcher2008 = IQMsimulate(toettcher2008, x_T);
+figure(4)
+plot(transpose(toet2008.time), b*transpose(toet2008.statevalues), 'LineWidth', 2);
+set(gca, 'YLim', [0 3])
+legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
+xlabel('time (h)'), ylabel('concentration (AU)')
+title('IQM cell cycle model')
 end
+

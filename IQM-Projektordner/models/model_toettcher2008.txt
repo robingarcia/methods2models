@@ -187,8 +187,8 @@ t_r       =50
 
 ********** MODEL VARIABLES
 M = 1.8
-p534np = t_d+4
-chk2p = t_d
+p534np = 0
+chk2p = 0
 Dko = 0
 Eko = 0
 CHX = 0
