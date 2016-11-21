@@ -1,7 +1,7 @@
-
+tic
 %% Load data
 
-datafolder	= './';
+datafolder	= '~/methods2models/datasets/example';
 datafile	= 'data.mat';
 
 load(fullfile(datafolder,datafile))
@@ -40,3 +40,4 @@ NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 
 options.doplots = 1;
 PlotERAVariance(data,NewPathDensity,options)
+toc
