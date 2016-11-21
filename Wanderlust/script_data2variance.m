@@ -1,7 +1,7 @@
 tic
 %% Load data
 
-datafolder	= '~/methods2models/datasets/example';
+datafolder	= '~/methods2models/datasets/example'; %Implement GUI for users
 datafile	= 'data.mat';
 
 load(fullfile(datafolder,datafile))

@@ -12,8 +12,8 @@
 
 tic
 % for-Loop
-n = zeros(1,3); % Define a zero matrix --> better performance
-for n = 1:3 % n = number of run
+n = zeros(1,1); % Define a zero matrix --> better performance
+for n = 1:1 % n = number of run
 random_out(n) = random_ic;
 
 % Change the IC randomly
@@ -47,12 +47,21 @@ toc
 
 % Define updated statevalues
 random_statevalues = random_out.statevalues;
-%random_statevalues_T = transpose(random_statevalues);
-newdata = transpose(random_statevalues);
+random_statevalues_T = transpose(random_statevalues);
+%newdata = transpose(random_statevalues);
 %Save statevalues as dataset
-%save ~/methods2models/datasets/random_output.mat random_statevalues_T;
-save ~/methods2models/datasets/example/data.mat newdata;
+save ~/methods2models/datasets/random_output.mat random_statevalues_T;
+%save ~/methods2models/datasets/example/data.mat newdata;
 
-%Plot the dataset
-%qq = plot(newdata(:,1),newdata(:,2))
+
+% Default IC
+%default = random_ic();
+
+%Plot the dataset in all combinations (Statevalue, n outputs)
+for x=1:3
+    for y=1:3
+figure(x)
+scatterplot(x,y) = scatter(random_statevalues_T(x,:),random_statevalues_T(y,:))
+    end
+end
 
