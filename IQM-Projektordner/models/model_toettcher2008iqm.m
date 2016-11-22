@@ -1,8 +1,8 @@
 %Simulate IQM-Model
-function [toet2008] = model_toettcher2008iqm
-grab = evalin('base', 'x_T'); %fetch x_T from base workspace and use it within caller workspace
+function [toet2008] = model_toettcher2008iqm(time_vector)
+%grab = evalin('base', 'x_T'); %fetch x_T from base workspace and use it within caller workspace
 toettcher2008 = IQMmodel('model_toettcher2008.txt'); %Load the model
-toet2008 = IQMsimulate(toettcher2008, grab); %Simulate the loaded model
+toet2008 = IQMsimulate(toettcher2008, time_vector); %Simulate the loaded model
 
 % b - a matrix defining some outputs for plotting (IQM-Model)
 b = zeros(4, 31);
