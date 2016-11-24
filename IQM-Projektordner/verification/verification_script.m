@@ -2,12 +2,12 @@
 % Extraction of the results MATLAB-Model
 
 simTime = 0:200;    % the final timepoint of simulation
-results_m=model_toettcher2008matlab(simTime)
+results_m=model_toettcher2008matlab(simTime);
 y_T = transpose(results_m.y); %y_T = transposed y from results_m (Statevalues) MATLAB-Model
 x_T = transpose(results_m.x); %x_T = transposed x from results_m (Time) MATLAB-Model
 
 % Extraction of the results IQM-Model
-results_iqm = model_toettcher2008iqm(x_T)
+results_iqm = model_toettcher2008iqm(x_T);
 y_iqm = results_iqm.statevalues; % Statevalues IQM-Model
 x_iqm = results_iqm.time;        % Time IQM-Model
 y_iqmt= transpose(results_iqm.statevalues); %Adapt matrix range

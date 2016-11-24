@@ -196,7 +196,7 @@ p53_basal = 0.75
 arrest_I = 1
 arrest_II = 1
 arrest_III = 1
-
+%CHX = 1-CHX
 
 
 ********** MODEL REACTIONS
