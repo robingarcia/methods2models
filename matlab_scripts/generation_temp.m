@@ -1,16 +1,12 @@
 %% Script for data generation with autosave function
 
-%Load IQM-model
+%Simulation w/ updated ICs
+for i = 1:31
+   this_IC = gaussIC{i};
+   simdata{i} = model_toettcher2008mex(t_iqm, this_IC);
+end
 
 
-% Simulate model and generate data with default IC values
-%toettcher2008_sim = IQMsimulate(toettcher2008,120); %simulation time = 120
-
-% Fetch the IC vector
-%IC_default = IQMinitialconditions(toettcher2008); %IC-vector w/ default IC
-
-
-tic
 % for-Loop
 n = zeros(1,1); % Define a zero matrix --> better performance
 for n = 1:1 % n = number of run
@@ -43,7 +39,7 @@ random_out(n) = random_ic;
 %Profile output
 %profile viewer
 end
-toc
+
 
 % Define updated statevalues
 random_statevalues = random_out.statevalues;
@@ -58,10 +54,10 @@ save ~/methods2models/datasets/random_output.mat random_statevalues_T;
 %default = random_ic();
 
 %Plot the dataset in all combinations (Statevalue, n outputs)
-for x=1:3
-    for y=1:3
-figure(x)
-scatterplot(x,y) = scatter(random_statevalues_T(x,:),random_statevalues_T(y,:))
-    end
-end
+%for x=1:3
+%    for y=1:3
+%figure(x)
+%scatterplot(x,y) = scatter(random_statevalues_T(x,:),random_statevalues_T(y,:))
+%    end
+%end
 

@@ -1,5 +1,5 @@
 %% This is an MEX-model implementation of the IQM-model 
-function [results_mex] = model_toettcher2008mex
+function [results_mex] = model_toettcher2008mex(t_iqm,ICdefault)
 % Create MEX-model
 toettcher2008 = IQMmodel('model_toettcher2008.txt'); % Load the model
 IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulation function
@@ -7,7 +7,8 @@ IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulati
 
 % Simulate the models
 tic
-results_mex = model_toettcher2008MEX(0:0.1:120); % Simulation of MEX-model
+results_mex = model_toettcher2008MEX(t_iqm,ICdefault); % Simulation of MEX-model
+%results_mex = model_toettcher2008MEX(t_iqm, ICdefault); % Simulation of MEX-model
 toc
 
 tic
