@@ -1,5 +1,5 @@
 %% Function for random IC
-function [rndmic] = lognrnd_ic
+function [rndmic,t_iqm] = lognrnd_ic
 
 % Load model
 toettcher2008 = IQMmodel('model_toettcher2008.txt');
