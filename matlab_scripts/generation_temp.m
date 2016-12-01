@@ -1,15 +1,15 @@
 %% Script for data generation with autosave function
-
+n =2224;
 %Load the 
-rndmic = lognrnd_ic;
+rndmic = lognrnd_ic(n);
 
 t_iqm = [0:0.1:120];
 
 
 %Simulation w/ updated ICs
-for i = 1:31
+for i = 1:n
    this_IC = rndmic{i};
-   simdata{i} = model_toettcher2008mex(t_iqm, this_IC);
+   simdata{i} = model_toettcher2008MEX(t_iqm, this_IC);
 end
 
 

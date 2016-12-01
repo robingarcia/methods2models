@@ -1,5 +1,5 @@
 %% Function for random IC
-function [rndmic,t_iqm] = lognrnd_ic
+function [rndmic,t_iqm] = lognrnd_ic(n)
 
 % Load model
 toettcher2008 = IQMmodel('model_toettcher2008.txt');
@@ -19,10 +19,10 @@ Pdefault = values;
 
 
 % Change the IC value log normally distributed
-IC_not_zero = ICdefault(ICdefault ~=0); %31-27
+IC_not_zero = (ICdefault ~=0); %31-27
 sigma = 1;
-M = ICdefault;
-V = sigma .* ICdefault;
+M = ICdefault(IC_not_zero);
+V = sigma .* M;
 %MU = zeros(1,31);
 %SIGMA = zeros(1,31);
 MU = log(M.^2 ./ sqrt(V+M.^2));
@@ -31,17 +31,20 @@ SIGMA = sqrt(log(V./M.^2 + 1));
 %SIGMAA = SIGMAA(IC_not_zero);
 %[M,V] = lognstat(MU,SIGMA);
 % Create n gauss distributed ICs
-L = length(ICdefault);
 %gaussIC = zeros(1,31);
-%gaussIC = zeros(1,31);
+% gaussIC = zeros(1,31);
 %IC_not_zero = ICdefault(ICdefault ~=0);
 
-        for i = 1:L %ICdefault = 0; 
+% preallocate rndmic and set initial values
+rndmic = cell(1,n);
+[rndmic{:}] = deal(zeros(size(ICdefault)));
+
+        for i = 1:n %ICdefault = 0; 
             %gaussIC = zeros(1,31)
             %gaussIC = ICdefault
-            IC_not_zero = lognrnd(MU,SIGMA);
+            this_randIC = lognrnd(MU,SIGMA);
             %my_gaussIC{i} = random_ics;
-            rndmic{i} = IC_not_zero;
+            rndmic{i}(IC_not_zero) = this_randIC;
         end
 
 end
