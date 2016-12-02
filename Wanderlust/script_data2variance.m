@@ -4,8 +4,12 @@ tic
 datafolder	= '~/methods2models/datasets/example'; %Implement GUI for users
 datafile	= 'data.mat';
 
+%datafolder	= '~/methods2models/datasets/'; %Implement GUI for users
+%datafile	= '20161202T190402.mat';
+
 load(fullfile(datafolder,datafile))
 data = newdata';
+%data = random_statevalues{3}';
 % load options for ERA and wanderlust
 load_options
 
