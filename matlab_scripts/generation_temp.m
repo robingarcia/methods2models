@@ -1,5 +1,5 @@
 %% Script for data generation with autosave function
-n = 3; %Number of datasets
+n = 10; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -23,7 +23,7 @@ simdata = cell(1,n);
 random_statevalues = cell(1,n);
 for i = 1:n
    this_IC = rndmic{i};
-   simdata{i} = model_toettcher2008mex(t_iqm, this_IC);
+   simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX oder mex? 
    random_statevalues{i} = simdata{1,i}.statevalues;
    
 %Plot all statevalues
