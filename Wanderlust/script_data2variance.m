@@ -1,17 +1,21 @@
 tic
 %% Load data
 
-datafolder	= '~/methods2models/datasets/'; %Implement GUI for users
-datafile	= 'data.mat';
+filename = uigetfile('~/methods2models/datasets');
+datafile = importdata(filename);
+data = datafile';
+%datafolder	= '~/methods2models/datasets/example/'; %Implement GUI for users
+%datafile	= 'data.mat';
 
 %datafolder	= '~/methods2models/datasets/'; %Implement GUI for users
 %datafile	= '20161202T190402.mat';
 
-load(fullfile(datafolder,datafile))
-data = newdata';
+%load(fullfile(datafolder,datafile))
+%load(fullfile(datafile))
+%data = newdata';
 %data = random_statevalues{3}';
 % load options for ERA and wanderlust
-load_options
+load_options % Set an own m-file
 
 %% Find a path through the population 
 % wanderlust options

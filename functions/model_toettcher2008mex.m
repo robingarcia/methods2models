@@ -15,14 +15,14 @@ results_mex = model_toettcher2008MEX(time_vector); % Simulation of MEX-model
 %results_mex = model_toettcher2008MEX(t_iqm, ICdefault); % Simulation of MEX-model
 toc
 
-% b - a matrix defining some outputs for plotting (MEX-Model)
+% m - a matrix defining some outputs for plotting (MEX-Model)
 m = zeros(4, 31);
 m(1,[3 4 9 10 30]) = 1;    % CycBT
 m(2,[2 15 29]) = 1;        % CycAT
 m(3,[5 16 31]) = 1;        % CycET
 m(4,12) = 1;               % Cdc20A
 
-figure(7)
+figure(76)
 plot(transpose(results_mex.time), m*transpose(results_mex.statevalues), 'LineWidth', 2);
 set(gca, 'YLim', [0 3])
 legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
