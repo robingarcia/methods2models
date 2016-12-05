@@ -5,12 +5,11 @@ rndmic = lognrnd_ic(n);
 
 %Check new IC's (Distribution of IC's)
 tic
-n=10;
 rndmic = lognrnd_ic(n);
 H = cell2mat(rndmic(:));
-for i = 1:2
+for i = 1:31
 vector = H(:,i);
-figure(i)
+subplot(16,2,i);
 histfit(vector)
 end
 toc
@@ -24,7 +23,7 @@ simdata = cell(1,n);
 random_statevalues = cell(1,n);
 for i = 1:n
    this_IC = rndmic{i};
-   simdata{i} = model_toettcher2008MEX(t_iqm, this_IC);
+   simdata{i} = model_toettcher2008mex(t_iqm, this_IC);
    random_statevalues{i} = simdata{1,i}.statevalues;
    
 %Plot all statevalues
