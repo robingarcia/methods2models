@@ -9,9 +9,9 @@ for j = 1:31 %31 Komponenten
     %figure(j)
     for i =1:n % n Versch. ICs
     y = datafile{i}(:,j);
-    subplot(10,3,i)
+    subplot(n,n,j)
     plot(t,y);
-    title('j')
+    title('None')
     xlabel('time')
     ylabel('AU')
     hold on;
@@ -23,6 +23,24 @@ for j = 1:31 %31 Komponenten
 end
 
 
+% Check for oscillations
+for j = 1:n
+    for i = 1:31
+    %state = datafile{1,1};
+    state = datafile{n}(:,j);
+    figure(900+i);
+    state_plot(i) = plot(t,state);
+    title('Stateplot')
+    xlabel('time')
+    ylabel('AU')
+    hold on;
+    [autocor,lags] = xcorr(state,t,'coeff');
+    figure(800+i);
+    xcorr_plot(i) = plot(lags/120,autocor);
+    hold on;
+    
+    end
+end
 %signal_1 = datafile{1,1};
 %signal_2 = datafile{1,2};
 %signal_3 = datafile{1,3};

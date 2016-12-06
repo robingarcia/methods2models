@@ -1,5 +1,6 @@
+function [] = generation_temp (n)
 %% Script for data generation with autosave function
-n = 10; %Number of datasets
+%n = 10; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -51,3 +52,4 @@ save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues');
 
 % Dataset2Wanderlust
 % PATH muss auf datasets zeigen
+end
