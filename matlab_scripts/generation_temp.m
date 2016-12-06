@@ -16,7 +16,7 @@ end
 toc
 
 % Simulation time
-t_iqm = 0:0.1:120;
+t_iqm = 0:0.1:1000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues

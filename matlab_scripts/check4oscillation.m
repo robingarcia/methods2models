@@ -9,7 +9,7 @@ for j = 1:31 %31 Komponenten
     %figure(j)
     for i =1:n % n Versch. ICs
     y = datafile{i}(:,j);
-    subplot(n,n,j)
+    subplot(8,8,j)
     plot(t,y);
     title('None')
     xlabel('time')
