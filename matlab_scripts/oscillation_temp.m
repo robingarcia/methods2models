@@ -1,10 +1,10 @@
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
-t = 0:0.1:1000;
+t = 0:0.1:10000;
 n = size(datafile,2);
 
 for j = 1:n
-    for i = 1:3 
+    for i = 1:n 
     %state = datafile{1,1};
     state = datafile{n}(:,j);
     figure(900+i);

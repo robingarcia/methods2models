@@ -2,7 +2,7 @@ function [] = check4oscillation()
 % Script to check for oscillation in datasets
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
-t = 0:0.1:120;
+t = 0:0.1:10000;
 n = size(datafile,2);
 %figure
 for j = 1:31 %31 Komponenten 

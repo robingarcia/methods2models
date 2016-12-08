@@ -10,8 +10,8 @@
 %mkdir datasets reports
 %addpath(genpath('/~methods2models'));
 %Specifiy your needs
-tF = 0:0.1:1000; % Simulation Time
-n = 2;           % n new datasets
+tF = 0:0.1:10000; % Simulation Time
+n = 100;           % n new datasets
 %profile on
 % Load the MATLAB-model
 matlab_model = model_toettcher2008matlab(tF);
