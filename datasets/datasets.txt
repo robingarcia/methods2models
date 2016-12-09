@@ -1,0 +1,8 @@
+%%%%%%%%%%%%%%%%%%%%%%%%% IMPORTANT INFORMATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+This directory contains all *.mat files.
+When you generate the statevalues the mat-files can get quite big (e.g > 200 MB)
+Github only allows a filesize of 50MB.
+Therefore to avoid overflowing this directory with big mat-files
+all files with *.mat ending will be ignored.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
