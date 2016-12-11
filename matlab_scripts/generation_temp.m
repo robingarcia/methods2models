@@ -1,6 +1,6 @@
 function [] = generation_temp (n)
 %% Script for data generation with autosave function
-%n = 10; %Number of datasets
+n = 10; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -16,7 +16,7 @@ end
 toc
 
 % Simulation time
-t_iqm = 0:0.1:1000;
+t_iqm = 0:0.1:5000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues
