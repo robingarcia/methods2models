@@ -1,8 +1,9 @@
+function [] = verification_iqm(tF)
 %% Script for model verification
 % Extraction of the results MATLAB-Model
-
-simTime = 0:2000;    % the final timepoint of simulation
-results_m=model_toettcher2008matlab(simTime);
+%tF = simTime;
+%simTime = 0:2000;    % the final timepoint of simulation
+results_m=model_toettcher2008matlab(tF);
 y_T = transpose(results_m.y); %y_T = transposed y from results_m (Statevalues) MATLAB-Model
 x_T = transpose(results_m.x); %x_T = transposed x from results_m (Time) MATLAB-Model
 time_vector = x_T;
@@ -32,6 +33,6 @@ hold on
 plot(x_T(timerange),y_iqm(timerange,number_wrong_timepoints~=0),'--')
 
 legend(wrong_states)
-
+end
 
 

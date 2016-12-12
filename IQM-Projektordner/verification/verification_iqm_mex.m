@@ -1,10 +1,11 @@
+function[] = verification_iqm_mex(tF)
 %% Script for model verification
 % Extraction of the results MATLAB-Model
 
-simTime = 0:200;    % the final timepoint of simulation
+%simTime = 0:200;    % the final timepoint of simulation
 
 % Extraction of the results IQM-Model
-results_iqm = model_toettcher2008iqm(simTime);
+results_iqm = model_toettcher2008iqm(tF);
 y_iqm = results_iqm.statevalues; % Statevalues IQM-Model
 x_iqm = results_iqm.time;        % Time IQM-Model
 y_iqmt= transpose(results_iqm.statevalues); %Adapt matrix range
@@ -36,6 +37,6 @@ hold on
 plot(x_iqm(timerange),y_mex(timerange,number_wrong_timepoints~=0),'--')
 
 legend(wrong_states)
-
+end
 
 

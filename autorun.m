@@ -8,32 +8,39 @@
 %clear all;
 %clc all;
 %mkdir datasets reports
-%addpath(genpath('/~methods2models'));
+addpath(genpath('~/methods2models'));
 %Specifiy your needs
-tF = 0:0.1:10000; % Simulation Time
-n = 100;           % n new datasets
+dt = 0.1;
+tmax = 100;
+tF = 0:dt:tmax; % Simulation Time
+n = 20;           % n new datasets
 %profile on
+
 % Load the MATLAB-model
 matlab_model = model_toettcher2008matlab(tF);
 
 % Load the IQM-model
 iqm_model = model_toettcher2008iqm(tF);
+
 % Load the MEX-model
 mex_model = model_toettcher2008mex(tF);
 % Verificate  IQM vs MATLAB
-run verification_iqm.m;
+%verification_iqm(tF); % Bug?
 
 % Verificate  MEX vs MATLAB
-run verification_mex.m;
+%verification_mex(tF);
 
 % Verificate  IQM vs MEX
-run verification_iqm_mex.m;
+%verification_iqm_mex(tF);
 
 % Change default ICs (Gaussian)
-random_ic = lognrnd_ic(n);
+%random_ic = lognrnd_ic(n);
 
-% Generate data (+checm distribution of new ICs)
-generation_temp(n);
+% Generate data (+check distribution of new ICs)
+generation_temp(n,tF);
+
+% Check for oscillation
+frequence = check4oscillation;
 
 % Data2Wanderlust
 %script_data2variance;

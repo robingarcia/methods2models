@@ -3,8 +3,8 @@ function [toet2008, toettcher2008, ICdefault] = model_toettcher2008iqm(time_vect
 
 toettcher2008 = IQMmodel('model_toettcher2008.txt'); %Load the model
 ICdefault = IQMinitialconditions(toettcher2008);
-toet2008 = IQMsimulate(toettcher2008,time_vector); %Simulate the loaded model
-%toet2008 = IQMsimulate(toettcher2008, 120); %Simulate the loaded model
+%toet2008 = IQMsimulate(toettcher2008,time_vector); %Simulate the loaded model
+toet2008 = IQMsimulate(toettcher2008, 1000); %Simulate the loaded model
 
 
 % b - a matrix defining some outputs for plotting (IQM-Model)
