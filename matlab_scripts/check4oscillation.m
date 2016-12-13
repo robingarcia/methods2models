@@ -20,20 +20,34 @@ for j = 1:31 %31 Komponenten
     hold on;
     end
 end
-[autocor,lags] = xcorr(state-mean(state));
-[~,pos] =findpeaks(autocor);
+%[autocor,lags] = xcorr(state-mean(state));
+%[~,pos] =findpeaks(autocor);
 %plot(diff(lags(pos)));
 %mean(diff(lags(pos)));
 
 %plot(state)
-freq = mean(diff(lags(pos)*0.1))
-minmax(lags)
+%freq = mean(diff(lags(pos)*0.1));
+%minmax(lags)
 
 %X = ['Frequence:', num2str(freq)];
 %frequence = disp(X);
+
+% Plot histogram
+z = size(datafile{1,n});
+check = cell(n,z(1,2));
+for a = 1:31 %31 Komponenten 
+ 
+    for b =1:n % n Versch. ICs
+    check{b,a} = datafile{b}(:,a);
+    
+    end
+end
+[autocor,lags] = xcorr(check-mean(check{:,a}));
+[~,pos] =findpeaks(autocor);
+freq = mean(diff(lags(pos)*0.1));
+hist(freq);
 end
 
-% Check for oscillations
 
 
 
