@@ -1,8 +1,8 @@
-function [] = generation_temp (n, tF)
+function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-%n = 10; %Number of datasets
+n = 9; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -18,7 +18,7 @@ end
 toc
 
 % Simulation time
-%t_iqm = 0:0.1:50;
+t_iqm = 0:0.1:50000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues
@@ -26,8 +26,8 @@ simdata = cell(1,n);
 random_statevalues = cell(1,n);
 for i = 1:n
    this_IC = rndmic{i};
-   simdata{i} = model_toettcher2008MEX(tF,this_IC); %MEX oder mex?
-   %simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX oder mex? 
+   %simdata{i} = model_toettcher2008MEX(tF,this_IC); %MEX oder mex?
+   simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX oder mex? 
    random_statevalues{i} = simdata{1,i}.statevalues;
    
 %Plot all statevalues
