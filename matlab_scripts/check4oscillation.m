@@ -41,11 +41,19 @@ for a = 1:31 %31 Komponenten
     check{b,a} = datafile{b}(:,a);
     
     end
+
 end
-[autocor,lags] = xcorr(check-mean(check{:,a}));
+
+for c = 1:n; % Number of diff. ICs
+    for d = 1:31;
+[autocor,lags] = xcorr(check{c,d}-mean(check{c,d}));
 [~,pos] =findpeaks(autocor);
-freq = mean(diff(lags(pos)*0.1));
-hist(freq);
+freq{c,d} = mean(diff(lags(pos)*0.1));
+%hist(freq{c,d});
+plot(freq{c,d});
+hold on;
+    end
+end
 end
 
 
