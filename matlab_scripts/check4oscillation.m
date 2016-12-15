@@ -1,7 +1,6 @@
 function [freq] = check4oscillation()
 % Script to check for oscillation in datasets
 
-
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
 %dt = 0.1;
@@ -14,7 +13,6 @@ for j = 1:31 %31 Komponenten
     state = datafile{i}(:,j);
     subplot(4,8,j)
     plot(state);
-    title('None')
     xlabel('time')
     ylabel('AU')
     hold on;
@@ -36,22 +34,24 @@ end
 z = size(datafile{1,n});
 check = cell(n,z(1,2));
 for a = 1:31 %31 Komponenten 
- 
     for b =1:n % n Versch. ICs
     check{b,a} = datafile{b}(:,a);
-    
     end
-
 end
 
-for c = 1:n; % Number of diff. ICs
-    for d = 1:31;
-[autocor,lags] = xcorr(check{c,d}-mean(check{c,d}));
-[~,pos] =findpeaks(autocor);
-freq{c,d} = mean(diff(lags(pos)*0.1));
-%hist(freq{c,d});
-plot(freq{c,d});
-hold on;
+statefreq = cell(n,z(1,2));
+freq = cell(n,z(1,2));
+figure
+for c = 1:31; % Number of variables
+    for d = 1:n; % Number of ICs
+        statefreq{c,d} = datafile{d}(:,c);
+        [autocor,lags] = xcorr(statefreq{c,d}-mean(statefreq{c,d}));
+        [~,pos] =findpeaks(autocor);
+        freq = mean(diff(lags(pos)*0.1));
+        subplot(4,8,c)
+        freq = round(freq);
+        histogram(freq);
+        hold on;
     end
 end
 end
