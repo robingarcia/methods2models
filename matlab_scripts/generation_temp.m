@@ -2,7 +2,7 @@ function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-n = 100; %Number of datasets
+n = 10000; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -13,12 +13,12 @@ H = cell2mat(rndmic(:));
 for i = 1:31
 vector = H(:,i);
 subplot(4,8,i);
-histfit(vector)
+histogram(vector)
 end
 toc
 
 % Simulation time
-t_iqm = 0:1000;
+t_iqm = 0:5000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues
