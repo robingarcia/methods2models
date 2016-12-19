@@ -9,11 +9,12 @@ load('toetcher_statenames.mat');
 %t = 0:dt:tmax;
 n = size(datafile,2);
 
-for j = 15 %:31 %31 Komponenten 
+for j = [2,3,4,5,9,10,12,15,16,29,30,31] %:31 %31 Komponenten 
     %figure(j)
     for i =1:n % n Versch. ICs
     state = datafile{i}(:,j);
     subplot(4,8,j)
+    hold on;
     plot(state);
     xlabel('time')
     ylabel(sprintf('AU %s',statenames{j}))
@@ -44,7 +45,7 @@ end
 statefreq = cell(n,z(1,2));
 freq = cell(1,z(1,2));
 figure
-for c = 15 %:31; % Number of variables
+for c = [2,3,4,5,9,10,12,15,16,29,30,31] %:31; % Number of variables
     allfreq = zeros(1,n);
     for d = 1:n; % Number of ICs
         statefreq{c,d} = datafile{d}(:,c);
