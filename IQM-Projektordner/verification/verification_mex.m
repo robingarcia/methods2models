@@ -1,4 +1,4 @@
-function[] = verification_mex(tF)
+%function[] = verification_mex(tF)
 %% Script for model verification
 % Extraction of the results MATLAB-Model
 
@@ -34,5 +34,5 @@ hold on
 plot(x_T(timerange),y_mex(timerange,number_wrong_timepoints_mex~=0),':')
 
 legend(wrong_states_mex)
-end
+%end
 

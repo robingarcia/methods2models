@@ -1,10 +1,10 @@
 tic
-n=2000;
+n=1000;
 rndmic = lognrnd_ic(n);
 H = cell2mat(rndmic(:));
 for i = 1:31
 vector = H(:,i);
-subplot(16,2,i)
+subplot(8,4,i)
 histfit(vector)
 end
 toc
