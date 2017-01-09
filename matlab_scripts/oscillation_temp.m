@@ -1,7 +1,7 @@
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
 dt = 0.1;
-tmax = 5000;
+tmax = 1000;
 t = 0:dt:tmax;
 n = size(datafile,2);
 

@@ -202,7 +202,7 @@ u = @(t) [1.8               % M
 
 
 tic
-tF = 1:20000;    % the final timepoint of simulation
+tF = 0:100;    % the final timepoint of simulation
 xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
 toc
 

@@ -14,6 +14,9 @@ for j = [2,3,4,5,9,10,12,15,16,29,30,31] %:31 %31 Komponenten
     for i =1:n % n Versch. ICs
     state = datafile{i}(:,j);
     subplot(4,8,j)
+    %a = floor(sqrt(j));
+    %b = ceil(j/a);
+    %subplot(a,b,j)
     hold on;
     plot(state);
     xlabel('time')

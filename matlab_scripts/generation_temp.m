@@ -2,7 +2,7 @@ function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-n = 10000; %Number of datasets
+n = 10; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -18,7 +18,7 @@ end
 toc
 
 % Simulation time
-t_iqm = 0:2000;
+t_iqm = 0:1000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues
