@@ -2,7 +2,7 @@ function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-n = 10; %Number of datasets
+n = 50; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -18,7 +18,7 @@ end
 toc
 
 % Simulation time
-t_iqm = 0:1000;
+t_iqm = 0:5000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues
@@ -53,7 +53,7 @@ end
 directoryname = uigetdir('~/methods2models/');
 cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
-save([filename '.mat'], 'random_statevalues','-v7.3');
+save([filename '.mat'], 'random_statevalues','t_iqm','-v7.3');
 cd('~/methods2models')
 %T = array2table(random_statevalues);
 %T = cell2table(random_statevalues);
