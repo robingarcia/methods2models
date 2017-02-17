@@ -14,6 +14,6 @@ four=[1:length(q)];
 four(1:50) = 4;
 
 y = two .*(t_3>=0 & t_3 < p_g1.*z);
-y = two+q*t_3 .* (t_3>=p_g1.*z & t_3 < (p_g1.*z+p_s.*z));
-y = four .* (t_3>=(p_g1.*z+p_s.*z) & t_3 <= z);
+y = y + two+q .* (t_3>=p_g1.*z & t_3 < (p_g1.*z+p_s.*z));
+y = y + four .* (t_3>=(p_g1.*z+p_s.*z) & t_3 <= z);
 end
