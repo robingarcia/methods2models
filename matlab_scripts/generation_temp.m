@@ -2,7 +2,7 @@ function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-n = 50; %Number of datasets
+n = 500; %Number of datasets
 %Load the 
 rndmic = lognrnd_ic(n);
 

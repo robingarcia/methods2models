@@ -1,4 +1,4 @@
-function y = DNA (t_3,z,q,p_g1, p_s)
+function y = DNA (t,z,q,p_g1, p_s, n)
 % Piecewise defined function
 % Call y = DNA(t)
 
@@ -6,14 +6,19 @@ function y = DNA (t_3,z,q,p_g1, p_s)
 %y = 2+slope*t .* (t>=p_g1*T(:,i) & t < (p_g1*T(:,i)+p_s*T(:,i)));
 %y = 4 .* (t>=(p_g1*T(:,i)+p_s*T(:,i)) & t <= T(:,i));
 
+%Example numbers
+p_g1 = 0.4;
+p_s = 0.3;
+z = 1;
+
 %Design of vectors
 two=[1:length(q)];
-two(1:50) = 2;
+two(1:n) = 2;
 
 four=[1:length(q)];
-four(1:50) = 4;
+four(1:n) = 2;
 
-y = two .*(t_3>=0 & t_3 < p_g1.*z);
-y = y + two+q .* (t_3>=p_g1.*z & t_3 < (p_g1.*z+p_s.*z));
-y = y + four .* (t_3>=(p_g1.*z+p_s.*z) & t_3 <= z);
+y = two .*(t>=0 & t < p_g1.*z);
+y = y + two+q .* (t>=p_g1.*z & t < (p_g1.*z+p_s.*z));
+y = y + four .* (t>=(p_g1.*z+p_s.*z) & t <= z);
 end

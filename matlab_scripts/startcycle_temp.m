@@ -33,9 +33,8 @@ for k = [2,3,5,6,7]
     findpeaks(APC(:,i));
     [pks,locs]=findpeaks(APC(:,i));
     APCpeak=findpeaks(APC(:,i));
-    locs_length=length(locs);   %Bestimmt länge des Vektors
-    LOCS = locs(locs_length,:); % Gibt den letzten Wert dieses Vektors aus (das Ende)
-    T(:,i) = LOCS; %Period duration per cell (Phase duration)    
+    T(:,i) = locs(end)-locs(end-1);
+     
     end
     F{1,k} = APCpeak;
     F{2,k} = T;
@@ -51,9 +50,15 @@ apc = apc ./apc;
     t_2 = locs(length(locs)); % Was wird hier genau berechnet? 
     t_1 = locs(length(locs)-1);
     t_3 = t_2 - t_1;
-p_s = apc - cyc_b - cyc_e; 
-p_g1 = apc - cyc_a - cyc_b;
-p_gm = apc - cyc_e - cyc_a; %p_g2
+%p_s = apc - cyc_b - cyc_e;
+p_s=[1:length(n)];
+p_s(1:n) = 0.4;
+%p_g1 = apc - cyc_a - cyc_b;
+p_g1=[1:length(n)];
+p_g1(1:n) = 0.3;
+%p_gm = apc - cyc_e - cyc_a; %p_g2
+p_gm=[1:length(n)];
+p_gm(1:n) = 0.3;
 total = p_s + p_g1 + p_gm;
 
 
@@ -73,6 +78,23 @@ slope = (y./(x3));
     
     z = t_3;
     q = slope;
-y = DNA(t_3,q,z,p_g1, p_s);
+y = DNA(t_3,q,z,p_g1, p_s, n);
 plot(y, 'r-')
 %end
+
+
+% Doubling
+gamma = zeros(1,n);
+gamma = log(2)./T; % Growth rate of the population
+
+
+
+% Plot the simulated dataset
+%for i = 1:n
+    
+%plot(random_statevalues{1,n}(:,2), random_statevalues{1,n}(:,3))
+%hold on
+%end
+
+% Calculate the growth
+%p @(a) (2*gamma * exp(-gamma*a);
