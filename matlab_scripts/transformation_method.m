@@ -1,3 +1,4 @@
+function 
 %Generate random numbers from the standard uniform distribution
-rng('default')  % For reproducibility
-u = rand(10000,1);
+a = rand(n,1);
+end

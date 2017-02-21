@@ -2,7 +2,7 @@ function [] = generation_temp (n)
 %% Script for data generation with autosave function
 %Extract timestamp
 filename = datestr(now,30);
-n = 500; %Number of datasets
+n = 500; %Number of datasets (Filesize will be 2*n MB with t = 10000)
 %Load the 
 rndmic = lognrnd_ic(n);
 
@@ -17,8 +17,8 @@ histogram(vector)
 end
 toc
 
-% Simulation time
-t_iqm = 0:5000;
+% Simulation time (keep at 5000)
+t_iqm = 0:1000;
 
 
 %Simulation w/ updated ICs and extract updated statevalues

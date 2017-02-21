@@ -6,11 +6,6 @@ function y = DNA (t,z,q,p_g1, p_s, n)
 %y = 2+slope*t .* (t>=p_g1*T(:,i) & t < (p_g1*T(:,i)+p_s*T(:,i)));
 %y = 4 .* (t>=(p_g1*T(:,i)+p_s*T(:,i)) & t <= T(:,i));
 
-%Example numbers
-p_g1 = 0.4;
-p_s = 0.3;
-z = 1;
-
 %Design of vectors
 two=[1:length(q)];
 two(1:n) = 2;
