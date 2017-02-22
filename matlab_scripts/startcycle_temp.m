@@ -12,14 +12,15 @@ t_iqm = datafile.t_iqm;
 t= t_iqm;
 n = length(random_statevalues); % Length of statevalues
 m = length(t_iqm); % Length of time
-o = m - 1000;
+o = m - 100;
 t=t(o:m);
 
 Xpart = zeros(length(t),n);
 T = zeros(1,n);
+
 %szAPC = size(APC);
 %szT = size(T);
-F = cell(2,5);
+%F = cell(2,5);
 %CT = cell(szT);
 %slope = zeros(1,n);
 %soi=soi{2,3,5,6,7}; %state of interest
@@ -29,19 +30,34 @@ for k = [2,3,5,6,7]
     x=random_statevalues{1,i}; %This are our cells
     x_part =x((o:m),k); % 6 = APC
     Xpart(:,i) = x_part;
+    
     figure(1)
     hold on;
     subplot(3,3,k)
     findpeaks(Xpart(:,i));
+    
     [pks,locs]=findpeaks(Xpart(:,i));
     Xpartpeak=findpeaks(Xpart(:,i));
     T(:,i) = locs(end)-locs(end-1); %Period of the cyclines and APC
-     
-    end
-    F{1,k} = Xpartpeak;
-    F{2,k} = T;
-    F{3,k} = Xpart;
+    pks = findpeaks(Xpart(:,i));
+    locs = findpeaks(Xpart(:,i));
     
+    end
+    F{1,k} = Xpartpeak; %Peakvalue
+    F{2,k} = T;         %Periods
+    F{3,k} = Xpart;     %
+    F{4,k} = locs;
+end
+no_2 = [F{4,2}, F{1,2}]
+no_3 = [F{4,3}, F{1,3}]
+no_5 = [F{4,5}, F{1,5}]
+no_6 = [F{4,6}, F{1,6}]
+no_7 = [F{4,7}, F{1,7}]
+for k = [2,3,5,6,7]
+    figure(2)
+    hold on
+findpeaks(x((o:m),k));
+legend('Cyclin A','CycA Peak', 'Cyclin B','CycB Peak', 'Cyclin E','CycE Peak', 'APC','APC Peak', 'APCP','APCP Peak');
 end
 
 %%%%%%%%%%%%%%%%
@@ -49,9 +65,11 @@ v = [2,3,5,6,7];
 combos = nchoosek(v,2);
 r = length(combos);
 for q=1:r;
-figure(2)
+figure(3)
 subplot(3,4,q)
 plot(F{3,combos(q,1)},F{3,combos(q,2)}, 'bo');
+xlabel(statenames(1,combos(q,1)))
+ylabel(statenames(1,combos(q,2)))
 end
 %%%%%%%%%%%%%%%%
 apc = F{2,6};   % M-Phase
@@ -61,27 +79,31 @@ cyc_b = (F{2,3})./apc; % G2-Phase
 cyc_e = (F{2,5})./apc; % G1-Phase
 apc_norm = apc ./apc;
 
-    t_2 = locs(length(locs)); % Was wird hier genau berechnet? 
-    t_1 = locs(length(locs)-1);
-    t_3 = t_2 - t_1;
+
+t_2(1:n) = locs(length(locs)); % What do you calculate here? 
+t_1(1:n) = locs(length(locs)-1);
+t_3 = t_2 - t_1;
     
 
 %Duration of the cell cycle phases (from: The cell: a molecular approach.
 %2nd edition
 p_g1 = apc*0.5; % Duration G1-Phase
 p_s = apc*0.3;  %Duration S-Phase
-p_g1 = apc*0.16; % Duration G1-Phase
+p_g2 = apc*0.16; % Duration G1-Phase
 p_gm = apc*0.04; %p_g2 Duration G2-Phase
-
-
-
+%p_g1 = apc_norm - 
+%p_s = 
+%p_g2 =
+%p_gm = 
+%summ_dur = 
+% What is happening here?
 x1 = p_g1;
 x2 = cyc_e + cyc_a;
 x3 = x2-x1;
-y=(1:length(x3));
-y(1:50) = 2;
+yy=(1:length(x3));
+yy(1:n) = 2;
 slope = (1:length(x3));
-slope = (y./(x3)); 
+slope = (yy./(x3)); 
 
 
 % Simulate the duplication of the DNA 2n -> 4n
@@ -91,8 +113,8 @@ slope = (y./(x3));
     
     z = t_3;
     q = slope;
-y = DNA(t_3,q,z,p_g1, p_s, n);
-figure(3)
+y = DNA(q,z,p_g1, p_s, n, t);
+figure(4)
 plot(y, 'r-')
 %end
 
@@ -111,5 +133,5 @@ gamma = log(2)./T; % Growth rate of the population
 %end
 
 % Distribution
-a = rand(50,1)';
+a = rand(n,1)';
 X = distribution_func(a, gamma);

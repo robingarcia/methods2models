@@ -26,8 +26,8 @@ simdata = cell(1,n);
 random_statevalues = cell(1,n);
 for i = 1:n
    this_IC = rndmic{i};
-   %simdata{i} = model_toettcher2008MEX(tF,this_IC); %MEX oder mex?
-   simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX oder mex? 
+   %simdata{i} = model_toettcher2008MEX(tF,this_IC); %MEX or mex?
+   simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX or mex? 
    random_statevalues{i} = simdata{1,i}.statevalues;
    
 %Plot all statevalues
