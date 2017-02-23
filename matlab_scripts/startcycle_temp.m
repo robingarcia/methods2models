@@ -25,16 +25,17 @@ T = zeros(1,n);
 %slope = zeros(1,n);
 %soi=soi{2,3,5,6,7}; %state of interest
 % Calculate APC property
-for k = [2,3,5,6,7]
-    for i = 1:n
+for k = [2,3,5,6,7] % This are our states
+    for i = 1:n % 
     x=random_statevalues{1,i}; %This are our cells
-    x_part =x((o:m),k); % 6 = APC
+    x_part =x((o:m),k);
     Xpart(:,i) = x_part;
     
     figure(1)
     hold on;
-    subplot(3,3,k)
+    s(k)=subplot(3,3,k);
     findpeaks(Xpart(:,i));
+    title(s(k),statenames(1,k));
     
     [pks,locs]=findpeaks(Xpart(:,i));
     Xpartpeak=findpeaks(Xpart(:,i));
@@ -48,16 +49,16 @@ for k = [2,3,5,6,7]
     F{3,k} = Xpart;     %
     F{4,k} = locs;
 end
-no_2 = [F{4,2}, F{1,2}]
-no_3 = [F{4,3}, F{1,3}]
-no_5 = [F{4,5}, F{1,5}]
-no_6 = [F{4,6}, F{1,6}]
-no_7 = [F{4,7}, F{1,7}]
-for k = [2,3,5,6,7]
+no_2 = [F{4,2}, F{1,2}];
+no_3 = [F{4,3}, F{1,3}];
+no_5 = [F{4,5}, F{1,5}];
+no_6 = [F{4,6}, F{1,6}];
+no_7 = [F{4,7}, F{1,7}];
+for k = [2,3,5,6,7];
     figure(2)
     hold on
 findpeaks(x((o:m),k));
-legend('Cyclin A','CycA Peak', 'Cyclin B','CycB Peak', 'Cyclin E','CycE Peak', 'APC','APC Peak', 'APCP','APCP Peak');
+%legend('Cyclin A','CycA Peak', 'Cyclin B','CycB Peak', 'Cyclin E','CycE Peak', 'APC','APC Peak', 'APCP','APCP Peak');
 end
 
 %%%%%%%%%%%%%%%%
@@ -106,16 +107,16 @@ slope = (1:length(x3));
 slope = (yy./(x3)); 
 
 
-% Simulate the duplication of the DNA 2n -> 4n
+% Simulate the duplication of the DNA 2n -> 4n (still buggy)
 %for i = 1:n
     %z = apc(1,i);
     %q = slope(1,i)
     
     z = t_3;
     q = slope;
-y = DNA(q,z,p_g1, p_s, n, t);
-figure(4)
-plot(y, 'r-')
+%y = DNA(q,z, n, t,apc);
+%figure(4)
+%plot(y, 'r-')
 %end
 
 
@@ -134,4 +135,26 @@ gamma = log(2)./T; % Growth rate of the population
 
 % Distribution
 a = rand(n,1)';
-X = distribution_func(a, gamma);
+for i = 1:n;
+X_distr(:,i) = distribution_func(a, gamma);
+figure(6)
+hold on;
+hist(X_distr(:,i))
+plot(T,X_distr(:,i))
+end
+
+for i = 1:n
+X_primitive(:,i) = primitive(a, gamma);
+figure(7)
+hold on
+hist(X_primitive(:,i))
+plot(T,X_primitive(:,i))
+end
+fprimi = X_primitive;
+for i = 1:n
+X_inverse(:,i) = inverse(fprimi, gamma);
+figure(8)
+hold on
+hist(X_inverse(:,i))
+plot(T,X_inverse(:,i))
+end
