@@ -1,7 +1,9 @@
-function [ fdist ] = distribution_func(a,gamma)
+function [ fdist ] = distribution_func(a,gamma(:,i))
 %UNTITLED4 Summary of this function goes here
-%   Detailed explanation goes here
-fdist=2.*gamma.*exp(-gamma.*a);
+%   This is our distribution function
+%   gamma is the growth rate
+%   a is our input variable
+fdist=2.*gamma(:,i).*exp(-gamma(:,i).*a);
 
 end
 

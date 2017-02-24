@@ -133,26 +133,25 @@ gamma = log(2)./T; % Growth rate of the population
 %hold on
 %end
 
+%Choose random timepoints
 % Distribution
-a = rand(n,1)';
+a = rand(n,1)'; %Generate uniformly distributed random numbers
 for i = 1:n;
-X_distr(:,i) = distribution_func(a, gamma);
+X_distr(:,i) = distribution_func(a, gamma(:,i)); %Uniform-Distribution
 figure(6)
 hold on;
 hist(X_distr(:,i))
 plot(T,X_distr(:,i))
-end
 
-for i = 1:n
-X_primitive(:,i) = primitive(a, gamma);
+X_primitive(:,i) = primitive(a, gamma(:,i));
 figure(7)
 hold on
 hist(X_primitive(:,i))
 plot(T,X_primitive(:,i))
-end
+
 fprimi = X_primitive;
-for i = 1:n
-X_inverse(:,i) = inverse(fprimi, gamma);
+
+X_inverse(:,i) = inverse(fprimi, gamma(:,i));
 figure(8)
 hold on
 hist(X_inverse(:,i))
