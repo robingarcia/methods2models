@@ -1,4 +1,4 @@
-function y = DNA (t,z,q, n, apc)
+function y = DNA (t,slope, n, apc)
 % Piecewise defined function
 % Call y = DNA(t)
 
@@ -14,6 +14,11 @@ a = [1:length(t)];
 b = [1:length(t)];
 c = [1:length(t)];
 
+p_g1 = [1:length(t)];
+p_s = [1:length(t)];
+p_g2 = [1:length(t)];
+p_gm = [1:length(t)];
+
 %times=t(
 
 for i = 1:length_apc;
@@ -24,7 +29,7 @@ for i = 1:length_apc;
 
 a=two ((t>=2) & (t < p_g1))
 b=two((t>=p_g1) & (t < (p_g1+p_s)))
-c=four((t>=(p_g1+p_s)) & (t <= z))
+c=four((t>=(p_g1+p_s)) & (t <= apc))
     
 y=[a,b,c]
 figure(55)

@@ -31,7 +31,7 @@ b=two((t>=p_g1) & (t < (p_g1+p_s)));
 %end
 c=four((t>=(p_g1+p_s)) & (t <= z));
     
-y=[a,b,c]
+y=[a,b,c];
 figure(55)
 hold on;
 plot(y);

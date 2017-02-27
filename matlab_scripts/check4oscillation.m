@@ -9,7 +9,7 @@ load('toetcher_statenames.mat');
 %t = 0:dt:tmax;
 n = size(datafile,2);
 
-for j = [2,3,4,5,9,10,12,15,16,29,30,31] %:31 %31 Komponenten 
+for j = [1,2,3,4,5,6,7,9,10,12,15,16,29,30,31] %:31 %31 Komponenten 
     %figure(j)
     for i =1:n % n Versch. ICs
     state = datafile{i}(:,j);
