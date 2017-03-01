@@ -68,6 +68,14 @@ for q=1:r;
 figure(2)
 subplot(3,4,q)
 f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'b.');
+hold on;
+for i = 1:n %Plot the start of the cell cycle
+    startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
+    lstartpoint = length(startpoint);
+    for k = 1:lstartpoint;
+f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
+    end
+end
 xlabel(statenames(1,combos(q,1)))
 ylabel(statenames(1,combos(q,2)))
 end
@@ -116,12 +124,22 @@ y=[a,b,c];
 figure(5)
 hold on;
 plot(y);
-gamma = zeros(1,n); % n-cells = n different gammas
-gamma = log(2)./T; % Growth rate of the population; T = period
+
 end
 
 %% Plot the beginning of the cellcycle
-
-%% Choose arbitrary timepoints
-
+% See above
+%% Choose arbitrary timepoints (Inverse method)
+gamma = zeros(1,n); % n-cells = n different gammas
+a = [0:T-1]; % Interval
+%p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
+for i = 1:n;
+    gamma = log(2)./G{2,n}; % Growth rate of the population; T = period 
+    p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
+    p(a,gamma)
+    figure(900)
+    plot(a,p(a,gamma));
+    hold on;
+end
 %% Create new dataset with timepoints
+% Select arbitrary results from a given dataset
