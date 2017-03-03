@@ -1,6 +1,7 @@
 %% This is an template for output generation
 clear ;
 clc;
+addpath /Users/robin/methods2models/ /Users/robin/MATLAB/
 %% Load the data
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
