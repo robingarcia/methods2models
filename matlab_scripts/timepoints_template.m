@@ -130,15 +130,19 @@ end
 %% Plot the beginning of the cellcycle
 % See above
 %% Choose arbitrary timepoints (Inverse method)
-gamma = zeros(1,n); % n-cells = n different gammas
-a = [0:T-1]; % Interval
+%gamma = zeros(1,n); % n-cells = n different gammas
+syms a gamma p P
+a = (0:T); % Interval
+%gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
 for i = 1:n;
-    gamma = log(2)./G{2,n}; % Growth rate of the population; T = period 
-    p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
-    p(a,gamma)
+    gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
+    p=@(a,gamma)(2*gamma.*exp(-gamma.*a));
+    P=@(a, gamma)((2*gamma.*exp(-gamma.*a))/a);
+    p(a,gamma);
+    %area=trapz(a, p(a,gamma));
     figure(900)
-    plot(a,p(a,gamma));
+    h=plot(a,p(a,gamma));
     hold on;
 end
 %% Create new dataset with timepoints
