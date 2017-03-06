@@ -22,9 +22,8 @@ end
 j = [1,2,3,5,6,7]; %States which should be analyzed
 F = cell(5,length(j));
 G = cell(2,n);
-tic
-for i = 1:n;        % i = Number of cells
-    for j = [2,3,5,6,7];    % j = States
+for i = 1:n        % i = Number of cells
+    for j = [2,3,5,6,7]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
     %figure(100+i);
     %hold on;
@@ -47,11 +46,9 @@ AverageDistance_Peaks = mean(diff(locs));
     G{2,i} = T;
     PKS= G{1,i}{1,6};
 end
-toc
-
 %% Plot all peaks
-for j = [2,3,5,6,7];
-   for i = 1:n;
+for j = [2,3,5,6,7]
+   for i = 1:n
     onecell(:,i)=statevalues{1,i}(:,j);
     figure(1)
     hold on;
@@ -65,7 +62,7 @@ end
 j = [2,3,5,6,7];
 combos = nchoosek(j,2);
 r = length(combos);
-for q=1:r;
+for q=1:r
 figure(2)
 subplot(3,4,q)
 f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'b.');
@@ -73,7 +70,7 @@ hold on;
 for i = 1:n %Plot the start of the cell cycle
     startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
     lstartpoint = length(startpoint);
-    for k = 1:lstartpoint;
+    for k = 1:lstartpoint
 f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
     end
 end
@@ -82,8 +79,8 @@ ylabel(statenames(1,combos(q,2)))
 end
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
-for i = 1:n;
-    for j = [2,3,5,6,7];
+for i = 1:n
+    for j = [2,3,5,6,7]
 peakInterval = diff(G{1,i}{2,j});
     figure(3)
     hold on;
@@ -96,7 +93,7 @@ peakInterval = diff(G{1,i}{2,j});
 end
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
-for i = 1:n;
+for i = 1:n
     z = G{2,i};
     interval = size(t);
     time = linspace(interval(1,1), interval(1,2));
@@ -125,6 +122,10 @@ y=[a,b,c];
 figure(5)
 hold on;
 plot(y);
+grid on;
+    xlabel('Time')
+    ylabel('DNA')
+    title('Changes in DNA content')
 
 end
 
@@ -132,19 +133,50 @@ end
 % See above
 %% Choose arbitrary timepoints (Inverse method)
 %gamma = zeros(1,n); % n-cells = n different gammas
-syms a gamma p P
+syms a gamma p P x
 a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
-for i = 1:n;
+for i = 1:n
     gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
-    p=@(a,gamma)(2*gamma.*exp(-gamma.*a));
-    P=@(a, gamma)((2*gamma.*exp(-gamma.*a))/a);
-    p(a,gamma);
+    GAMMA{1,i} = gamma;
+    p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function
+    P=@(a,gamma)((2*exp(-gamma.*a))+2); %Primitive
+    x=@(P,gamma)((log(P./(2*gamma)))./gamma);
+    pp=p(a,gamma);
+    PP=P(a,gamma);
+    %invPP=x(P(a,gamma),gamma);
     %area=trapz(a, p(a,gamma));
     figure(900)
+    subplot(2,2,1)
     h=plot(a,p(a,gamma));
     hold on;
+    grid on;
+    xlabel('Age [h]');
+    ylabel('Celldensity');
+    title('Distribution Function (pdf)');
+    
+    subplot(2,2,2)
+    H=plot(a,P(a,gamma));
+    hold on;
+    grid on;
+    xlabel('Age [h]');
+    ylabel('Celldensity');
+    title('Primitive Function (cdf)')
+    
+    
+    
 end
+invcdf = x(P(a,gamma),gamma);
 %% Create new dataset with timepoints
 % Select arbitrary results from a given dataset
+
+%% Print some information
+% Define names 
+Cells = n;
+Period = mean([G{2,:}]);
+SimulationTime = datafile.t_iqm(end);
+GrowthRate = mean([GAMMA{1,:}]);
+RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
+
+
