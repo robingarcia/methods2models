@@ -55,7 +55,7 @@ for j = [2,3,5,6,7]
     s(j)=subplot(3,3,j);
     findpeaks(onecell(:,i),'MinPeakDistance', 15);
     title(s(j),statenames(1,j));
-       
+    hold off;   
    end
 end
 %% Plot all Cyclines
@@ -76,6 +76,7 @@ f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpo
 end
 xlabel(statenames(1,combos(q,1)))
 ylabel(statenames(1,combos(q,2)))
+hold off;
 end
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
@@ -89,6 +90,8 @@ peakInterval = diff(G{1,i}{2,j});
     xlabel('Period of the cell cycle')
     ylabel('Frequency of Occurrence')
     title('Histogram of Peak Intervals (Cell cycle period)')
+    hold off;
+    hold off;
     end
 end
 %% Simulate the duplication of the DNA 2 -> 4
@@ -126,6 +129,7 @@ grid on;
     xlabel('Time')
     ylabel('DNA')
     title('Changes in DNA content')
+    hold off;
 
 end
 
@@ -155,6 +159,7 @@ for i = 1:n
     xlabel('Age [h]');
     ylabel('Celldensity');
     title('Distribution Function (pdf)');
+    hold off;
     
     subplot(2,2,2)
     H=plot(a,P(a,gamma));
@@ -163,11 +168,35 @@ for i = 1:n
     xlabel('Age [h]');
     ylabel('Celldensity');
     title('Primitive Function (cdf)')
-    
-    
-    
+    hold off;
 end
-invcdf = x(P(a,gamma),gamma);
+
+% Inverse method alorithm
+    rand('seed', 12345)
+    nSamples = n;
+    
+    %Parameters: gamma from above
+    
+    %Draw proposal samples
+    Z = rand(1,nSamples);
+    
+    %Evaluate Proposal samples at the inverse cdf
+    samples = P(Z,gamma);
+    bins = linspace(0,1,50);
+    counts = histc(samples,bins);
+    probSampled = counts/sum(counts)
+    probTheory = p(bins, gamma);
+    
+    %Display
+    b = bar(bins, probSampled, 'FaceColor', [0.9 0.9 0.9]);
+    figure(8)
+    hold on;
+    t = plot(bins, probTheory/sum(probTheory), 'r', 'LineWidth', 2);
+    xlim([0,1])
+    xlabel('a')
+    ylabel('p(a)')
+    legend([t,b],{'Theory', 'IT Samples'})
+    hold off
 %% Create new dataset with timepoints
 % Select arbitrary results from a given dataset
 
