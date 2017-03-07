@@ -140,8 +140,8 @@ a = (0:T); % Interval
 for i = 1:n
     gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
     GAMMA{1,i} = gamma;
-    p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function
-    P=@(a,gamma)((2*exp(-gamma.*a))+2); %Primitive
+    p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function (pdf)
+    P=@(a,gamma)((-2*exp(-gamma.*a))+2); %Primitive (cdf)
     x=@(P,gamma)((log(P./(2*gamma)))./gamma);
     pp=p(a,gamma);
     PP=P(a,gamma);
