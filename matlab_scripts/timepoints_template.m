@@ -53,7 +53,7 @@ for j = [2,3,5,6,7]
     figure(1)
     hold on;
     s(j)=subplot(3,3,j);
-    findpeaks(onecell(:,i),'MinPeakDistance', 15);
+    %findpeaks(onecell(:,i),'MinPeakDistance', 15);
     title(s(j),statenames(1,j));
     hold off;   
    end
@@ -159,7 +159,7 @@ for i = 1:n
     xlabel('Age [h]');
     ylabel('Celldensity');
     title('Distribution Function (pdf)');
-    hold off;
+    %hold off;
     
     subplot(2,2,2)
     H=plot(a,P(a,gamma));
@@ -168,35 +168,33 @@ for i = 1:n
     xlabel('Age [h]');
     ylabel('Celldensity');
     title('Primitive Function (cdf)')
-    hold off;
+    %hold off;
 end
 
 % Inverse method alorithm
-    rand('seed', 12345)
+    %rand('seed', 12345)
     nSamples = n;
-    
+    for i = 1:n
+        gamma = log(2)./G{2,i};
+        
     %Parameters: gamma from above
-    
+    mu=gamma;
     %Draw proposal samples
-    Z = rand(1,nSamples);
-    
-    %Evaluate Proposal samples at the inverse cdf
-    samples = P(Z,gamma);
-    bins = linspace(0,1,50);
-    counts = histc(samples,bins);
-    probSampled = counts/sum(counts)
-    probTheory = p(bins, gamma);
-    
-    %Display
-    b = bar(bins, probSampled, 'FaceColor', [0.9 0.9 0.9]);
-    figure(8)
+    Z = rand(1,nSamples); %Create uniform distributed pseudorandom numbers
+    figure(400)
     hold on;
-    t = plot(bins, probTheory/sum(probTheory), 'r', 'LineWidth', 2);
-    xlim([0,1])
-    xlabel('a')
-    ylabel('p(a)')
-    legend([t,b],{'Theory', 'IT Samples'})
-    hold off
+    histogram(Z);
+    %Evaluate Proposal samples at the inverse cdf
+    %pd = makedist('exp');
+    z = G{2,i};
+    samples = 2*mu*expinv(mu,Z);
+    samples_real = samples*z; %Get the real timepoint depending on the period
+    figure(500)
+    hold on;
+    histogram(samples_real);
+    end
+    
+    
 %% Create new dataset with timepoints
 % Select arbitrary results from a given dataset
 
@@ -206,6 +204,6 @@ Cells = n;
 Period = mean([G{2,:}]);
 SimulationTime = datafile.t_iqm(end);
 GrowthRate = mean([GAMMA{1,:}]);
-RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
+RESULTS = table(Cells,SimulationTime, Period, GrowthRate)
 
 

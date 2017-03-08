@@ -1,20 +1,23 @@
 %% Inverse transformation algorithm (SAS)
 % Example of using the inverse CDF algorithm to generate variates from the exponential distribution
 rand('seed',12345)
+n=1000;
 nSamples = n;
  
 % BETA PARAMETERS
-gamma;
+mu = gamma;
+
  
 % DRAW PROPOSAL SAMPLES
-z = rand(1,nSamples);
+z = rand(1,nSamples); %Create uniform distributed pseudorandom numbers
  
 % EVALUATE PROPOSAL SAMPLES AT INVERSE CDF
-samples = icdf('beta',z,alpha,beta);
+pd = makedist('exp');
+samples = icdf(pd,z);
 bins = linspace(0,1,50);
 counts = histc(samples,bins);
-probSampled = counts/sum(counts)
-probTheory = betapdf(bins,alpha,beta);
+probSampled = counts/sum(counts);
+probTheory = exppdf(bins,mu);
  
 % DISPLAY
 b = bar(bins,probSampled,'FaceColor',[.9 .9 .9]);
