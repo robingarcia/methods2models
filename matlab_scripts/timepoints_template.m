@@ -8,10 +8,14 @@ datafile = importdata(filename);
 load('toetcher_statenames.mat');
 statevalues = datafile.random_statevalues; % States
 t = datafile.t_iqm; % Time
+timepoints = datafile.t_iqm;
+t_original=timepoints./timepoints(end); %0 to 1
 n = length(statevalues); % Determine the number of cells
 m = length(t);
+%m2 = m*0.1;
 o = m - 100;
-t=t(o:m); %
+t=t(o:m); %Trimmed time vector
+t_cut=t./t(end); %0 to 1
 PKS = zeros(n);
 for i = 1:n
     m = length(statevalues{1,i});
@@ -138,12 +142,13 @@ end
 %% Choose arbitrary timepoints (Inverse method)
 %gamma = zeros(1,n); % n-cells = n different gammas
 syms a gamma p P x
-a = (0:T); % Interval
+%a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
 for i = 1:n
     gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
     GAMMA{1,i} = gamma;
+    a = (0:G{2,i}); % Interval
     p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function (pdf)
     P=@(a,gamma)((-2*exp(-gamma.*a))+2); %Primitive (cdf)
     x=@(P,gamma)((log(P./(2*gamma)))./gamma);
@@ -173,27 +178,44 @@ end
 
 % Inverse method alorithm
     %rand('seed', 12345)
+    %hold on;
     nSamples = n;
+    samples = cell(1,n);
     for i = 1:n
         gamma = log(2)./G{2,i};
         
     %Parameters: gamma from above
-    mu=gamma;
+    mu=2*gamma;
     %Draw proposal samples
-    Z = rand(1,nSamples); %Create uniform distributed pseudorandom numbers
-    figure(400)
-    hold on;
-    histogram(Z);
+    P = rand(nSamples,1); %Create uniform distributed pseudorandom numbers
+    %figure(400)
+    %hist(P);
     %Evaluate Proposal samples at the inverse cdf
     %pd = makedist('exp');
     z = G{2,i};
-    samples = 2*mu*expinv(mu,Z);
-    samples_real = samples*z; %Get the real timepoint depending on the period
-    figure(500)
-    hold on;
-    histogram(samples_real);
-    end
+    samples{1,i} = 2*mu*expinv(P,mu);
+    %samples_real = samples*z; %Get the real timepoint depending on the period
     
+    %Plot the distributions
+    
+    figure(400)
+    subplot(2,2,1)
+    hist(P);
+    %hold on;
+    grid on;
+    xlabel('Timepoints');
+    ylabel('Frequency');
+    title('Uniform Distribution [0,1]');
+    
+    subplot(2,2,2)
+    hist(samples{1,i});
+    %hold on;
+    grid on;
+    xlabel('Timepoints');
+    ylabel('Frequency');
+    title('Exponential Distribution');
+    end
+    %hold off;
     
 %% Create new dataset with timepoints
 % Select arbitrary results from a given dataset
