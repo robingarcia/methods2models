@@ -58,30 +58,12 @@ for j = [2,3,5,6,7]
     hold on;
     s(j)=subplot(3,3,j);
     %findpeaks(onecell(:,i),'MinPeakDistance', 15);
+    findpeaks(onecell(:,i),'MinPeakDistance', 15);
     title(s(j),statenames(1,j));
     hold off;   
    end
 end
-%% Plot all Cyclines
-j = [2,3,5,6,7];
-combos = nchoosek(j,2);
-r = length(combos);
-for q=1:r
-figure(2)
-subplot(3,4,q)
-f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'b.');
-hold on;
-for i = 1:n %Plot the start of the cell cycle
-    startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
-    lstartpoint = length(startpoint);
-    for k = 1:lstartpoint
-f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
-    end
-end
-xlabel(statenames(1,combos(q,1)))
-ylabel(statenames(1,combos(q,2)))
-hold off;
-end
+
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
 for i = 1:n
@@ -89,15 +71,16 @@ for i = 1:n
 peakInterval = diff(G{1,i}{2,j});
     figure(3)
     hold on;
-    hist(peakInterval)
+    hist_period = histogram(diff(G{1,i}{2,j}));
     grid on;
     xlabel('Period of the cell cycle')
     ylabel('Frequency of Occurrence')
     title('Histogram of Peak Intervals (Cell cycle period)')
     hold off;
-    hold off;
+    
     end
 end
+hist_period
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
 for i = 1:n
@@ -134,7 +117,6 @@ grid on;
     ylabel('DNA')
     title('Changes in DNA content')
     hold off;
-
 end
 
 %% Plot the beginning of the cellcycle
@@ -148,10 +130,11 @@ syms a gamma p P x
 for i = 1:n
     gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
     GAMMA{1,i} = gamma;
-    a = (0:G{2,i}); % Interval
+    a = linspace(0,z,n); %a = (G{2,i}); % Interval
+    T_range = (0:G{2,i}); % Plotting range
     p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function (pdf)
     P=@(a,gamma)((-2*exp(-gamma.*a))+2); %Primitive (cdf)
-    x=@(P,gamma)((log(P./(2*gamma)))./gamma);
+    %x=@(P,gamma)((log(P./(2*gamma)))./gamma);
     pp=p(a,gamma);
     PP=P(a,gamma);
     %invPP=x(P(a,gamma),gamma);
@@ -180,46 +163,79 @@ end
     %rand('seed', 12345)
     %hold on;
     nSamples = n;
-    samples = cell(1,n);
+    %samples = cell(1,n);
+    samples = zeros(1,n);
+    measurement = zeros(n,31);
     for i = 1:n
         gamma = log(2)./G{2,i};
         
-    %Parameters: gamma from above
-    mu=2*gamma;
+    
     %Draw proposal samples
-    P = rand(nSamples,1); %Create uniform distributed pseudorandom numbers
+    P = rand; %Create uniform distributed pseudorandom numbers
     %figure(400)
     %hist(P);
     %Evaluate Proposal samples at the inverse cdf
     %pd = makedist('exp');
-    z = G{2,i};
-    samples{1,i} = 2*mu*expinv(P,mu);
-    %samples_real = samples*z; %Get the real timepoint depending on the period
+    %z = G{2,i};
+    x=@(P,gamma)(-((-(P-2)/2)./gamma))
+    samples(1,i) = round(abs(x(P,gamma))); %abs to avoid negative values
+    
+    
     
     %Plot the distributions
     
     figure(400)
     subplot(2,2,1)
-    hist(P);
-    %hold on;
+    histogram(P);
+    hold on;
     grid on;
     xlabel('Timepoints');
     ylabel('Frequency');
     title('Uniform Distribution [0,1]');
     
     subplot(2,2,2)
-    hist(samples{1,i});
-    %hold on;
+    histogram(samples(1,i));
+    hold on;
     grid on;
     xlabel('Timepoints');
     ylabel('Frequency');
     title('Exponential Distribution');
+    
+    %Compose measurement dataset
+    measurement(i,:) = statevalues{1,i}(samples(1,i),:);
     end
     %hold off;
     
 %% Create new dataset with timepoints
 % Select arbitrary results from a given dataset
-
+%% Plot all Cyclines
+for i = 1:n
+j = [2,3,5,6,7];
+combos = nchoosek(j,2);
+r = length(combos);
+for q=1:r
+figure(2)
+hold on;
+subplot(3,4,q)
+f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
+hold on;
+%for i = 1:n %Plot the start of the cell cycle
+    startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
+    lstartpoint = length(startpoint);
+    for k = 1:lstartpoint
+f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
+    end
+    
+    
+f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
+    
+%end
+xlabel(statenames(1,combos(q,1)))
+ylabel(statenames(1,combos(q,2)))
+title('Simulated Dataset')
+hold off;
+end
+end
 %% Print some information
 % Define names 
 Cells = n;
