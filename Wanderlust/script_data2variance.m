@@ -3,6 +3,7 @@ tic
 
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
+%data = datafile;
 data = datafile';
 %datafolder	= '~/methods2models/datasets/example/'; %Implement GUI for users
 %datafile	= 'data.mat';
@@ -17,6 +18,15 @@ data = datafile';
 % load options for ERA and wanderlust
 load_options % Set an own m-file
 
+
+
+disp(' ')
+disp(' NOTE: The simulation need some time!')
+
+
+disp('   ')
+disp(' Press ENTER to start!  ')
+pause
 %% Find a path through the population 
 % wanderlust options
 start = [-3,-1.2];
@@ -24,7 +34,7 @@ startballsize = [0.02,0.02];
 wanderlust_weights = [1,1];
 doplots = 1;
 num_graphs = 30;
-PathIndex = [1,2];
+PathIndex = [1,2]; %User interaction with options
 manual_path = 0;
 
 G = PathfromWanderlust(data,options);

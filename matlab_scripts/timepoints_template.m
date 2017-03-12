@@ -80,7 +80,7 @@ peakInterval = diff(G{1,i}{2,j});
     
     end
 end
-hist_period
+hist_period;
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
 for i = 1:n
@@ -165,7 +165,7 @@ end
     nSamples = n;
     %samples = cell(1,n);
     samples = zeros(1,n);
-    measurement = zeros(n,31);
+    measurement = zeros(n,31); %n measurements
     for i = 1:n
         gamma = log(2)./G{2,i};
         
@@ -177,7 +177,7 @@ end
     %Evaluate Proposal samples at the inverse cdf
     %pd = makedist('exp');
     %z = G{2,i};
-    x=@(P,gamma)(-((-(P-2)/2)./gamma))
+    x=@(P,gamma)(-((-(P-2)/2)./gamma));
     samples(1,i) = round(abs(x(P,gamma))); %abs to avoid negative values
     
     
@@ -206,8 +206,13 @@ end
     end
     %hold off;
     
-%% Create new dataset with timepoints
+%% Save the measurement dataset
 % Select arbitrary results from a given dataset
+filename = datestr(now,30);
+filename=strcat('m', filename);
+directoryname = uigetdir('~/methods2models/');
+save([filename '.mat'], 'measurement','-v7.3');
+cd('~/methods2models');
 %% Plot all Cyclines
 for i = 1:n
 j = [2,3,5,6,7];
@@ -242,6 +247,9 @@ Cells = n;
 Period = mean([G{2,:}]);
 SimulationTime = datafile.t_iqm(end);
 GrowthRate = mean([GAMMA{1,:}]);
-RESULTS = table(Cells,SimulationTime, Period, GrowthRate)
+RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
+disp(RESULTS);
+%% Save your measurements
+%directoryname = uigetdir('~/methods2models/');
 
 
