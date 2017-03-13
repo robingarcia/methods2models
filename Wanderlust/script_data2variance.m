@@ -4,7 +4,7 @@ tic
 filename = uigetfile('~/methods2models/datasets');
 datafile = importdata(filename);
 %data = datafile;
-data = datafile';
+data = datafile;
 %datafolder	= '~/methods2models/datasets/example/'; %Implement GUI for users
 %datafile	= 'data.mat';
 

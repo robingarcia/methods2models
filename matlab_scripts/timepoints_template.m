@@ -51,36 +51,36 @@ AverageDistance_Peaks = mean(diff(locs));
     PKS= G{1,i}{1,6};
 end
 %% Plot all peaks
-for j = [2,3,5,6,7]
-   for i = 1:n
-    onecell(:,i)=statevalues{1,i}(:,j);
-    figure(1)
-    hold on;
-    s(j)=subplot(3,3,j);
+%for j = [2,3,5,6,7]
+   %for i = 1:n
+    %onecell(:,i)=statevalues{1,i}(:,j);
+    %figure(1)
+    %hold on;
+    %s(j)=subplot(3,3,j);
     %findpeaks(onecell(:,i),'MinPeakDistance', 15);
-    findpeaks(onecell(:,i),'MinPeakDistance', 15);
-    title(s(j),statenames(1,j));
-    hold off;   
-   end
-end
+    %findpeaks(onecell(:,i),'MinPeakDistance', 15);
+    %title(s(j),statenames(1,j));
+    %hold off;   
+   %end
+%end
 
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
 for i = 1:n
     for j = [2,3,5,6,7]
 peakInterval = diff(G{1,i}{2,j});
-    figure(3)
-    hold on;
-    hist_period = histogram(diff(G{1,i}{2,j}));
-    grid on;
-    xlabel('Period of the cell cycle')
-    ylabel('Frequency of Occurrence')
-    title('Histogram of Peak Intervals (Cell cycle period)')
-    hold off;
+    %figure(3)
+    %hold on;
+    %hist_period = histogram(diff(G{1,i}{2,j}));
+    %grid on;
+    %xlabel('Period of the cell cycle')
+    %ylabel('Frequency of Occurrence')
+    %title('Histogram of Peak Intervals (Cell cycle period)')
+    %hold off;
     
     end
 end
-hist_period;
+%hist_period;
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
 for i = 1:n
