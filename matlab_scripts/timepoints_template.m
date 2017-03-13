@@ -9,17 +9,18 @@ load('toetcher_statenames.mat');
 statevalues = datafile.random_statevalues; % States
 t = datafile.t_iqm; % Time
 timepoints = datafile.t_iqm;
-t_original=timepoints./timepoints(end); %0 to 1
+%t_original=timepoints./timepoints(end); %0 to 1
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
-o = m - 100;
+o = m - 400;
 t=t(o:m); %Trimmed time vector
-t_cut=t./t(end); %0 to 1
+%t_norm = t-t(1); % Set the time vector from 0 to x
+%t_cut=t./t(end); %0 to 1
 PKS = zeros(n);
 for i = 1:n
     m = length(statevalues{1,i});
-o = m - 100;
+o=m-400;%o = m - 100;
 statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
 end
 %% Determine the peaks of your Cyclines and APC during cellcycle
@@ -84,7 +85,7 @@ end
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
 for i = 1:n
-    z = G{2,i};
+    z = G{2,i}; % Same value as T
     interval = size(t);
     time = linspace(interval(1,1), interval(1,2));
     
@@ -127,20 +128,26 @@ syms a gamma p P x
 %a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
+GAMMA = zeros(1,n);
+samples = zeros(1,n);
+%measurement = zeros(n,31); %n measurements
 for i = 1:n
-    gamma = log(2)./G{2,i}; % g = Growth rate of the population; T = period 
-    GAMMA{1,i} = gamma;
-    a = linspace(0,z,n); %a = (G{2,i}); % Interval
-    T_range = (0:G{2,i}); % Plotting range
-    p=@(a,gamma)(2*gamma.*exp(-gamma.*a)); %Distribution function (pdf)
-    P=@(a,gamma)((-2*exp(-gamma.*a))+2); %Primitive (cdf)
-    %x=@(P,gamma)((log(P./(2*gamma)))./gamma);
-    pp=p(a,gamma);
-    PP=P(a,gamma);
-    %invPP=x(P(a,gamma),gamma);
-    %area=trapz(a, p(a,gamma));
+    gamma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
+    GAMMA(1,i) = gamma;
+    %Pseu = rand;                % Uniform distributed numbers
+    %a = linspace(0,T,n); %a = (G{2,i}); % Interval with period T (???)
+    a = (0:G{2,i}); % Plotting range
+    p=@(a,gamma)(2*gamma*exp(-gamma*a));  %Distribution function (pdf)
+    P=@(a,gamma)((-2*exp(-gamma.*a))+2);    %Primitive (cdf)
+    x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
+    samples(1,i) = x(gamma);                %Exponential distributed number
+    %samples = samples./n;
+    
+    
     figure(900)
-    subplot(2,2,1)
+    subplot(2,2,1) % PDF Plot
+    %histogram(samples);
+    hold on;
     h=plot(a,p(a,gamma));
     hold on;
     grid on;
@@ -149,7 +156,7 @@ for i = 1:n
     title('Distribution Function (pdf)');
     %hold off;
     
-    subplot(2,2,2)
+    subplot(2,2,2) % CDF Plot
     H=plot(a,P(a,gamma));
     hold on;
     grid on;
@@ -159,15 +166,15 @@ for i = 1:n
     %hold off;
 end
 
-% Inverse method alorithm
+%% Inverse method alorithm
     %rand('seed', 12345)
     %hold on;
-    nSamples = n;
+   
     %samples = cell(1,n);
     samples = zeros(1,n);
     measurement = zeros(n,31); %n measurements
     for i = 1:n
-        gamma = log(2)./G{2,i};
+        gamma = log(2)/G{2,i};
         
     
     %Draw proposal samples
@@ -177,8 +184,9 @@ end
     %Evaluate Proposal samples at the inverse cdf
     %pd = makedist('exp');
     %z = G{2,i};
-    x=@(P,gamma)(-((-(P-2)/2)./gamma));
-    samples(1,i) = round(abs(x(P,gamma))); %abs to avoid negative values
+    %x=@(P,gamma)((log((2-gamma)./2))./P);
+    x=@(P,gamma)((log(-2/(P-2))/gamma));
+    samples(1,i) = ceil(x(P,gamma)); %ceil or round
     
     
     
@@ -194,7 +202,7 @@ end
     title('Uniform Distribution [0,1]');
     
     subplot(2,2,2)
-    histogram(samples(1,i));
+    histogram(samples);
     hold on;
     grid on;
     xlabel('Timepoints');
@@ -214,10 +222,12 @@ directoryname = uigetdir('~/methods2models/');
 save([filename '.mat'], 'measurement','-v7.3');
 cd('~/methods2models');
 %% Plot all Cyclines
+
 for i = 1:n
 j = [2,3,5,6,7];
 combos = nchoosek(j,2);
 r = length(combos);
+f = gobjects(1,r);
 for q=1:r
 figure(2)
 hold on;
@@ -246,7 +256,7 @@ end
 Cells = n;
 Period = mean([G{2,:}]);
 SimulationTime = datafile.t_iqm(end);
-GrowthRate = mean([GAMMA{1,:}]);
+GrowthRate = mean(GAMMA(1,:));
 RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
 disp(RESULTS);
 %% Save your measurements
