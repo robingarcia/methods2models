@@ -128,41 +128,42 @@ syms a gamma p P x
 %a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
-GAMMA = zeros(1,n);
-samples = zeros(1,n);
+%GAMMA = zeros(1,n);
+%samples = zeros(1,n);
 %measurement = zeros(n,31); %n measurements
 for i = 1:n
     gamma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
     GAMMA(1,i) = gamma;
-    %Pseu = rand;                % Uniform distributed numbers
+    %Pseu = randi(G{2,i});                % Uniform distributed numbers
     %a = linspace(0,T,n); %a = (G{2,i}); % Interval with period T (???)
     a = (0:G{2,i}); % Plotting range
-    p=@(a,gamma)(2*gamma*exp(-gamma*a));  %Distribution function (pdf)
-    P=@(a,gamma)((-2*exp(-gamma.*a))+2);    %Primitive (cdf)
-    x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
+    p=@(gamma,a)(2*gamma*exp(-gamma*a));  %Distribution function (pdf)
+    P=@(a,gamma)((2-2*exp(-gamma*a)));    %Primitive (cdf)
+    %x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
+    x=@(gamma)(log(-(rand-2)/2)/-gamma);
     samples(1,i) = x(gamma);                %Exponential distributed number
-    %samples = samples./n;
+    
     
     
     figure(900)
-    subplot(2,2,1) % PDF Plot
-    %histogram(samples);
+    %subplot(2,2,1) % PDF Plot
+    hist(samples);
     hold on;
-    h=plot(a,p(a,gamma));
-    hold on;
+    plot(a,p(gamma,a));
+    %hold on;
     grid on;
     xlabel('Age [h]');
     ylabel('Celldensity');
     title('Distribution Function (pdf)');
     %hold off;
     
-    subplot(2,2,2) % CDF Plot
-    H=plot(a,P(a,gamma));
-    hold on;
-    grid on;
-    xlabel('Age [h]');
-    ylabel('Celldensity');
-    title('Primitive Function (cdf)')
+    %subplot(2,2,2) % CDF Plot
+    %plot(a,P(a,gamma));
+    %hold on;
+    %grid on;
+    %xlabel('Age [h]');
+    %ylabel('Celldensity');
+    %title('Primitive Function (cdf)')
     %hold off;
 end
 
@@ -194,16 +195,16 @@ end
     
     figure(400)
     subplot(2,2,1)
-    histogram(P);
-    hold on;
+    hist(P);
+    %hold on;
     grid on;
     xlabel('Timepoints');
     ylabel('Frequency');
     title('Uniform Distribution [0,1]');
     
     subplot(2,2,2)
-    histogram(samples);
-    hold on;
+    hist(samples);
+    %hold on;
     grid on;
     xlabel('Timepoints');
     ylabel('Frequency');
