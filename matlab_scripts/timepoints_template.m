@@ -142,15 +142,15 @@ for i = 1:n
     %x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
     x=@(gamma)(log(-(rand-2)/2)/-gamma);
     samples(1,i) = x(gamma);                %Exponential distributed number
-    
+    %distfun(1,i) = p(gamma,a);
     
     
     figure(900)
     %subplot(2,2,1) % PDF Plot
-    hist(samples);
-    hold on;
-    plot(a,p(gamma,a));
+    %h=histogram(x(gamma));
     %hold on;
+    plot(a,(p(gamma,a)));
+    hold on;
     grid on;
     xlabel('Age [h]');
     ylabel('Celldensity');
@@ -166,7 +166,16 @@ for i = 1:n
     %title('Primitive Function (cdf)')
     %hold off;
 end
-
+%figure(900)
+    %subplot(2,2,1) % PDF Plot
+    h=histogram(samples,'Normalization','pdf');
+    hold on;
+    %plot(a,distfun*n);
+    hold on;
+    grid on;
+    xlabel('Age [h]');
+    ylabel('Celldensity');
+    title('Distribution Function (pdf)');
 %% Inverse method alorithm
     %rand('seed', 12345)
     %hold on;
