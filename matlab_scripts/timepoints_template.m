@@ -85,10 +85,12 @@ end
 %% Simulate the duplication of the DNA 2 -> 4
 % Determine the slope: m = (4-2)/x2-x1
 for i = 1:n
-    z = G{2,i}; % Same value as T
+    %z = G{2,i}; % Same value as T
+    %z = G{1,i}{2,6};
     interval = size(t);
-    time = linspace(interval(1,1), interval(1,2));
-    
+    %time = linspace(interval(1,1), interval(1,2));
+    time = (1:interval(end));
+    %time = t?
     %Design of vectors
 two=(1:length(time));
 two(1:length(time)) = 2;
@@ -99,27 +101,42 @@ four(1:length(time)) = 4;
 %y = zeros(1,length(time));
 %y(1:length(time))=2;
 
+for k = 1:length(G{1,i}{2,6})
+    z = G{1,i}{2,6}(k,1);
 p_g1 = z*0.5; % Duration G1-Phase
 p_s = z*0.3;  %Duration S-Phase
 p_g2 = z*0.16; % Duration G1-Phase
 p_gm = z*0.04; %p_g2 Duration G2-Phase
-slope = abs(2/(p_g2 - p_g1));
+%slope = abs(2/(p_g2 - p_g1));
 
-a=two ((time>=0) & (time < p_g1)); 
+a=two((time>=0) & (time < p_g1)); 
 b=two((time>=p_g1) & (time < (p_g1+p_s)));
 c=four((time>=(p_g1+p_s)) & (time <= z));
     
 y=[a,b,c];
 figure(5)
 hold on;
-plot(y);
+dnaplot=plot(y);
 grid on;
     xlabel('Time')
     ylabel('DNA')
     title('Changes in DNA content')
-    hold off;
-end
+    %hold off;
 
+
+DNA = dnaplot.YData';
+szDNA = size(DNA,1);
+DNAzeros = zeros(length(statevalues{1,1}),1);
+DNAzeros([1:szDNA])=DNA;
+statevalues{1,i}(:,32)=DNAzeros;
+figure(43)
+%plot(statevalues{1,i}(:,32));
+hold on;
+%statevalues{1,i}(:,32)=DNA;
+%DNAzeros = [DNA;zeros(length(statevalues{1,i}-length(DNA),1]
+%statevalues{szDNA(1,1),szDNA(1,2),i}(:,32) = DNA;
+end
+end
 %% Plot the beginning of the cellcycle
 % See above
 %% Choose arbitrary timepoints (Inverse method)
@@ -179,25 +196,25 @@ end
 %% Inverse method alorithm
     %rand('seed', 12345)
     %hold on;
-   
+    SAMPLES = cell(1,n);
     %samples = cell(1,n);
     samples = zeros(1,n);
-    measurement = zeros(n,31); %n measurements
+    measurement = zeros(n,32); %n measurements
     for i = 1:n
         gamma = log(2)/G{2,i};
         
     
     %Draw proposal samples
-    P = rand; %Create uniform distributed pseudorandom numbers
+    P = rand(1,n); %Create uniform distributed pseudorandom numbers
     %figure(400)
     %hist(P);
     %Evaluate Proposal samples at the inverse cdf
     %pd = makedist('exp');
     %z = G{2,i};
     %x=@(P,gamma)((log((2-gamma)./2))./P);
-    x=@(P,gamma)((log(-2/(P-2))/gamma));
-    samples(1,i) = ceil(x(P,gamma)); %ceil or round
-    
+    x=@(P,gamma)((log(-2./(P-2))/gamma));
+    samples = ceil(x(P,gamma)); %ceil or round
+    SAMPLES{1,i} = samples;
     
     
     %Plot the distributions
@@ -221,16 +238,16 @@ end
     
     %Compose measurement dataset
     measurement(i,:) = statevalues{1,i}(samples(1,i),:);
+    %MEASUREMENT{1,i} = measurement;
     end
-    %hold off;
-    
+    %hold off;    
 %% Save the measurement dataset
 % Select arbitrary results from a given dataset
 filename = datestr(now,30);
 filename=strcat('m', filename);
 directoryname = uigetdir('~/methods2models/');
 save([filename '.mat'], 'measurement','-v7.3');
-cd('~/methods2models');
+cd('~/methods2models/dataset/measurement');
 %% Plot all Cyclines
 
 for i = 1:n
