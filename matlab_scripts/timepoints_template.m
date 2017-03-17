@@ -1,3 +1,4 @@
+function [measurement, START, SAMPLES] = timepoints_template()
 %% This is an template for output generation
 clear ;
 clc;
@@ -114,7 +115,7 @@ b=two((time>=p_g1) & (time < (p_g1+p_s)));
 c=four((time>=(p_g1+p_s)) & (time <= z));
     
 y=[a,b,c];
-figure(5)
+%figure(5)
 hold on;
 dnaplot=plot(y);
 grid on;
@@ -124,14 +125,14 @@ grid on;
     %hold off;
 
 
-DNA = dnaplot.YData';
+DNA = y';
 szDNA = size(DNA,1);
 DNAzeros = zeros(length(statevalues{1,1}),1);
 DNAzeros([1:szDNA])=DNA;
 statevalues{1,i}(:,32)=DNAzeros;
-figure(43)
+%figure(43)
 %plot(statevalues{1,i}(:,32));
-hold on;
+%hold on;
 %statevalues{1,i}(:,32)=DNA;
 %DNAzeros = [DNA;zeros(length(statevalues{1,i}-length(DNA),1]
 %statevalues{szDNA(1,1),szDNA(1,2),i}(:,32) = DNA;
@@ -247,7 +248,7 @@ filename = datestr(now,30);
 filename=strcat('m', filename);
 directoryname = uigetdir('~/methods2models/');
 save([filename '.mat'], 'measurement','-v7.3');
-cd('~/methods2models/dataset/measurement');
+cd('~/methods2models');
 %% Plot all Cyclines
 
 for i = 1:n
@@ -256,20 +257,20 @@ combos = nchoosek(j,2);
 r = length(combos);
 f = gobjects(1,r);
 for q=1:r
-figure(2)
+%figure(2)
 hold on;
 subplot(3,4,q)
-f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
+%f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
 hold on;
 %for i = 1:n %Plot the start of the cell cycle
     startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
     lstartpoint = length(startpoint);
     for k = 1:lstartpoint
-f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
+%f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
     end
     
 %Plot the measurements
-f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
+%f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
     
 %end
 xlabel(statenames(1,combos(q,1)))
@@ -277,6 +278,20 @@ ylabel(statenames(1,combos(q,2)))
 title('Simulated Dataset')
 hold off;
 end
+end
+
+%% New simulated IC 
+START = cell(2,n);
+for i = 1:n
+    startpoint = G{1,i}{2,6};
+    START{1,i} = startpoint; % Startpoints of the cellcycle
+    simstart_IC = zeros(length(startpoint),32);
+    for j = 1:1:size(startpoint,1)
+        %n = startpoint(j,1);
+        simstart_IC(j,:) = statevalues{1,i}(j,:); % IC at the start
+        START{2,i} = simstart_IC; %New IC from simulated dataset
+    end
+    
 end
 %% Print some information
 % Define names 
@@ -289,4 +304,4 @@ disp(RESULTS);
 %% Save your measurements
 %directoryname = uigetdir('~/methods2models/');
 
-
+end

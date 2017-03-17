@@ -1,5 +1,5 @@
 %% This is an MEX-model implementation of the IQM-model 
-function [results_mex] = model_toettcher2008mex(time_vector)
+function [results_mex] = model_toettcher2008mex(time_vector, IC)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Debugging area
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -12,13 +12,14 @@ IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulati
 ICdefault = IQMinitialconditions(toettcher2008);
 cd '~/methods2models/';
 t_iqm = 0:0.1:100;
+time_vector = 0:0.1:100;
 % Simulate the models
 tic
 results_iqm = IQMsimulate(toettcher2008,0:0.1:120); % Simulation of IQM-model
 toc
 
 tic
-results_mex = model_toettcher2008MEX(time_vector); % Simulation of MEX-model
+results_mex = model_toettcher2008MEX(time_vector,IC); % Simulation of MEX-model
 %results_mex = model_toettcher2008MEX(t_iqm, ICdefault); % Simulation of MEX-model
 toc
 
