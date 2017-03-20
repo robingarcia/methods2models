@@ -6,17 +6,17 @@ function [results_mex] = model_toettcher2008mex(time_vector, IC)
 
 
 % Create MEX-model
-cd '~/methods2models/IQM-Projektordner/models/mex_model';
-toettcher2008 = IQMmodel('~/methods2models/IQM-Projektordner/models/model_toettcher2008.txt'); % Load the model
-IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulation function
-ICdefault = IQMinitialconditions(toettcher2008);
-cd '~/methods2models/';
-t_iqm = 0:0.1:100;
-time_vector = 0:0.1:100;
+%cd '~/methods2models/IQM-Projektordner/models/mex_model';
+%toettcher2008 = IQMmodel('~/methods2models/IQM-Projektordner/models/model_toettcher2008.txt'); % Load the model
+%IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulation function
+%ICdefault = IQMinitialconditions(toettcher2008);
+%cd '~/methods2models/';
+%t_iqm = 0:0.1:100;
+%time_vector = 0:0.1:100;
 % Simulate the models
-tic
-results_iqm = IQMsimulate(toettcher2008,0:0.1:120); % Simulation of IQM-model
-toc
+%tic
+%results_iqm = IQMsimulate(toettcher2008,0:0.1:120); % Simulation of IQM-model
+%toc
 
 tic
 results_mex = model_toettcher2008MEX(time_vector,IC); % Simulation of MEX-model

@@ -55,7 +55,8 @@ generation_temp(n,tF);
 %for i = 1:length(C)
     tF = sort(C{1,i});
     simulationIC = B{2,1}(1,:);
-mex_model = model_toettcher2008mex(tF,simulationIC);
+    simulationIC = simulationIC([1:31]);
+rndm_measurement = model_toettcher2008mex(tF,simulationIC);
 %end
 %% Data2Wanderlust
 %script_data2variance;

@@ -109,9 +109,16 @@ p_s = z*0.3;  %Duration S-Phase
 p_g2 = z*0.16; % Duration G1-Phase
 p_gm = z*0.04; %p_g2 Duration G2-Phase
 %slope = abs(2/(p_g2 - p_g1));
+t_1 = z/2;
+t_2 = 0.8*z;
+slope = (2/(t_2 - t_1));
+
+slpe = (1:length(time));
+slpe(1:length(time)) = 2;
+slpe = slpe+slope.*time;
 
 a=two((time>=0) & (time < p_g1)); 
-b=two((time>=p_g1) & (time < (p_g1+p_s)));
+b=slpe((time>=p_g1) & (time < (p_g1+p_s)));
 c=four((time>=(p_g1+p_s)) & (time <= z));
     
 y=[a,b,c];
