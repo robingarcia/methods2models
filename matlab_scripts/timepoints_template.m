@@ -152,7 +152,7 @@ end
 % See above
 %% Choose arbitrary timepoints (Inverse method)
 %gamma = zeros(1,n); % n-cells = n different gammas
-syms a gamma p P x
+syms a gammma p P x
 %a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
@@ -160,16 +160,16 @@ syms a gamma p P x
 %samples = zeros(1,n);
 %measurement = zeros(n,31); %n measurements
 for i = 1:n
-    gamma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
-    GAMMA(1,i) = gamma;
+    gammma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
+    GAMMMA(1,i) = gammma;
     %Pseu = randi(G{2,i});                % Uniform distributed numbers
     %a = linspace(0,T,n); %a = (G{2,i}); % Interval with period T (???)
     a = (0:G{2,i}); % Plotting range
-    p=@(gamma,a)(2*gamma*exp(-gamma*a));  %Distribution function (pdf)
-    P=@(a,gamma)((2-2*exp(-gamma*a)));    %Primitive (cdf)
+    p=@(gammma,a)(2*gammma*exp(-gammma*a));  %Distribution function (pdf)
+    P=@(a,gammma)((2-2*exp(-gammma*a)));    %Primitive (cdf)
     %x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
-    x=@(gamma)(log(-(rand-2)/2)/-gamma);
-    samples(1,i) = x(gamma);                %Exponential distributed number
+    x=@(gammma)(log(-(rand-2)/2)/-gammma);
+    samples(1,i) = x(gammma);                %Exponential distributed number
     %distfun(1,i) = p(gamma,a);
     
     
@@ -212,7 +212,7 @@ end
     samples = zeros(1,n);
     measurement = zeros(n,32); %n measurements
     for i = 1:n
-        gamma = log(2)/G{2,i};
+        gammma = log(2)/G{2,i};
         
     
     %Draw proposal samples
@@ -223,8 +223,8 @@ end
     %pd = makedist('exp');
     %z = G{2,i};
     %x=@(P,gamma)((log((2-gamma)./2))./P);
-    x=@(P,gamma)((log(-2./(P-2))/gamma));
-    samples = ceil(x(P,gamma)); %ceil or round
+    x=@(P,gammma)((log(-2./(P-2))/gammma));
+    samples = ceil(x(P,gammma)); %ceil or round
     SAMPLES{1,i} = samples;
     
     
@@ -310,7 +310,7 @@ Period = mean([G{2,:}]);
 %SimulationTime = datafile.t_iqm(end);
 SimulationTime = t_iqm(end);
 
-GrowthRate = mean(GAMMA(1,:));
+GrowthRate = mean(GAMMMA(1,:));
 RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
 disp(RESULTS);
 %% Save your measurements
