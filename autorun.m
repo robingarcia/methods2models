@@ -19,13 +19,14 @@ n = input('How many cells? (e.g: [20]):');           % n new datasets
 
 %% Load the cell cycle models
 % Load the MATLAB-model
-matlab_model = model_toettcher2008matlab(tF);
+%matlab_model = model_toettcher2008matlab(tF);
 
 % Load the IQM-model
-[toet2008, toettcher2008, IC] = model_toettcher2008iqm(tF);
+%[toet2008, toettcher2008, IC] = model_toettcher2008iqm(tF);
 
 % Load the MEX-model
-mex_model = model_toettcher2008mex(tF,IC);
+%mex_model = model_toettcher2008mex(tF,IC);
+results_mex = model_toettcher2008MEX(time_vector,IC);
 % Verificate  IQM vs MATLAB
 %verification_iqm(tF); % Bug?
 
@@ -56,7 +57,7 @@ generation_temp(n,tF);
     tF = sort(C{1,i});
     simulationIC = B{2,1}(1,:);
     simulationIC = simulationIC([1:31]);
-rndm_measurement = model_toettcher2008mex(tF,simulationIC);
+rndm_measurement = model_toettcher2008MEX(tF,simulationIC);
 %end
 %% Data2Wanderlust
 %script_data2variance;

@@ -1,15 +1,18 @@
-function [measurement, START, SAMPLES] = timepoints_template()
+function [measurement, START, SAMPLES] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
-clear ;
-clc;
+%clear ;
+%clc;
 %addpath /Users/robin/methods2models/ /Users/robin/MATLAB/
 %% Load the data
-filename = uigetfile('~/methods2models/datasets');
-datafile = importdata(filename);
+%filename = uigetfile('~/methods2models/datasets');
+%datafile = importdata(filename);
 load('toetcher_statenames.mat');
-statevalues = datafile.random_statevalues; % States
-t = datafile.t_iqm; % Time
-timepoints = datafile.t_iqm;
+%statevalues = datafile.random_statevalues; % States
+statevalues = random_statevalues; % States
+%t = datafile.t_iqm; % Time
+%timepoints = datafile.t_iqm;
+t = t_iqm; % Time
+timepoints = t_iqm;
 %t_original=timepoints./timepoints(end); %0 to 1
 n = length(statevalues); % Determine the number of cells
 m = length(t);
@@ -251,11 +254,11 @@ end
     %hold off;    
 %% Save the measurement dataset
 % Select arbitrary results from a given dataset
-filename = datestr(now,30);
-filename=strcat('m', filename);
-directoryname = uigetdir('~/methods2models/');
-save([filename '.mat'], 'measurement','-v7.3');
-cd('~/methods2models');
+%filename = datestr(now,30);
+%filename=strcat('m', filename);
+%directoryname = uigetdir('~/methods2models/');
+%save([filename '.mat'], 'measurement','-v7.3');
+%cd('~/methods2models');
 %% Plot all Cyclines
 
 for i = 1:n
@@ -304,7 +307,9 @@ end
 % Define names 
 Cells = n;
 Period = mean([G{2,:}]);
-SimulationTime = datafile.t_iqm(end);
+%SimulationTime = datafile.t_iqm(end);
+SimulationTime = t_iqm(end);
+
 GrowthRate = mean(GAMMA(1,:));
 RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
 disp(RESULTS);
