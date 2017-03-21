@@ -2,17 +2,18 @@
 function [rndmic,t_iqm] = lognrnd_ic(n,tF)
 
 % Load model
-toettcher2008 = IQMmodel('model_toettcher2008.txt');
+%------------toettcher2008 = IQMmodel('model_toettcher2008.txt');
 %toettcher2008_sim = model_toettcher2008iqm(120);
 % Simulate IQM model and generate data with default IC values
-toettcher2008sim = IQMsimulate(toettcher2008,120); %simulation time = 120
-t_iqm = toettcher2008sim.time;
+%------------toettcher2008sim = IQMsimulate(toettcher2008,tF); %simulation time = 120
+%------------t_iqm = toettcher2008sim.time;
 % Fetch the IC vector
-ICdefault = IQMinitialconditions(toettcher2008); %IC-vector w/ default IC
-
+%------ICdefault = IQMinitialconditions(toettcher2008); %IC-vector w/ default IC
+[xSol,ic] = model_toettcher2008matlab;
+ICdefault = ic;
 %Fetch the parameter vector
-[parameters,values]=IQMparameters(toettcher2008); %Parameter-vector w/ deafault parameters
-Pdefault = values; 
+%----[parameters,values]=IQMparameters(toettcher2008); %Parameter-vector w/ deafault parameters
+%-----Pdefault = values; 
 
 % Simulate MEX model and generate data with default values
 %results_mex = model_toettcher2008mex(t_iqm,ICdefault, Pdefault); %simulation time = t_iqm = 120

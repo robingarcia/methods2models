@@ -1,4 +1,4 @@
-function [xSol] = model_toettcher2008matlab(tF)
+function [xSol,ic] = model_toettcher2008matlab(tF)
 %% Modified final model of the cell cycle from Toettcher et. al. 2008
 
 % This file simulates the final model that has been optimized to data of
