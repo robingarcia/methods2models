@@ -126,12 +126,12 @@ c=four((time>=(p_g1+p_s)) & (time <= z));
     
 y=[a,b,c];
 %figure(5)
-hold on;
-dnaplot=plot(y);
-grid on;
-    xlabel('Time')
-    ylabel('DNA')
-    title('Changes in DNA content')
+%hold on;
+%dnaplot=plot(y);
+%grid on;
+%    xlabel('Time')
+%    ylabel('DNA')
+%    title('Changes in DNA content')
     %hold off;
 
 
@@ -173,16 +173,16 @@ for i = 1:n
     %distfun(1,i) = p(gamma,a);
     
     
-    figure(900)
+    %figure(900)
     %subplot(2,2,1) % PDF Plot
     %h=histogram(x(gamma));
     %hold on;
-    plot(a,(p(gamma,a)));
-    hold on;
-    grid on;
-    xlabel('Age [h]');
-    ylabel('Celldensity');
-    title('Distribution Function (pdf)');
+    %plot(a,(p(gamma,a)));
+    %hold on;
+    %grid on;
+    %xlabel('Age [h]');
+    %ylabel('Celldensity');
+    %title('Distribution Function (pdf)');
     %hold off;
     
     %subplot(2,2,2) % CDF Plot
@@ -196,14 +196,14 @@ for i = 1:n
 end
 %figure(900)
     %subplot(2,2,1) % PDF Plot
-    h=histogram(samples,'Normalization','pdf');
-    hold on;
+    %h=histogram(samples,'Normalization','pdf');
+    %hold on;
     %plot(a,distfun*n);
-    hold on;
-    grid on;
-    xlabel('Age [h]');
-    ylabel('Celldensity');
-    title('Distribution Function (pdf)');
+    %hold on;
+    %grid on;
+    %xlabel('Age [h]');
+    %ylabel('Celldensity');
+    %title('Distribution Function (pdf)');
 %% Inverse method alorithm
     %rand('seed', 12345)
     %hold on;
@@ -230,22 +230,22 @@ end
     
     %Plot the distributions
     
-    figure(400)
-    subplot(2,2,1)
-    hist(P);
+    %figure(400)
+    %subplot(2,2,1)
+    %hist(P);
     %hold on;
-    grid on;
-    xlabel('Timepoints');
-    ylabel('Frequency');
-    title('Uniform Distribution [0,1]');
+    %grid on;
+    %xlabel('Timepoints');
+    %ylabel('Frequency');
+    %title('Uniform Distribution [0,1]');
     
-    subplot(2,2,2)
-    hist(samples);
+    %subplot(2,2,2)
+    %hist(samples);
     %hold on;
-    grid on;
-    xlabel('Timepoints');
-    ylabel('Frequency');
-    title('Exponential Distribution');
+    %grid on;
+    %xlabel('Timepoints');
+    %ylabel('Frequency');
+    %title('Exponential Distribution');
     
     %Compose measurement dataset
     measurement(i,:) = statevalues{1,i}(samples(1,i),:);
@@ -268,25 +268,25 @@ r = length(combos);
 f = gobjects(1,r);
 for q=1:r
 %figure(2)
-hold on;
-subplot(3,4,q)
+%hold on;
+%subplot(3,4,q)
 %f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
-hold on;
+%hold on;
 %for i = 1:n %Plot the start of the cell cycle
-    startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
-    lstartpoint = length(startpoint);
-    for k = 1:lstartpoint
+    %startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
+    %lstartpoint = length(startpoint);
+    %for k = 1:lstartpoint
 %f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
-    end
+    %end
     
 %Plot the measurements
 %f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
     
 %end
-xlabel(statenames(1,combos(q,1)))
-ylabel(statenames(1,combos(q,2)))
-title('Simulated Dataset')
-hold off;
+%xlabel(statenames(1,combos(q,1)))
+%ylabel(statenames(1,combos(q,2)))
+%title('Simulated Dataset')
+%hold off;
 end
 end
 

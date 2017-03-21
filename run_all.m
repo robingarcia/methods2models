@@ -1,5 +1,7 @@
 %% Run all in one step
 %addpath(genpath('~/methods2models'));
+%addpath(genpath('~/methods2models'));
+a = addpath(genpath('~/methods2models'));
 %tic
 filename = datestr(now,30); %Timestamp
 dt = input('Input stepzise (e.g: [0.1]):');
@@ -46,7 +48,8 @@ toc
 % Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
-cd('~/methods2models/datasets/');
+directoryname = input('Directory? (e.g:~/methods2models/ ):');
+cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
 %save([filename '.mat'], 'random_statevalues','t_iqm','SAMPLES','rndm_measurement', '-v7.3');
 save([filename '.mat'],'rndm_measurement');
