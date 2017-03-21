@@ -34,6 +34,7 @@ tic
     tF = sort(SAMPLES{1,i});
     simulationIC = START{2,1}(1,:);
     simulationIC = simulationIC([1:31]);
+    simulationIC = simulationIC';
 %rndm_measurement{i} = model_toettcher2008MEX(tF,simulationIC);
 rndm_measurement = model_toettcher2008MEX(tF,simulationIC);
 

@@ -225,7 +225,7 @@ end
     %x=@(P,gamma)((log((2-gamma)./2))./P);
     x=@(P,gammma)((log(-2./(P-2))/gammma));
     samples = ceil(x(P,gammma)); %ceil or round
-    SAMPLES{1,i} = samples;
+    %SAMPLES{1,i} = samples;
     
     
     %Plot the distributions
@@ -249,6 +249,8 @@ end
     
     %Compose measurement dataset
     measurement(i,:) = statevalues{1,i}(samples(1,i),:);
+    samples = samples-1;
+    SAMPLES{1,i} = samples;
     %MEASUREMENT{1,i} = measurement;
     end
     %hold off;    
