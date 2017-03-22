@@ -1,4 +1,4 @@
-function [measurement, START, SAMPLES] = timepoints_template(random_statevalues,t_iqm)
+function [START, SAMPLES,t_period] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -210,6 +210,7 @@ end
     SAMPLES = cell(1,n);
     %samples = cell(1,n);
     samples = zeros(1,n);
+    t_period = cell(1,n);
     measurement = zeros(n,32); %n measurements
     for i = 1:n
         gammma = log(2)/G{2,i};
@@ -224,7 +225,7 @@ end
     %z = G{2,i};
     %x=@(P,gamma)((log((2-gamma)./2))./P);
     x=@(P,gammma)((log(-2./(P-2))/gammma));
-    samples = ceil(x(P,gammma)); %ceil or round
+    samples = x(P,gammma); %ceil or round
     %SAMPLES{1,i} = samples;
     
     
@@ -248,9 +249,10 @@ end
     %title('Exponential Distribution');
     
     %Compose measurement dataset
-    measurement(i,:) = statevalues{1,i}(samples(1,i),:);
-    samples = samples-1;
+    %measurement(i,:) = statevalues{1,i}(samples(1,i),:);
+    %samples = samples-1;
     SAMPLES{1,i} = samples;
+    t_period{1,i} = G{2,i};
     %MEASUREMENT{1,i} = measurement;
     end
     %hold off;    
