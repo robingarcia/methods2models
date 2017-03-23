@@ -8,7 +8,7 @@ dt = input('Input stepzise (e.g: [0.1]):');
 tmax = input('Input simulation time (e.g: [100]):');
 tF = 0:dt:tmax; % Simulation Time
 n = input('How many cells? (e.g: [20]):');% n new datasets
-m = input('How many snapshots? (e.g: [20]):');% Number of snapshots
+%m = input('How many snapshots? (e.g: [20]):');% Number of snapshots
 % ----------------------------------------------------------Data generation
 tic
 rndmic = lognrnd_ic(n);
@@ -24,20 +24,20 @@ for i = 1:n
    random_statevalues{i} = simdata{1,i}.statevalues;
 end
 toc
-% --------------------------------------------------------------Measurement
+%% --------------------------------------------------------------Measurement
 tic
 [START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF);
 toc
-%--------------------------------------------------------Simulate the model
+% --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
 tic
-rndm_measurement = cell(1,m);
-measurement = cell(1,m);
+rndm_measurement = cell(1,n);
+measurement = cell(1,n);
 %rndm_measurement = cell(1,length(SAMPLES));
 tspan = zeros(1,n+1);
 t_period = cell2mat(t_period);
 
-for i = 1:m %:length(SAMPLES) // How many snapshots? i = 1 snapshot
+for i = 1:n %:length(SAMPLES) // How many snapshots? i = 1 snapshot
     samples = sort(SAMPLES{1,i}(1,:));
     tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
     simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0
@@ -47,16 +47,24 @@ rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
 
 y_DNA = DNAcontent(tspan,t_period(1,i))';
-
-rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
-measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
+%y_DNA = piecewise(tspan, t_period(1,i))';
+figure(2)
+hold on;
+axis([1000 length(y_DNA) 1 4.5])
+plot(y_DNA)
+hold off;
+%rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
+%measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
 end
 toc
 %
 
 %% Simulate DNA
-%DNAcontent(tspan, t_period{1,1})
-
+%yDNA = DNAcontent(tspan, t_period{1,1})
+%axis([0 2*pi -1.5 1.5])
+%figure(2)
+%plot(y_DNA);
+%hold on;
 %% Plot yout dataset
 %scatter(newdata(1,:), newdata(2,:))
 %for i = 1:n
@@ -74,12 +82,12 @@ toc
 %% Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
-directoryname = input('Directory? (e.g:~/methods2models/ ):');
-cd(directoryname);
+%directoryname = input('Directory? (e.g:~/methods2models/ ):');
+%cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
 %save([filename '.mat'], 'random_statevalues','t_iqm','SAMPLES','rndm_measurement', '-v7.3');
-save([filename '.mat'],'rndm_measurement');
-cd('~/methods2models')
+%save([filename '.mat'],'rndm_measurement');
+%cd('~/methods2models')
 %toc
 
 %% Plot yout dataset
