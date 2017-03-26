@@ -4,9 +4,9 @@
 %a = addpath(genpath('~/methods2models'));
 %tic
 filename = datestr(now,30); %Timestamp
-dt = input('Input stepzise (e.g: [0.1]):');
+%dt = input('Input stepzise (e.g: [0.1]):');
 tmax = input('Input simulation time (e.g: [100]):');
-tF = 0:dt:tmax; % Simulation Time
+tF = 0:tmax; % Simulation Time
 n = input('How many cells? (e.g: [20]):');% n new datasets
 %m = input('How many snapshots? (e.g: [20]):');% Number of snapshots
 % ----------------------------------------------------------Data generation
@@ -26,7 +26,7 @@ end
 toc
 %% --------------------------------------------------------------Measurement
 tic
-[START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF);
+[START, SAMPLES,t_period,G1,S,G_all] = timepoints_template(random_statevalues, tF);
 toc
 % --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
@@ -46,15 +46,16 @@ for i = 1:n %:length(SAMPLES) // How many snapshots? i = 1 snapshot
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
 
-y_DNA = DNAcontent(tspan,t_period(1,i))';
+y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,6}, G_all{4,6})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
 figure(2)
 hold on;
-%axis([1000 length(y_DNA) 1 4.5])
+axis([0 tmax 1.5 4.5])
 plot(y_DNA)
+grid on;
 hold off;
-%rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
-%measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
+rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
+measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
 end
 toc
 %
@@ -82,12 +83,12 @@ toc
 %% Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
-%directoryname = input('Directory? (e.g:~/methods2models/ ):');
+directoryname = input('Directory? (e.g:~/methods2models/ ):');
 %cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
 %save([filename '.mat'], 'random_statevalues','t_iqm','SAMPLES','rndm_measurement', '-v7.3');
-%save([filename '.mat'],'rndm_measurement');
-%cd('~/methods2models')
+save([filename '.mat'],'measurement');
+cd('~/methods2models')
 %toc
 
 %% Plot yout dataset

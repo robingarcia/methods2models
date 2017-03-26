@@ -1,4 +1,4 @@
-function [START, SAMPLES,t_period] = timepoints_template(random_statevalues,t_iqm)
+function [START, SAMPLES,t_period,G1,S,G] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -17,22 +17,22 @@ timepoints = t_iqm;
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
-o = m - 400;
+o = m - 100;
 t=t(o:m); %Trimmed time vector
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
 PKS = zeros(n);
 for i = 1:n
     m = length(statevalues{1,i});
-o=m-400;%o = m - 100;
+o=m-100;%o = m - 100;
 statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
 end
 %% Determine the peaks of your Cyclines and APC during cellcycle
-j = [1,2,3,5,6,7]; %States which should be analyzed
+j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
-G = cell(2,n);
+G = cell(4,n);
 for i = 1:n        % i = Number of cells
-    for j = [2,3,5,6,7]    % j = States
+    for j = [2,3,4,5,6,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
     %figure(100+i);
     %hold on;
@@ -50,11 +50,27 @@ AverageDistance_Peaks = mean(diff(locs));
     G{1,i} = F;
     %T = pdist(G{1,i}{2,6});  %Calculate the period
     end
+    % Calculation of the cell cylce period
     T = (G{1,i}{2,6});  %Calculate the period
     T=T(end)-T(end-1); %APC Period (=Cellcycle period)
-    G{2,i} = T;
+    G{2,i} = T; %Period of the cell cycle
     PKS= G{1,i}{1,6};
+    
+    % G1/S-Transition
+    CycETrans = G{1,i}{2,5}(end-1);
+    % S/G2-Transition
+    pBTrans = G{1,i}{2,4}(end-1);
+    % M/G1-Transition
+    Cdc20ATrans = G{1,i}{2,12}(end-1);
+    % Duration G1-Phase
+    g1Duration = CycETrans - Cdc20ATrans;
+    G{3,i} = g1Duration;
+    % Duration S-Phase
+    sDuration = pBTrans - CycETrans;
+    G{4,i} = sDuration;
 end
+G1 = G{3,:};
+S = G{4,:};
 %% Plot all peaks
 %for j = [2,3,5,6,7]
    %for i = 1:n
@@ -72,7 +88,7 @@ end
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
 for i = 1:n
-    for j = [2,3,5,6,7]
+    for j = [2,3,4,5,6,7,12]
 peakInterval = diff(G{1,i}{2,j});
     %figure(3)
     %hold on;
@@ -87,44 +103,45 @@ peakInterval = diff(G{1,i}{2,j});
 end
 %hist_period;
 %% Simulate the duplication of the DNA 2 -> 4
+% +++++++ Delete this part ++++++++++
 % Determine the slope: m = (4-2)/x2-x1
-for i = 1:n
+%for i = 1:n
     %z = G{2,i}; % Same value as T
     %z = G{1,i}{2,6};
-    interval = size(t);
+%    interval = size(t);
     %time = linspace(interval(1,1), interval(1,2));
-    time = (1:interval(end));
+%    time = (1:interval(end));
     %time = t?
     %Design of vectors
-two=(1:length(time));
-two(1:length(time)) = 2;
+%two=(1:length(time));
+%two(1:length(time)) = 2;
 
-four=(1:length(time));
-four(1:length(time)) = 4;
+%four=(1:length(time));
+%four(1:length(time)) = 4;
 
 %y = zeros(1,length(time));
 %y(1:length(time))=2;
 
-for k = 1:length(G{1,i}{2,6})
-    z = G{1,i}{2,6}(k,1);
-p_g1 = z*0.5; % Duration G1-Phase
-p_s = z*0.3;  %Duration S-Phase
-p_g2 = z*0.16; % Duration G1-Phase
-p_gm = z*0.04; %p_g2 Duration G2-Phase
+%for k = 1:length(G{1,i}{2,6})
+%    z = G{1,i}{2,6}(k,1);
+%p_g1 = z*0.5; % Duration G1-Phase
+%p_s = z*0.3;  %Duration S-Phase
+%p_g2 = z*0.16; % Duration G1-Phase
+%p_gm = z*0.04; %p_g2 Duration G2-Phase
 %slope = abs(2/(p_g2 - p_g1));
-t_1 = z/2;
-t_2 = 0.8*z;
-slope = (2/(t_2 - t_1));
+%t_1 = z/2;
+%t_2 = 0.8*z;
+%slope = (2/(t_2 - t_1));
 
-slpe = (1:length(time));
-slpe(1:length(time)) = 2;
-slpe = slpe+slope.*time;
+%slpe = (1:length(time));
+%slpe(1:length(time)) = 2;
+%slpe = slpe+slope.*time;
 
-a=two((time>=0) & (time < p_g1)); 
-b=slpe((time>=p_g1) & (time < (p_g1+p_s)));
-c=four((time>=(p_g1+p_s)) & (time <= z));
+%a=two((time>=0) & (time < p_g1)); 
+%b=slpe((time>=p_g1) & (time < (p_g1+p_s)));
+%c=four((time>=(p_g1+p_s)) & (time <= z));
     
-y=[a,b,c];
+%y=[a,b,c];
 %figure(5)
 %hold on;
 %dnaplot=plot(y);
@@ -135,19 +152,19 @@ y=[a,b,c];
     %hold off;
 
 
-DNA = y';
-szDNA = size(DNA,1);
-DNAzeros = zeros(length(statevalues{1,1}),1);
-DNAzeros([1:szDNA])=DNA;
-statevalues{1,i}(:,32)=DNAzeros;
+%DNA = y';
+%szDNA = size(DNA,1);
+%DNAzeros = zeros(length(statevalues{1,1}),1);
+%DNAzeros([1:szDNA])=DNA;
+%statevalues{1,i}(:,32)=DNAzeros;
 %figure(43)
 %plot(statevalues{1,i}(:,32));
 %hold on;
 %statevalues{1,i}(:,32)=DNA;
 %DNAzeros = [DNA;zeros(length(statevalues{1,i}-length(DNA),1]
 %statevalues{szDNA(1,1),szDNA(1,2),i}(:,32) = DNA;
-end
-end
+%end
+%end
 %% Plot the beginning of the cellcycle
 % See above
 %% Choose arbitrary timepoints (Inverse method)
@@ -299,7 +316,7 @@ START = cell(2,n);
 for i = 1:n
     startpoint = G{1,i}{2,6};
     START{1,i} = startpoint; % Startpoints of the cellcycle
-    simstart_IC = zeros(length(startpoint),32);
+    simstart_IC = zeros(length(startpoint),31);
     for j = 1:1:size(startpoint,1)
         %n = startpoint(j,1);
         simstart_IC(j,:) = statevalues{1,i}(j,:); % IC at the start
