@@ -1,7 +1,7 @@
 %% Run all in one step
 %addpath(genpath('~/methods2models'));
 %addpath(genpath('~/methods2models'));
-a = addpath(genpath('~/methods2models'));
+%a = addpath(genpath('~/methods2models'));
 %tic
 filename = datestr(now,30); %Timestamp
 dt = input('Input stepzise (e.g: [0.1]):');
@@ -53,8 +53,8 @@ hold on;
 %axis([1000 length(y_DNA) 1 4.5])
 plot(y_DNA)
 hold off;
-rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
-measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
+%rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
+%measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
 end
 toc
 %
