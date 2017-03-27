@@ -11,7 +11,7 @@ n = input('How many cells? (e.g: [20]):');% n new datasets
 %m = input('How many snapshots? (e.g: [20]):');% Number of snapshots
 % ----------------------------------------------------------Data generation
 tic
-rndmic = lognrnd_ic(n);
+rndmic = lognrnd_ic(n); % Generate gaussian distributed ICs
 toc
 
 tic
@@ -28,7 +28,7 @@ toc
 tic
 [START, SAMPLES,t_period,G1,S,G_all] = timepoints_template(random_statevalues, tF);
 toc
-% --------------------------------------------------------Simulate the model
+%% --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
 tic
 rndm_measurement = cell(1,n);
@@ -46,7 +46,7 @@ for i = 1:n %:length(SAMPLES) // How many snapshots? i = 1 snapshot
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
 
-y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,6}, G_all{4,6})';
+y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
 figure(2)
 hold on;

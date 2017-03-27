@@ -17,14 +17,14 @@ timepoints = t_iqm;
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
-o = m - 100;
+o = m - 90;
 t=t(o:m); %Trimmed time vector
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
 PKS = zeros(n);
 for i = 1:n
     m = length(statevalues{1,i});
-o=m-100;%o = m - 100;
+o=m-90;%o = m - 100;
 statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
 end
 %% Determine the peaks of your Cyclines and APC during cellcycle
@@ -34,11 +34,11 @@ G = cell(4,n);
 for i = 1:n        % i = Number of cells
     for j = [2,3,4,5,6,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
-    %figure(100+i);
+    %figure;
     %hold on;
-    %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 15);
+    %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
-    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 15);
+    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 29);
     
 
 AverageDistance_Peaks = mean(diff(locs));
@@ -55,34 +55,47 @@ AverageDistance_Peaks = mean(diff(locs));
     T=T(end)-T(end-1); %APC Period (=Cellcycle period)
     G{2,i} = T; %Period of the cell cycle
     PKS= G{1,i}{1,6};
+    t_period(1,i) = G{2,i};
+    %Triple-Peak
+    %triplePeak{1,i}(i,1) = G{1,i}{2,5};
+    %triplePeak{1,i}(i,2) = G{1,i}{2,4};
+    %triplePeak{1,i}(i,3) = G{1,i}{2,12};
     
     % G1/S-Transition
-    CycETrans = G{1,i}{2,5}(end-1);
+    CycETransEnd = G{1,i}{2,5}(end);
+    CycETransMinus = G{1,i}{2,5}(end-1);
     % S/G2-Transition
-    pBTrans = G{1,i}{2,4}(end-1);
+    pBTransEnd = G{1,i}{2,4}(end);
+    pBTransMinus = G{1,i}{2,4}(end-1);
     % M/G1-Transition
-    Cdc20ATrans = G{1,i}{2,12}(end-1);
+    Cdc20ATransEnd = G{1,i}{2,12}(end);
+    Cdc20ATransMinus = G{1,i}{2,12}(end-1);
+    
+    
     % Duration G1-Phase
-    g1Duration = CycETrans - Cdc20ATrans;
+    g1Duration = CycETransEnd - Cdc20ATransEnd;
     G{3,i} = g1Duration;
     % Duration S-Phase
-    sDuration = pBTrans - CycETrans;
+    sDuration = pBTransMinus - CycETransMinus;
     G{4,i} = sDuration;
+    
+    G1(1,i) = G{3,i}; % Duration G1-Phase for all cells
+    S(1,i) = G{4,i};  % Duration S-Phase for all cells
+    
 end
-G1 = G{3,:};
-S = G{4,:};
+
 %% Plot all peaks
-%for j = [2,3,5,6,7]
-   %for i = 1:n
-    %onecell(:,i)=statevalues{1,i}(:,j);
-    %figure(1)
-    %hold on;
-    %s(j)=subplot(3,3,j);
-    %findpeaks(onecell(:,i),'MinPeakDistance', 15);
-    %findpeaks(onecell(:,i),'MinPeakDistance', 15);
-    %title(s(j),statenames(1,j));
-    %hold off;   
-   %end
+%for j = [2,3,4,5,6,7,12]
+%   for i = 1:n
+%    onecell(:,i)=statevalues{1,i}(:,j);
+%    figure(1)
+%    hold on;
+%    s(j)=subplot(3,3,j);
+%    findpeaks(onecell(:,i),'MinPeakDistance', 25);
+    %findpeaks(onecell(:,i),'MinPeakDistance', 25);
+%    title(s(j),statenames(1,j));
+%    hold off;   
+%   end
 %end
 
 %% Determine the period of the cell cycle
@@ -227,7 +240,7 @@ end
     SAMPLES = cell(1,n);
     %samples = cell(1,n);
     samples = zeros(1,n);
-    t_period = cell(1,n);
+    %t_period = cell(1,n);
     measurement = zeros(n,32); %n measurements
     for i = 1:n
         gammma = log(2)/G{2,i};
@@ -269,7 +282,8 @@ end
     %measurement(i,:) = statevalues{1,i}(samples(1,i),:);
     %samples = samples-1;
     SAMPLES{1,i} = samples;
-    t_period{1,i} = G{2,i};
+    
+    %t_period(1,i) = G{2,i};
     %MEASUREMENT{1,i} = measurement;
     end
     %hold off;    
