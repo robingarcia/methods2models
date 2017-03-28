@@ -26,7 +26,7 @@ end
 toc
 %% --------------------------------------------------------------Measurement
 tic
-[START, SAMPLES,t_period,G1,S,G_all] = timepoints_template(random_statevalues, tF);
+[START, SAMPLES,t_period,G_all] = timepoints_template(random_statevalues, tF);
 toc
 %% --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
@@ -34,12 +34,13 @@ tic
 rndm_measurement = cell(1,n);
 measurement = cell(1,n);
 %rndm_measurement = cell(1,length(SAMPLES));
-tspan = zeros(1,n+1);
-t_period = cell2mat(t_period);
+tspan = zeros(1,n+1); %+1); % ERROR HERE!!!
+%t_period = cell2mat(t_period);
 
 for i = 1:n %:length(SAMPLES) // How many snapshots? i = 1 snapshot
     samples = sort(SAMPLES{1,i}(1,:));
     tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
+    %tspan = samples;
     simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0
     simulationIC = simulationIC((1:31));
     simulationIC = simulationIC';
@@ -48,12 +49,12 @@ rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 
 y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
-figure(2)
-hold on;
-axis([0 tmax 1.5 4.5])
-plot(y_DNA)
-grid on;
-hold off;
+%figure(2)
+%hold on;
+%axis([ 1.5 4.5])
+%plot(y_DNA)
+%grid on;
+%hold off;
 rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
 measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
 end

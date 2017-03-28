@@ -1,4 +1,4 @@
-function [START, SAMPLES,t_period,G1,S,G] = timepoints_template(random_statevalues,t_iqm)
+function [START, SAMPLES,t_period,G] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -17,14 +17,14 @@ timepoints = t_iqm;
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
-o = m - 90;
+o = m - 100;
 t=t(o:m); %Trimmed time vector
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
 PKS = zeros(n);
 for i = 1:n
     m = length(statevalues{1,i});
-o=m-90;%o = m - 100;
+o=m-100;%o = m - 100;
 statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
 end
 %% Determine the peaks of your Cyclines and APC during cellcycle
@@ -38,7 +38,7 @@ for i = 1:n        % i = Number of cells
     %hold on;
     %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
-    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 29);
+    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 28,'MinPeakHeight',0.05);
     
 
 AverageDistance_Peaks = mean(diff(locs));
@@ -61,29 +61,47 @@ AverageDistance_Peaks = mean(diff(locs));
     %triplePeak{1,i}(i,2) = G{1,i}{2,4};
     %triplePeak{1,i}(i,3) = G{1,i}{2,12};
     
+    % APC Period
+    T = G{1,i}{2,6}(end);
+    
     % G1/S-Transition
-    CycETransEnd = G{1,i}{2,5}(end);
-    CycETransMinus = G{1,i}{2,5}(end-1);
+    CycETransEnd = G{1,i}{2,5}(end-1);
+    
     % S/G2-Transition
-    pBTransEnd = G{1,i}{2,4}(end);
-    pBTransMinus = G{1,i}{2,4}(end-1);
+    pBTransEnd = G{1,i}{2,4}(end-1);
+    
     % M/G1-Transition
-    Cdc20ATransEnd = G{1,i}{2,12}(end);
-    Cdc20ATransMinus = G{1,i}{2,12}(end-1);
+    Cdc20ATransMinus = G{1,i}{2,12}(end-2);
     
     
     % Duration G1-Phase
-    g1Duration = CycETransEnd - Cdc20ATransEnd;
+    g1Duration = CycETransEnd - Cdc20ATransMinus;
     G{3,i} = g1Duration;
     % Duration S-Phase
-    sDuration = pBTransMinus - CycETransMinus;
+    sDuration = pBTransEnd - Cdc20ATransMinus;
+    sDuration = sDuration - g1Duration;
     G{4,i} = sDuration;
     
-    G1(1,i) = G{3,i}; % Duration G1-Phase for all cells
-    S(1,i) = G{4,i};  % Duration S-Phase for all cells
+    % This step is important to correct shifts (Workaround!!!)
+    if G{3,i} > G{2,i} ; % Should smaller than the cellcycle period
+    G{3,i} = G{3,i} - G{2,i};
+    if G{4,i} < 0 ;% Should not be negative
+        G{4,i} = G{4,i} + G{2,i};
+    end
+end
+    
+    %G1(1,i) = G{3,i}; % Duration G1-Phase for all cells
+    %S(1,i) = G{4,i};  % Duration S-Phase for all cells
+    
+    
+    %l_state(i,1) = length(G{1,i}{2,4}); %Length of the vector
+    %l_state(i,2) = length(G{1,i}{2,5}); %Length of the vector
+    %l_state(i,3) = length(G{1,i}{2,12}); % Length of the vector
+    
     
 end
 
+%findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 10);
 %% Plot all peaks
 %for j = [2,3,4,5,6,7,12]
 %   for i = 1:n
