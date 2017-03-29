@@ -4,7 +4,7 @@
 %a = addpath(genpath('~/methods2models'));
 %tic
 filename = datestr(now,30); %Timestamp
-load('toetcher_statenames.mat');
+load('toettcher_statenames.mat');
 %dt = input('Input stepzise (e.g: [0.1]):');
 tmax = input('Input simulation time (e.g: [100]):');
 tF = 0:tmax; % Simulation Time
