@@ -6,7 +6,7 @@ function [START, SAMPLES,t_period,G] = timepoints_template(random_statevalues,t_
 %% Load the data
 %filename = uigetfile('~/methods2models/datasets');
 %datafile = importdata(filename);
-load('toetcher_statenames.mat');
+%load('toetcher_statenames.mat');
 %statevalues = datafile.random_statevalues; % States
 statevalues = random_statevalues; % States
 %t = datafile.t_iqm; % Time
