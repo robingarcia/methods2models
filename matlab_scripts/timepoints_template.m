@@ -38,7 +38,7 @@ for i = 1:n        % i = Number of cells
     %hold on;
     %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
-    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 28,'MinPeakHeight',0.05);
+    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
     
 
 AverageDistance_Peaks = mean(diff(locs));
@@ -103,18 +103,18 @@ end
 
 %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 10);
 %% Plot all peaks
-%for j = [2,3,4,5,6,7,12]
-%   for i = 1:n
-%    onecell(:,i)=statevalues{1,i}(:,j);
-%    figure(1)
-%    hold on;
-%    s(j)=subplot(3,3,j);
-%    findpeaks(onecell(:,i),'MinPeakDistance', 25);
-    %findpeaks(onecell(:,i),'MinPeakDistance', 25);
-%    title(s(j),statenames(1,j));
-%    hold off;   
-%   end
-%end
+% for j = 5 %[2,3,4,5,6,7,12]
+%    for i = 1:n
+%     onecell(:,i)=statevalues{1,i}(:,j);
+%     figure(1)
+%     hold on;
+% %    s(j)=subplot(3,3,j);
+%     findpeaks(onecell(:,i),'MinPeakDistance', 25);
+%     %findpeaks(onecell(:,i),'MinPeakDistance', 25);
+%     title(s(j),statenames(1,j));
+% %    hold off;   
+%    end
+%    end
 
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
@@ -265,7 +265,7 @@ end
         
     
     %Draw proposal samples
-    P = rand(1,n); %Create uniform distributed pseudorandom numbers
+    P = rand(1,n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
     %figure(400)
     %hist(P);
     %Evaluate Proposal samples at the inverse cdf
@@ -314,39 +314,39 @@ end
 %cd('~/methods2models');
 %% Plot all Cyclines
 
-for i = 1:n
-j = [2,3,5,6,7];
-combos = nchoosek(j,2);
-r = length(combos);
-f = gobjects(1,r);
-for q=1:r
-%figure(2)
-%hold on;
-%subplot(3,4,q)
-%f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
-%hold on;
-%for i = 1:n %Plot the start of the cell cycle
-    %startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
-    %lstartpoint = length(startpoint);
-    %for k = 1:lstartpoint
-%f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
-    %end
-    
-%Plot the measurements
-%f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
-    
-%end
-%xlabel(statenames(1,combos(q,1)))
-%ylabel(statenames(1,combos(q,2)))
-%title('Simulated Dataset')
-%hold off;
-end
-end
+% for i = 1:n
+% j = [2,3,5,6,7];
+% combos = nchoosek(j,2);
+% r = length(combos);
+% f = gobjects(1,r);
+% for q=1:r
+% %figure(2)
+% %hold on;
+% %subplot(3,4,q)
+% %f(q)=plot(statevalues{1,i}(:,combos(q,1)),statevalues{1,i}(:,combos(q,2)), 'k.');
+% %hold on;
+% %for i = 1:n %Plot the start of the cell cycle
+%     %startpoint = G{1,i}{2,6}; % {2,6} = Localization of the APC-peak
+%     %lstartpoint = length(startpoint);
+%     %for k = 1:lstartpoint
+% %f(q)=plot(statevalues{1,i}(startpoint(k,1),combos(q,1)),statevalues{1,i}(startpoint(k,1),combos(q,2)),'r*');
+%     %end
+%     
+% %Plot the measurements
+% %f(q)=plot(statevalues{1,i}(samples(1,i),combos(q,1)),statevalues{1,i}(samples(1,i),combos(q,2)),'go') ;
+%     
+% %end
+% %xlabel(statenames(1,combos(q,1)))
+% %ylabel(statenames(1,combos(q,2)))
+% %title('Simulated Dataset')
+% %hold off;
+% end
+% end
 
-%% New simulated IC 
+%% New simulated IC (extracted from a simulation = cellcycle start)
 START = cell(2,n);
 for i = 1:n
-    startpoint = G{1,i}{2,6};
+    startpoint = G{1,i}{2,6}; %Choose 3-4 periods (But only one period is required here!)
     START{1,i} = startpoint; % Startpoints of the cellcycle
     simstart_IC = zeros(length(startpoint),31);
     for j = 1:1:size(startpoint,1)
@@ -366,7 +366,5 @@ SimulationTime = t_iqm(end);
 GrowthRate = mean(GAMMMA(1,:));
 RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
 disp(RESULTS);
-%% Save your measurements
-%directoryname = uigetdir('~/methods2models/');
 
 end

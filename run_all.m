@@ -4,6 +4,7 @@
 %a = addpath(genpath('~/methods2models'));
 %tic
 filename = datestr(now,30); %Timestamp
+load('toetcher_statenames.mat');
 %dt = input('Input stepzise (e.g: [0.1]):');
 tmax = input('Input simulation time (e.g: [100]):');
 tF = 0:tmax; % Simulation Time
@@ -21,7 +22,7 @@ for i = 1:n
    this_IC = rndmic{i};
    simdata{i} = model_toettcher2008MEX(tF,this_IC); %MEX or mex?
    %simdata{i} = model_toettcher2008MEX(t_iqm,this_IC); %MEX or mex? 
-   random_statevalues{i} = simdata{1,i}.statevalues;
+   random_statevalues{i} = simdata{1,i}.statevalues;%Why more timesteps as given above?
 end
 toc
 %% --------------------------------------------------------------Measurement
@@ -34,18 +35,22 @@ tic
 rndm_measurement = cell(1,n);
 measurement = cell(1,n);
 %rndm_measurement = cell(1,length(SAMPLES));
-tspan = zeros(1,n+1); %+1); % ERROR HERE!!!
+%tspan = zeros(1,n+1);% ERROR HERE!!! (tspan duration has same length as one cell cycle?)
 %t_period = cell2mat(t_period);
 
-for i = 1:n %:length(SAMPLES) // How many snapshots? i = 1 snapshot
-    samples = sort(SAMPLES{1,i}(1,:));
-    tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
+for i = 1 %:length(SAMPLES) // How many snapshots? i = 1 snapshot
+    samples = sort(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
+    tspan = horzcat(0,samples,t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    %tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
     %tspan = samples;
-    simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0
+    simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
     simulationIC = simulationIC((1:31));
     simulationIC = simulationIC';
+%--------------------------------------------------------------
+% NEW SIMULATION (SNAPSHOTS)
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
+%--------------------------------------------------------------
 
 y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
@@ -55,32 +60,16 @@ y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %plot(y_DNA)
 %grid on;
 %hold off;
-rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA);
-measurement{1,i} = rndm_measurement{1,i}.statevalues; %Save statevalues only
+rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA); %Merge measurement-dataset with DNA simulation
+measurement{1,i} = (rndm_measurement{1,i}.statevalues)'; %Save statevalues only
 end
 toc
-%
-
-%% Simulate DNA
-%yDNA = DNAcontent(tspan, t_period{1,1})
-%axis([0 2*pi -1.5 1.5])
-%figure(2)
-%plot(y_DNA);
-%hold on;
-%% Plot yout dataset
-%scatter(newdata(1,:), newdata(2,:))
-%for i = 1:n
-    
-%data = measurement{1,1}';
-%scatter(data(32,:),data(5,:));
-%end
 %% Merge?
 % Build workspace
-%for i = 1:n
-%Dcell = measurement{1,i};
-%end
-%Dmat = cell2mat(Dcell);
-
+mydata = cell2mat(measurement);
+%% Plot your dataset
+%scatterhist(newdata(1,:), newdata(2,:))
+%scatter(mydata(32,:),mydata(5,:));
 %% Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
@@ -88,9 +77,40 @@ directoryname = input('Directory? (e.g:~/methods2models/ ):');
 %cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
 %save([filename '.mat'], 'random_statevalues','t_iqm','SAMPLES','rndm_measurement', '-v7.3');
-save([filename '.mat'],'measurement');
-cd('~/methods2models')
+save([filename '.mat'],'mydata', '-v7.3');
+cd('~/methods2models/')
 %toc
 
-%% Plot yout dataset
-%scatter(newdata(1,:), newdata(2,:))
+% %% Plot yout dataset
+% %-------------------------------------------------------- Plot all Cyclines
+% % Update APC(6) position 
+% %[pks,locs, widths, proms]=findpeaks(Dmat(6,:), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
+% %startpoint = locs;
+% %for i = 1:n
+% j = [2,3,5,6,7];
+% combos = nchoosek(j,2);
+% r = length(combos);
+% f = gobjects(1,r);
+% for q=1:r
+% figure(2)
+% hold on;
+% subplot(3,4,q)
+% f(q)=scatter(Dmat(combos(q,1),:),Dmat(combos(q,2),:),[], 'k.');
+% hold on;
+% for i = 1:n %Plot the start of the cell cycle
+%     startpoint = G_all{1,i}{2,6}; % {2,6} = Localization of the APC-peak (old peak position maybe?) --> Update with findpeaks required!
+%     lstartpoint = length(startpoint);
+%     for k = 1:lstartpoint
+% f(q)=scatter(Dmat(combos(q,1),startpoint(k,1)),Dmat(combos(q,2),startpoint(k,1)),[],'r*');
+%     end
+%     
+% %Plot the measurements
+% %f(q)=plot(Dmat(samples(1,i),combos(q,1)),Dmat(samples(1,i),combos(q,2)),'go') ;
+%     
+% end
+% xlabel(statenames(1,combos(q,1)))
+% ylabel(statenames(1,combos(q,2)))
+% title('Simulated Dataset')
+% hold off;
+% end
+%end

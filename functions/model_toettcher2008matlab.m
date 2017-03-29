@@ -217,21 +217,23 @@ toc
 % integrated, and uses the matrix 'c' to define these linear combinations.
 % *************************************************************************
 
-% c - a matrix defining some outputs for plotting
-c = zeros(4, 31);
-c(1,[3 4 9 10 30]) = 1;    % CycBT
-c(2,[2 15 29]) = 1;        % CycAT
-c(3,[5 16 31]) = 1;        % CycET
-c(4,12) = 1;               % Cdc20A
-
+% % c - a matrix defining some outputs for plotting
+% c = zeros(5, 31);
+% %c(1,[3 4 9 10 30]) = 1;    % CycBT
+% %c(2,[2 15 29]) = 1;        % CycAT
+% %c(3,[5 16 31]) = 1;        % CycET
+% %c(4,12) = 1;               % Cdc20A
+% c(5,5) = 1;               % CycE
+% %c(5,4) = 1;               % pB
+% 
 % figure(2)
 % plot(xSol.x, c*xSol.y, 'LineWidth', 2);
-% set(gca, 'YLim', [0 3])
-% legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
+% set(gca, 'YLim', [0.03 0.12])
+% legend('CycET', 'CycAT', 'CycBT', 'Cdc20A', 'CycE', 'pB');
 % xlabel('time (h)'), ylabel('concentration (AU)')
 % title('MATLAB cell cycle model')
 
-
+%findpeaks(c*xSol.y(1,:));
 end
 
 

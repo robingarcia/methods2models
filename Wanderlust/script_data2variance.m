@@ -16,7 +16,7 @@ data = datafile;
 %data = newdata';
 %data = random_statevalues{3}';
 % load options for ERA and wanderlust
-load('toetcher_statenames.mat')
+load('toettcher_statenames.mat')
 load_options % Set an own m-file
 
 
