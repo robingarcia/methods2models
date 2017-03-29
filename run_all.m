@@ -38,7 +38,7 @@ measurement = cell(1,n);
 %tspan = zeros(1,n+1);% ERROR HERE!!! (tspan duration has same length as one cell cycle?)
 %t_period = cell2mat(t_period);
 
-for i = 1 %:length(SAMPLES) // How many snapshots? i = 1 snapshot
+for i = 1:length(SAMPLES) %// How many snapshots? i = 1 snapshot
     samples = sort(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
     tspan = horzcat(0,samples,t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     %tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
