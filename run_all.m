@@ -37,10 +37,10 @@ measurement = cell(1,n);
 %rndm_measurement = cell(1,length(SAMPLES));
 %tspan = zeros(1,n+1);% ERROR HERE!!! (tspan duration has same length as one cell cycle?)
 %t_period = cell2mat(t_period);
-
-for i = 1:length(SAMPLES) %// How many snapshots? i = 1 snapshot
-    samples = sort(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
-    tspan = horzcat(0,samples,t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+samples = sort(SAMPLES,2);
+for i = 1:length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 snapshot
+    %samples = sort(SAMPLES,2);%(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
+    tspan = horzcat(0,samples(i,:),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     %tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
     %tspan = samples;
     simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
@@ -52,6 +52,7 @@ rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
 %--------------------------------------------------------------
 
+%-------------------------------------------------DNA Simulation
 y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
 %figure(2)
@@ -60,6 +61,8 @@ y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
 %plot(y_DNA)
 %grid on;
 %hold off;
+%---------------------------------------------------------------
+
 rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA); %Merge measurement-dataset with DNA simulation
 measurement{1,i} = (rndm_measurement{1,i}.statevalues)'; %Save statevalues only
 end

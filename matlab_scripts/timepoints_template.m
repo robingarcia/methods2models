@@ -1,4 +1,4 @@
-function [START, SAMPLES,t_period,G] = timepoints_template(random_statevalues,t_iqm)
+function [START, samples,t_period,G] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -17,16 +17,19 @@ timepoints = t_iqm;
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
-o = m - 100;
-t=t(o:m); %Trimmed time vector
+%o = m - 100;
+X = ['Max. simulation time is:', num2str(m), '[s]'];
+disp(X)
+o = input('Start timepoint t_1? (e.g: [2800]):');
+%t=t(o:m); %Trimmed time vector
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
-PKS = zeros(n);
-for i = 1:n
-    m = length(statevalues{1,i});
-o=m-100;%o = m - 100;
-statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
-end
+%PKS = zeros(n);
+%for i = 1:n
+%    m = length(statevalues{1,i});
+%o=m-100;%o = m - 100;
+%statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
+%end
 %% Determine the peaks of your Cyclines and APC during cellcycle
 j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
@@ -38,21 +41,25 @@ for i = 1:n        % i = Number of cells
     %hold on;
     %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
-    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
+    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}((o:m),j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
     
 
-AverageDistance_Peaks = mean(diff(locs));
+    AverageDistance_Peaks = mean(diff(locs));
     F{1,j} = pks;        %Peakvalue
     F{2,j} = locs;       %Position
     F{3,j} = widths;     %
     F{4,j} = proms;      %Prominence
     F{5,j} = AverageDistance_Peaks;
     G{1,i} = F;
-    %T = pdist(G{1,i}{2,6});  %Calculate the period
+    
+    %Calculate the periods of all proteins
+    
+    
     end
     % Calculation of the cell cylce period
-    T = (G{1,i}{2,6});  %Calculate the period
-    T=T(end)-T(end-1); %APC Period (=Cellcycle period)
+    %T = (G{1,i}{2,6});  %Calculate the period
+    %T=T(end)-T(end-1); %APC Period (=Cellcycle period)
+    T = G{1,i}{5,6};
     G{2,i} = T; %Period of the cell cycle
     PKS= G{1,i}{1,6};
     t_period(1,i) = G{2,i};
@@ -62,7 +69,7 @@ AverageDistance_Peaks = mean(diff(locs));
     %triplePeak{1,i}(i,3) = G{1,i}{2,12};
     
     % APC Period
-    T = G{1,i}{2,6}(end);
+    T = G{1,i}{5,6};
     
     % G1/S-Transition
     CycETransEnd = G{1,i}{2,5}(end-1);
@@ -88,7 +95,7 @@ AverageDistance_Peaks = mean(diff(locs));
     if G{4,i} < 0 ;% Should not be negative
         G{4,i} = G{4,i} + G{2,i};
     end
-end
+    end
     
     %G1(1,i) = G{3,i}; % Duration G1-Phase for all cells
     %S(1,i) = G{4,i};  % Duration S-Phase for all cells
@@ -257,15 +264,15 @@ end
     %hold on;
     SAMPLES = cell(1,n);
     %samples = cell(1,n);
-    samples = zeros(1,n);
+    samples = zeros(n);
     %t_period = cell(1,n);
-    measurement = zeros(n,32); %n measurements
+    %measurement = zeros(n,32); %n measurements
     for i = 1:n
-        gammma = log(2)/G{2,i};
+        gammma = log(2)/G{2,i}; % G{2,i} is the period!
         
     
     %Draw proposal samples
-    P = rand(1,n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
+    P = rand(1,n); %n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
     %figure(400)
     %hist(P);
     %Evaluate Proposal samples at the inverse cdf
@@ -273,7 +280,7 @@ end
     %z = G{2,i};
     %x=@(P,gamma)((log((2-gamma)./2))./P);
     x=@(P,gammma)((log(-2./(P-2))/gammma));
-    samples = x(P,gammma); %ceil or round
+    samples(i,:) = x(P,gammma); %ceil or round
     %SAMPLES{1,i} = samples;
     
     
@@ -299,7 +306,7 @@ end
     %Compose measurement dataset
     %measurement(i,:) = statevalues{1,i}(samples(1,i),:);
     %samples = samples-1;
-    SAMPLES{1,i} = samples;
+    %SAMPLES(1,i) = samples;
     
     %t_period(1,i) = G{2,i};
     %MEASUREMENT{1,i} = measurement;
@@ -349,12 +356,13 @@ for i = 1:n
     startpoint = G{1,i}{2,6}; %Choose 3-4 periods (But only one period is required here!)
     START{1,i} = startpoint; % Startpoints of the cellcycle
     simstart_IC = zeros(length(startpoint),31);
-    for j = 1:1:size(startpoint,1)
-        %n = startpoint(j,1);
-        simstart_IC(j,:) = statevalues{1,i}(j,:); % IC at the start
+    for j = 1:length(startpoint);
+         for   k = startpoint(j,1);
+             A = statevalues{1,i}((o:m),:);
+        simstart_IC(j,:) = A(k,:); % IC at the start
         START{2,i} = simstart_IC; %New IC from simulated dataset
+        end
     end
-    
 end
 %% Print some information
 % Define names 
