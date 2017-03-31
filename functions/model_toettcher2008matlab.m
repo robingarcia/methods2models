@@ -1,4 +1,4 @@
-function [xSol,ic] = model_toettcher2008matlab(tF)
+function [ic] = model_toettcher2008matlab(tF)
 %% Modified final model of the cell cycle from Toettcher et. al. 2008
 
 % This file simulates the final model that has been optimized to data of
@@ -201,10 +201,10 @@ u = @(t) [1.8               % M
 % *************************************************************************
 
 
-tic
-tF = 0:100;    % the final timepoint of simulation
-xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
-toc
+%tic
+%tF = 0:100;    % the final timepoint of simulation
+%xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
+%toc
 
 
 

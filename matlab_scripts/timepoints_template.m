@@ -12,7 +12,7 @@ statevalues = random_statevalues; % States
 %t = datafile.t_iqm; % Time
 %timepoints = datafile.t_iqm;
 t = t_iqm; % Time
-timepoints = t_iqm;
+%timepoints = t_iqm;
 %t_original=timepoints./timepoints(end); %0 to 1
 n = length(statevalues); % Determine the number of cells
 m = length(t);
@@ -42,7 +42,7 @@ for i = 1:n        % i = Number of cells
     %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
     [pks,locs, widths, proms]=findpeaks(statevalues{1,i}((o:m),j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
-    
+    %findpeaks(statevalues{1,i}((o:m),j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
 
     AverageDistance_Peaks = mean(diff(locs));
     F{1,j} = pks;        %Peakvalue
@@ -72,30 +72,30 @@ for i = 1:n        % i = Number of cells
     T = G{1,i}{5,6};
     
     % G1/S-Transition
-    CycETransEnd = G{1,i}{2,5}(end-1);
+    CycETransEnd = G{1,i}{2,5}(end);
     
     % S/G2-Transition
-    pBTransEnd = G{1,i}{2,4}(end-1);
+    pBTransEnd = G{1,i}{2,4}(end);
     
     % M/G1-Transition
-    Cdc20ATransMinus = G{1,i}{2,12}(end-2);
+    Cdc20ATransMinus = G{1,i}{2,12}(end-1);
     
     
     % Duration G1-Phase
     g1Duration = CycETransEnd - Cdc20ATransMinus;
-    G{3,i} = g1Duration;
+    G{3,i} = g1Duration/G{1, i}{5, 6};  
     % Duration S-Phase
     sDuration = pBTransEnd - Cdc20ATransMinus;
     sDuration = sDuration - g1Duration;
-    G{4,i} = sDuration;
+    G{4,i} = sDuration/G{1, i}{5, 6};
     
     % This step is important to correct shifts (Workaround!!!)
-    if G{3,i} > G{2,i} ; % Should smaller than the cellcycle period
-    G{3,i} = G{3,i} - G{2,i};
-    if G{4,i} < 0 ;% Should not be negative
-        G{4,i} = G{4,i} + G{2,i};
-    end
-    end
+%----    if G{3,i} > G{2,i} ; % Should smaller than the cellcycle period
+%----    G{3,i} = G{3,i} - G{2,i};
+%----    if G{4,i} < 0 ;% Should not be negative
+%----        G{4,i} = G{4,i} + G{2,i};
+%----    end
+%----    end
     
     %G1(1,i) = G{3,i}; % Duration G1-Phase for all cells
     %S(1,i) = G{4,i};  % Duration S-Phase for all cells
@@ -125,20 +125,20 @@ end
 
 %% Determine the period of the cell cycle
 % See Ln 42 (F{2,j} = locs;)
-for i = 1:n
-    for j = [2,3,4,5,6,7,12]
-peakInterval = diff(G{1,i}{2,j});
-    %figure(3)
-    %hold on;
-    %hist_period = histogram(diff(G{1,i}{2,j}));
-    %grid on;
-    %xlabel('Period of the cell cycle')
-    %ylabel('Frequency of Occurrence')
-    %title('Histogram of Peak Intervals (Cell cycle period)')
-    %hold off;
-    
-    end
-end
+% for i = 1:n
+%     for j = [2,3,4,5,6,7,12]
+% peakInterval = diff(G{1,i}{2,j});
+%     %figure(3)
+%     %hold on;
+%     %hist_period = histogram(diff(G{1,i}{2,j}));
+%     %grid on;
+%     %xlabel('Period of the cell cycle')
+%     %ylabel('Frequency of Occurrence')
+%     %title('Histogram of Peak Intervals (Cell cycle period)')
+%     %hold off;
+%     
+%     end
+% end
 %hist_period;
 %% Simulate the duplication of the DNA 2 -> 4
 % +++++++ Delete this part ++++++++++
@@ -207,48 +207,48 @@ end
 % See above
 %% Choose arbitrary timepoints (Inverse method)
 %gamma = zeros(1,n); % n-cells = n different gammas
-syms a gammma p P x
+%#syms a gammma p P x
 %a = (0:T); % Interval
 %gamma = zeros(1,length(a));
 %p=@(a,gamma)(2*gamma*exp(-gamma(i)*a));
 %GAMMA = zeros(1,n);
 %samples = zeros(1,n);
 %measurement = zeros(n,31); %n measurements
-for i = 1:n
-    gammma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
-    GAMMMA(1,i) = gammma;
-    %Pseu = randi(G{2,i});                % Uniform distributed numbers
-    %a = linspace(0,T,n); %a = (G{2,i}); % Interval with period T (???)
-    a = (0:G{2,i}); % Plotting range
-    p=@(gammma,a)(2*gammma*exp(-gammma*a));  %Distribution function (pdf)
-    P=@(a,gammma)((2-2*exp(-gammma*a)));    %Primitive (cdf)
-    %x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
-    x=@(gammma)(log(-(rand-2)/2)/-gammma);
-    samples(1,i) = x(gammma);                %Exponential distributed number
-    %distfun(1,i) = p(gamma,a);
-    
-    
-    %figure(900)
-    %subplot(2,2,1) % PDF Plot
-    %h=histogram(x(gamma));
-    %hold on;
-    %plot(a,(p(gamma,a)));
-    %hold on;
-    %grid on;
-    %xlabel('Age [h]');
-    %ylabel('Celldensity');
-    %title('Distribution Function (pdf)');
-    %hold off;
-    
-    %subplot(2,2,2) % CDF Plot
-    %plot(a,P(a,gamma));
-    %hold on;
-    %grid on;
-    %xlabel('Age [h]');
-    %ylabel('Celldensity');
-    %title('Primitive Function (cdf)')
-    %hold off;
-end
+% for i = 1:n
+%     #gammma = log(2)/G{2,i}; % g = Growth rate of the population; T = period 
+%     #GAMMMA(1,i) = gammma;
+%     %Pseu = randi(G{2,i});                % Uniform distributed numbers
+%     %a = linspace(0,T,n); %a = (G{2,i}); % Interval with period T (???)
+%     #a = (0:G{2,i}); % Plotting range
+%     #p=@(gammma,a)(2*gammma*exp(-gammma*a));  %Distribution function (pdf)
+%     #P=@(a,gammma)((2-2*exp(-gammma*a)));    %Primitive (cdf)
+%     %x=@(gamma)((log(-2/(rand-2))/gamma));   %Inverse cdf (icdf)
+%     #x=@(gammma)(log(-(rand-2)/2)/-gammma);
+%     #samples(1,i) = x(gammma);                %Exponential distributed number
+%     %distfun(1,i) = p(gamma,a);
+%     
+%     
+%     %figure(900)
+%     %subplot(2,2,1) % PDF Plot
+%     %h=histogram(x(gamma));
+%     %hold on;
+%     %plot(a,(p(gamma,a)));
+%     %hold on;
+%     %grid on;
+%     %xlabel('Age [h]');
+%     %ylabel('Celldensity');
+%     %title('Distribution Function (pdf)');
+%     %hold off;
+%     
+%     %subplot(2,2,2) % CDF Plot
+%     %plot(a,P(a,gamma));
+%     %hold on;
+%     %grid on;
+%     %xlabel('Age [h]');
+%     %ylabel('Celldensity');
+%     %title('Primitive Function (cdf)')
+%     %hold off;
+% end
 %figure(900)
     %subplot(2,2,1) % PDF Plot
     %h=histogram(samples,'Normalization','pdf');
@@ -260,19 +260,21 @@ end
     %ylabel('Celldensity');
     %title('Distribution Function (pdf)');
 %% Inverse method alorithm
+syms a gammma p P x
     %rand('seed', 12345)
     %hold on;
-    SAMPLES = cell(1,n);
+    %SAMPLES = cell(1,n);
     %samples = cell(1,n);
-    samples = zeros(n);
+    samples = zeros(n);%n=cells and m = timepoints
     %t_period = cell(1,n);
     %measurement = zeros(n,32); %n measurements
+    P = rand(1,n);% Number of cells (=n) or time (=m)?
     for i = 1:n
         gammma = log(2)/G{2,i}; % G{2,i} is the period!
-        
+        GAMMMA(1,i) = gammma;
     
     %Draw proposal samples
-    P = rand(1,n); %n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
+    %#P = rand; %n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
     %figure(400)
     %hist(P);
     %Evaluate Proposal samples at the inverse cdf
@@ -353,16 +355,18 @@ end
 %% New simulated IC (extracted from a simulation = cellcycle start)
 START = cell(2,n);
 for i = 1:n
-    startpoint = G{1,i}{2,6}; %Choose 3-4 periods (But only one period is required here!)
+    startpoint = G{1,i}{2,6}(end,1); %Choose 3-4 periods (But only one period is required here!)
     START{1,i} = startpoint; % Startpoints of the cellcycle
-    simstart_IC = zeros(length(startpoint),31);
-    for j = 1:length(startpoint);
-         for   k = startpoint(j,1);
+    %simstart_IC = zeros(length(startpoint),31);
+    %for j = 1:length(startpoint);
+    %     for   k = startpoint(j,1);
              A = statevalues{1,i}((o:m),:);
-        simstart_IC(j,:) = A(k,:); % IC at the start
-        START{2,i} = simstart_IC; %New IC from simulated dataset
-        end
-    end
+        %simstart_IC(j,:) = A(k,:); % IC at the start
+        %simstart_IC(j,:) = A(startpoint,:); % IC at the start
+        %START{2,i} = simstart_IC; %New IC from simulated dataset
+        START{2,i} = A(startpoint,:); %New IC from simulated dataset
+        %end
+    %end
 end
 %% Print some information
 % Define names 

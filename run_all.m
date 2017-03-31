@@ -37,15 +37,17 @@ measurement = cell(1,n);
 %rndm_measurement = cell(1,length(SAMPLES));
 %tspan = zeros(1,n+1);% ERROR HERE!!! (tspan duration has same length as one cell cycle?)
 %t_period = cell2mat(t_period);
-samples = sort(SAMPLES,2);
-for i = 1:length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 snapshot
+samples = SAMPLES; %WHY SORT???
+for i = 1:n %length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 snapshot
     %samples = sort(SAMPLES,2);%(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
-    tspan = horzcat(0,samples(i,:),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    tspan = horzcat(0,sort(samples(i,:)),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    %tspan = horzcat(samples(i,:),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    %tspan = 0:tspan;
     %tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
     %tspan = samples;
-    simulationIC = START{2,i}(1,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
-    simulationIC = simulationIC((1:31));
-    simulationIC = simulationIC';
+    simulationIC = START{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
+    %simulationIC = simulationIC((1:31));%What is happening here? o.O
+    %simulationIC = simulationIC';
 %--------------------------------------------------------------
 % NEW SIMULATION (SNAPSHOTS)
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
@@ -69,7 +71,9 @@ end
 toc
 %% Merge?
 % Build workspace
+tic
 mydata = cell2mat(measurement);
+toc
 %% Plot your dataset
 %scatterhist(newdata(1,:), newdata(2,:))
 %scatter(mydata(32,:),mydata(5,:));

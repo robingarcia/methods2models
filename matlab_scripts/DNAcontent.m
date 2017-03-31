@@ -1,4 +1,4 @@
-function [ y_DNA ] = DNAcontent(time,T, G1,S )
+function [ y_DNA ] = DNAcontent(time,T,G1,S)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 % Mitotic Index
@@ -22,10 +22,10 @@ function [ y_DNA ] = DNAcontent(time,T, G1,S )
 %for k = 1:length(T)
     %z = T(1,k);
      % T = Period of the cell cycle
-p_g1 = G1; %G1; %T*0.5; % Duration G1-Phase
+G1 = T*G1; %G1; %T*0.5; % Duration G1-Phase
 %p_g2 = T*0.16; % Duration G2-Phase
 %p_gm = T*0.04; %p_gm Duration M-Phase
-p_s = S; %S; %13; %S; %T - p_g1 - p_g2 - p_gm;%z*0.3;  %Duration S-Phase
+S = T*S; %S; %13; %S; %T - p_g1 - p_g2 - p_gm;%z*0.3;  %Duration S-Phase
 %slope = abs(2/(p_g2 - p_g1));
 %t_1 = T/2;
 %t_2 = 0.8*T;
@@ -41,8 +41,8 @@ f_2=@(time)(4);
 f_3=@(time)(slope.*time+(2-(slope*G1)));
 
 y_DNA(time < G1) = f_1(time);
-y_DNA(time >= G1 & time <= S) = f_3(time(time >= G1 & time <= S));
 y_DNA(time > S) = f_2(time);
+y_DNA(time >= G1 & time <= S) = f_3(time(time >= G1 & time <= S));
 
 end
 
