@@ -27,8 +27,13 @@ end
 toc
 %% --------------------------------------------------------------Measurement
 tic
-[START, SAMPLES,t_period,G_all] = timepoints_template(random_statevalues, tF);
+[START, SAMPLES,t_period,G_all,GAMMA] = timepoints_template(random_statevalues, tF);
 toc
+
+%% ---------------------------------------------Check for ergodic assumption
+% Weak ergodic assumption
+
+% Strong ergodic assumption
 %% --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
 tic
@@ -55,13 +60,13 @@ rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %--------------------------------------------------------------
 
 %-------------------------------------------------DNA Simulation
-y_DNA = DNAcontent(tspan,t_period(1,i),G_all{3,i}, G_all{4,i})';
+y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))'; %G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
-%figure(2)
-%hold on;
+figure(2)
+hold on;
 %axis([ 1.5 4.5])
-%plot(y_DNA)
-%grid on;
+plot(y_DNA)
+grid on;
 %hold off;
 %---------------------------------------------------------------
 

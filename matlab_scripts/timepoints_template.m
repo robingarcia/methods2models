@@ -1,4 +1,4 @@
-function [START, samples,t_period,G] = timepoints_template(random_statevalues,t_iqm)
+function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -34,6 +34,7 @@ o = input('Start timepoint t_1? (e.g: [2800]):');
 j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
 G = cell(4,n);
+T = zeros(3,n);
 for i = 1:n        % i = Number of cells
     for j = [2,3,4,5,6,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
@@ -59,17 +60,17 @@ for i = 1:n        % i = Number of cells
     % Calculation of the cell cylce period
     %T = (G{1,i}{2,6});  %Calculate the period
     %T=T(end)-T(end-1); %APC Period (=Cellcycle period)
-    T = G{1,i}{5,6};
-    G{2,i} = T; %Period of the cell cycle
-    PKS= G{1,i}{1,6};
-    t_period(1,i) = G{2,i};
+    T(1,i) = G{1,i}{5,6}; %Period of the cell cycle
+    %G{2,i} = T; %Period of the cell cycle
+    %-----PKS= G{1,i}{1,6};
+    %t_period(1,i) = G{2,i};
     %Triple-Peak
     %triplePeak{1,i}(i,1) = G{1,i}{2,5};
     %triplePeak{1,i}(i,2) = G{1,i}{2,4};
     %triplePeak{1,i}(i,3) = G{1,i}{2,12};
     
     % APC Period
-    T = G{1,i}{5,6};
+    %T_APC = G{1,i}{5,6};
     
     % G1/S-Transition
     CycETransEnd = G{1,i}{2,5}(end);
@@ -83,11 +84,15 @@ for i = 1:n        % i = Number of cells
     
     % Duration G1-Phase
     g1Duration = CycETransEnd - Cdc20ATransMinus;
-    G{3,i} = g1Duration/G{1, i}{5, 6};  
+    %G{3,i} = g1Duration/G{1, i}{5, 6}; 
+    T(2,i) = g1Duration/G{1, i}{5, 6}; 
+    %T(2,i) = G{3,i};
     % Duration S-Phase
     sDuration = pBTransEnd - Cdc20ATransMinus;
     sDuration = sDuration - g1Duration;
-    G{4,i} = sDuration/G{1, i}{5, 6};
+    %G{4,i} = sDuration/G{1, i}{5, 6};
+    T(3,i) = sDuration/G{1, i}{5, 6};
+    %T(3,i) = G{4,i};
     
     % This step is important to correct shifts (Workaround!!!)
 %----    if G{3,i} > G{2,i} ; % Should smaller than the cellcycle period
@@ -268,9 +273,10 @@ syms a gammma p P x
     samples = zeros(n);%n=cells and m = timepoints
     %t_period = cell(1,n);
     %measurement = zeros(n,32); %n measurements
+    GAMMMA = zeros(1,n); %Just preallocation
     P = rand(1,n);% Number of cells (=n) or time (=m)?
     for i = 1:n
-        gammma = log(2)/G{2,i}; % G{2,i} is the period!
+        gammma = log(2)/T(1,i); % G{2,i}; % G{2,i} is the period!
         GAMMMA(1,i) = gammma;
     
     %Draw proposal samples
@@ -371,7 +377,7 @@ end
 %% Print some information
 % Define names 
 Cells = n;
-Period = mean([G{2,:}]);
+Period = mean(T(1,:));
 %SimulationTime = datafile.t_iqm(end);
 SimulationTime = t_iqm(end);
 
