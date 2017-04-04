@@ -39,13 +39,17 @@ toc
 tic
 rndm_measurement = cell(1,n);
 measurement = cell(1,n);
+TSPAN = zeros(n,n+2);
+proport = zeros(n,1);
+
 %rndm_measurement = cell(1,length(SAMPLES));
 %tspan = zeros(1,n+1);% ERROR HERE!!! (tspan duration has same length as one cell cycle?)
 %t_period = cell2mat(t_period);
 samples = SAMPLES; %WHY SORT???
 for i = 1:n %length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 snapshot
     %samples = sort(SAMPLES,2);%(SAMPLES{1,i}(1,:)); % Prepare your timepoints = cells
-    tspan = horzcat(0,sort(samples(i,:)),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    TSPAN(i,:) = tspan;
     %tspan = horzcat(samples(i,:),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     %tspan = 0:tspan;
     %tspan(:,(2:length(tspan))) = samples; %Set t0 = 0
@@ -57,10 +61,27 @@ for i = 1:n %length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 sn
 % NEW SIMULATION (SNAPSHOTS)
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
+measurement{i} = rndm_measurement{1,i}.statevalues;
+%probe = measurement{i}; %Because cell is not full?
 %--------------------------------------------------------------
+%polyre = cellfun(@transpose, measurement, 'UniformOutput', false);
+%--------------------------------------------------------------------------
+%rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA); %Merge measurement-dataset with DNA simulation
+%measurement{1,i} = (rndm_measurement{1,i}.statevalues)'; %Save statevalues only
+%measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
+end
 
+% Calculate period from new simulation dataset (measured dataset)
+tic
+[T] = timepoints_template2(measurement);%Use full tspan
+toc
+%---------------------------------------------------------------------------
+for i = 1:n
+    gammma = log(2)/T(1,i);
+p=@(gammma,T)(2-2*exp(-gammma*T(1,i)));
+proport(i,1) = p(gammma,T);
 %-------------------------------------------------DNA Simulation
-y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))'; %G_all{3,i}, G_all{4,i})';
+y_DNA = DNAcontent(tspan,T(1,i),T(2,i), T(3,i))'; %G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
 figure(2)
 hold on;
@@ -69,11 +90,17 @@ plot(y_DNA)
 grid on;
 %hold off;
 %---------------------------------------------------------------
-
-rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA); %Merge measurement-dataset with DNA simulation
-measurement{1,i} = (rndm_measurement{1,i}.statevalues)'; %Save statevalues only
+measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
 end
 toc
+
+%% Proportion of the total cell population p(0<tau<T) // T = period 
+%proport = zeros(n,1);
+%for i = 1:n
+%    gammma = log(2)/T(1,i);
+%p=@(gammma,T)(2-2*exp(-gammma*T(1,i)));
+%proport(i,1) = p(gammma,T);
+%end
 %% Merge?
 % Build workspace
 tic
