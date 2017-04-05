@@ -37,9 +37,10 @@ toc
 %% --------------------------------------------------------Simulate the model
 %m = input('How many snapshots? (e.g: [20]):');
 tic
+m = size(SAMPLES,2);
 rndm_measurement = cell(1,n);
 measurement = cell(1,n);
-TSPAN = zeros(n,n+2);
+TSPAN = zeros(n,m+2);
 proport = zeros(n,1);
 
 %rndm_measurement = cell(1,length(SAMPLES));
@@ -57,7 +58,7 @@ for i = 1:n %length(samples); %:length(SAMPLES) %// How many snapshots? i = 1 sn
     simulationIC = START{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
     %simulationIC = simulationIC((1:31));%What is happening here? o.O
     %simulationIC = simulationIC';
-%--------------------------------------------------------------
+%--------------------------------------------------------------------------
 % NEW SIMULATION (SNAPSHOTS)
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
 %rndm_measurement = model_toettcher2008MEX(tspan,simulationIC);
@@ -69,28 +70,25 @@ measurement{i} = rndm_measurement{1,i}.statevalues;
 %rndm_measurement{1,i}.statevalues = horzcat(rndm_measurement{1,i}.statevalues, y_DNA); %Merge measurement-dataset with DNA simulation
 %measurement{1,i} = (rndm_measurement{1,i}.statevalues)'; %Save statevalues only
 %measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
-end
+%end
 
 % Calculate period from new simulation dataset (measured dataset)
-tic
-[T] = timepoints_template2(measurement);%Use full tspan
-toc
-%---------------------------------------------------------------------------
-for i = 1:n
-    gammma = log(2)/T(1,i);
-p=@(gammma,T)(2-2*exp(-gammma*T(1,i)));
-proport(i,1) = p(gammma,T);
-%-------------------------------------------------DNA Simulation
-y_DNA = DNAcontent(tspan,T(1,i),T(2,i), T(3,i))'; %G_all{3,i}, G_all{4,i})';
+%tic
+%[T] = timepoints_template2(measurement);%Use full tspan
+%toc
+%------------------------------------------------------------DNA Simulation
+%for i = 1:n
+y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))'; %G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
 figure(2)
 hold on;
 %axis([ 1.5 4.5])
-plot(y_DNA)
+plot(tspan, y_DNA)
 grid on;
 %hold off;
-%---------------------------------------------------------------
+%--------------------------------------------------------------------------
 measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
+measurement{i} = measurement{i}(:,2:end-1);
 end
 toc
 

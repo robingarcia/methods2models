@@ -25,42 +25,50 @@ o = input('Start timepoint t_1? (e.g: [2800]):');
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
 %PKS = zeros(n);
-%for i = 1:n
-%    m = length(statevalues{1,i});
+statevalues_cut = cell(1,n);
+for i = 1:n
+    m = length(statevalues{1,i});
 %o=m-100;%o = m - 100;
-%statevalues{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
-%end
+statevalues_cut{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
+end
 %% Determine the peaks of your Cyclines and APC during cellcycle
 j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
 G = cell(4,n);
 T = zeros(3,n);
 for i = 1:n        % i = Number of cells
-    for j = [2,3,4,5,6,7,12]    % j = States
+    for k = 6
+        [pks2,locs2]=findpeaks(statevalues{1,i}((o:m),k));
+        for j = [2,3,4,5,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
     %figure;
     %hold on;
     %findpeaks(statevalues{1,i}(:,j), 'MinPeakDistance', 25);
     %legend('Cyclin A','Peak Cyc A','Cyclin B','Peak Cyc B', 'Cyclin E','Peak Cyc E', 'APC','Peak APC', 'APCP','Peak APCP');
-    [pks,locs, widths, proms]=findpeaks(statevalues{1,i}((o:m),j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
+    [pks,locs, widths, proms]=findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
     %findpeaks(statevalues{1,i}((o:m),j), 'MinPeakDistance', 28, 'MinPeakHeight',0.05);
 
-    AverageDistance_Peaks = mean(diff(locs));
+    AverageDistance_Peaks = diff(locs2);
+    AverageDistance_Peaks = AverageDistance_Peaks(end);
     F{1,j} = pks;        %Peakvalue
     F{2,j} = locs;       %Position
     F{3,j} = widths;     %
     F{4,j} = proms;      %Prominence
     F{5,j} = AverageDistance_Peaks;
+    F{6,k} = locs2;
     G{1,i} = F;
     
     %Calculate the periods of all proteins
     
     
+        end
     end
     % Calculation of the cell cylce period
     %T = (G{1,i}{2,6});  %Calculate the period
-    %T=T(end)-T(end-1); %APC Period (=Cellcycle period)
-    T(1,i) = G{1,i}{5,6}; %Period of the cell cycle
+    T(1,i)=locs2(end)-locs2(end-1); %APC Period (=Cellcycle period)
+    Tstart(1,i) = locs2(end-1);
+    %LOCS2 = diff(locs2);% G{1,i}{5,6}; %Period of the cell cycle
+    %T(1,i) = LOCS2(end);
     %G{2,i} = T; %Period of the cell cycle
     %-----PKS= G{1,i}{1,6};
     %t_period(1,i) = G{2,i};
@@ -73,25 +81,28 @@ for i = 1:n        % i = Number of cells
     %T_APC = G{1,i}{5,6};
     
     % G1/S-Transition
-    CycETransEnd = G{1,i}{2,5}(end);
-    
+    %if length(G{1,i}{2,5}) == 2
+    CycETransEnd = G{1,i}{2,5}-1;
+    %else 
+       
+    %end
     % S/G2-Transition
-    pBTransEnd = G{1,i}{2,4}(end);
+    pBTransEnd = G{1,i}{2,4}-1;
     
     % M/G1-Transition
-    Cdc20ATransMinus = G{1,i}{2,12}(end-1);
+    %Cdc20ATransMinus = locs2(end); %G{1,i}{2,12}(end-1);
     
     
     % Duration G1-Phase
-    g1Duration = CycETransEnd - Cdc20ATransMinus;
+    g1Duration = CycETransEnd; %- Cdc20ATransMinus;
     %G{3,i} = g1Duration/G{1, i}{5, 6}; 
-    T(2,i) = g1Duration/G{1, i}{5, 6}; 
+    T(2,i) = g1Duration/T(1,i); %G{1, i}{5, 6}; 
     %T(2,i) = G{3,i};
     % Duration S-Phase
-    sDuration = pBTransEnd - Cdc20ATransMinus;
-    sDuration = sDuration - g1Duration;
+    sDuration = pBTransEnd; %- Cdc20ATransMinus;
+    %sDuration = sDuration - g1Duration;
     %G{4,i} = sDuration/G{1, i}{5, 6};
-    T(3,i) = sDuration/G{1, i}{5, 6};
+    T(3,i) = sDuration/T(1,i); %G{1, i}{5, 6};
     %T(3,i) = G{4,i};
     
     % This step is important to correct shifts (Workaround!!!)
@@ -265,20 +276,21 @@ end
     %ylabel('Celldensity');
     %title('Distribution Function (pdf)');
 %% Inverse method alorithm
-syms a gammma p P x
+%syms a gammma p P x
     %rand('seed', 12345)
     %hold on;
     %SAMPLES = cell(1,n);
     %samples = cell(1,n);
-    samples = zeros(n);%n=cells and m = timepoints
+    m = 2;
+    samples = zeros(n,m);%n=cells and m = timepoints
     %t_period = cell(1,n);
     %measurement = zeros(n,32); %n measurements
     GAMMMA = zeros(1,n); %Just preallocation
-    P = rand(1,n);% Number of cells (=n) or time (=m)?
     for i = 1:n
         gammma = log(2)/T(1,i); % G{2,i}; % G{2,i} is the period!
         GAMMMA(1,i) = gammma;
     
+    P = rand(1,m);% Number of cells (=n) or time (=m)?
     %Draw proposal samples
     %#P = rand; %n); %Create uniform distributed pseudorandom numbers (How to choose n? Does it must be equal?)
     %figure(400)
@@ -361,16 +373,16 @@ syms a gammma p P x
 %% New simulated IC (extracted from a simulation = cellcycle start)
 START = cell(2,n);
 for i = 1:n
-    startpoint = G{1,i}{2,6}(end,1); %Choose 3-4 periods (But only one period is required here!)
-    START{1,i} = startpoint; % Startpoints of the cellcycle
+    startpoint = Tstart(1,i); %Choose 3-4 periods (But only one period is required here!)
+    START{1,i} = startpoint-1; % Startpoints of the cellcycle
     %simstart_IC = zeros(length(startpoint),31);
     %for j = 1:length(startpoint);
     %     for   k = startpoint(j,1);
-             A = statevalues{1,i}((o:m),:);
+             A = statevalues_cut{1,i};
         %simstart_IC(j,:) = A(k,:); % IC at the start
         %simstart_IC(j,:) = A(startpoint,:); % IC at the start
         %START{2,i} = simstart_IC; %New IC from simulated dataset
-        START{2,i} = A(startpoint,:); %New IC from simulated dataset
+        START{2,i} = A(startpoint-1,:); %New IC from simulated dataset
         %end
     %end
 end

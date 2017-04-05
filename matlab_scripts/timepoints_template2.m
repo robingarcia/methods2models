@@ -1,4 +1,4 @@
-function [START, samples,T,G,GAMMMA] = timepoints_template2(random_statevalues,t_iqm)
+function [T] = timepoints_template2(random_statevalues)
 %% This is an template for output generation
 %clear ;
 %clc;
@@ -32,7 +32,7 @@ o=1;
 j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
 G = cell(4,n);
-T = zeros(3,n);
+T = zeros(1,n);
 for i = 1:n        % i = Number of cells
     for j = [2,3,4,5,6,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
@@ -357,21 +357,21 @@ syms a gammma p P x
 % end
 
 %% New simulated IC (extracted from a simulation = cellcycle start)
-START = cell(2,n); %Why not random?
-for i = 1:n
-    startpoint = G{1,i}{2,6}(end,1); %Choose 3-4 periods (But only one period is required here!)
-    START{1,i} = startpoint; % Startpoints of the cellcycle
-    %simstart_IC = zeros(length(startpoint),31);
-    %for j = 1:length(startpoint);
-    %     for   k = startpoint(j,1);
-             A = statevalues{1,i}((o:end),:);
-        %simstart_IC(j,:) = A(k,:); % IC at the start
-        %simstart_IC(j,:) = A(startpoint,:); % IC at the start
-        %START{2,i} = simstart_IC; %New IC from simulated dataset
-        START{2,i} = A(startpoint,:); %New IC from simulated dataset
-        %end
-    %end
-end
+% START = cell(2,n); %Why not random?
+% for i = 1:n
+%     startpoint = G{1,i}{2,6}(end,1); %Choose 3-4 periods (But only one period is required here!)
+%     START{1,i} = startpoint; % Startpoints of the cellcycle
+%     %simstart_IC = zeros(length(startpoint),31);
+%     %for j = 1:length(startpoint);
+%     %     for   k = startpoint(j,1);
+%              A = statevalues{1,i}((o:end),:);
+%         %simstart_IC(j,:) = A(k,:); % IC at the start
+%         %simstart_IC(j,:) = A(startpoint,:); % IC at the start
+%         %START{2,i} = simstart_IC; %New IC from simulated dataset
+%         START{2,i} = A(startpoint,:); %New IC from simulated dataset
+%         %end
+%     %end
+% end
 %% Print some information
 % Define names 
 Cells = n;
