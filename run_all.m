@@ -27,7 +27,7 @@ end
 toc
 %% --------------------------------------------------------------Measurement
 tic
-[START, SAMPLES,t_period,G_all,GAMMA] = timepoints_template(random_statevalues, tF);
+[START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF);
 toc
 
 %% ---------------------------------------------Check for ergodic assumption
@@ -80,18 +80,18 @@ measurement{i} = rndm_measurement{1,i}.statevalues;
 %for i = 1:n
 y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))'; %G_all{3,i}, G_all{4,i})';
 %y_DNA = piecewise(tspan, t_period(1,i))';
-figure(2)
-hold on;
-%axis([ 1.5 4.5])
-plot(tspan, y_DNA)
-grid on;
+% figure(2)
+% hold on;
+% %axis([ 1.5 4.5])
+% plot(tspan, y_DNA)
+% grid on;
 %hold off;
 %--------------------------------------------------------------------------
 measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
 measurement{i} = measurement{i}(:,2:end-1);
 end
 toc
-
+mydata = cell2mat(measurement);
 %% Proportion of the total cell population p(0<tau<T) // T = period 
 %proport = zeros(n,1);
 %for i = 1:n
@@ -101,15 +101,16 @@ toc
 %end
 %% Merge?
 % Build workspace
-tic
-mydata = cell2mat(measurement);
-toc
+% tic
+% mydata = cell2mat(measurement);
+% toc
 %% Plot your dataset
 %scatterhist(newdata(1,:), newdata(2,:))
 %scatter(mydata(32,:),mydata(5,:));
 %% Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
+cd('~/methods2models/datasets/')
 directoryname = input('Directory? (e.g:~/methods2models/ ):');
 %cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
