@@ -1,4 +1,3 @@
-%% Function for random IC
 function [rndmic] = lognrnd_ic(n)
 %n = input('How many cells? (e.g: [20]):');% n new datasets
 % Load model
