@@ -8,3 +8,5 @@ for i = 1:31
     %s(i)=scatter(measurement{1,1}(i,:), measurement{1,1}(32,:))
     s(i)=scatter(mydata(i,:), mydata(32,:));
 end
+
+
