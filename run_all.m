@@ -9,10 +9,16 @@ filename = datestr(now,30); %Timestamp
 tmax = input('Input simulation time (e.g: [100]):');
 tF = 0:tmax; % Simulation Time
 n = input('How many cells? (e.g: [20]):');% n new datasets
+inputpath = input('Where are your input files? [/methods2models/datasets/input/]:','s');% set a path
+cd(inputpath);
+ls -l
+inputfile = input('Which *.csv file?:','s');% choose file
+ic = csvread(inputfile);
+cd('~/methods2models/');
 %m = input('How many snapshots? (e.g: [20]):');% Number of snapshots
 % ----------------------------------------------------------Data generation
 tic
-rndmic = lognrnd_ic(n); % Generate gaussian distributed ICs
+rndmic = lognrnd_ic(n,ic); % Generate gaussian distributed ICs
 toc
 
 tic
@@ -99,6 +105,11 @@ mydata = cell2mat(measurement);
 %p=@(gammma,T)(2-2*exp(-gammma*T(1,i)));
 %proport(i,1) = p(gammma,T);
 %end
+
+%% Error model (add noise to dataset) -------------------------------------
+% This is necessary to gain realistic results
+error_model(mydata)
+
 %% Merge?
 % Build workspace
 % tic
@@ -110,8 +121,8 @@ mydata = cell2mat(measurement);
 %% Save workspace
 %Save workspace w/ timestamp (Save statevalues only)
 %directoryname = uigetdir('~/methods2models/');
-cd('~/methods2models/datasets/')
-directoryname = input('Directory? (e.g:~/methods2models/ ):');
+cd('~/methods2models/datasets/output/');
+%directoryname = input('Directory? (e.g:~/methods2models/ ):');
 %cd(directoryname);
 %save(['~/methods2models/datasets/' filename '.mat'], 'random_statevalues', '-v7.3');
 %save([filename '.mat'], 'random_statevalues','t_iqm','SAMPLES','rndm_measurement', '-v7.3');

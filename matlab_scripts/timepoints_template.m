@@ -38,7 +38,7 @@ G = cell(4,n);
 T = zeros(3,n);
 for i = 1:n        % i = Number of cells
     for k = 6
-        [pks2,locs2]=findpeaks(statevalues{1,i}((o:m),k));
+        [pks,locs2]=findpeaks(statevalues{1,i}((o:m),k));
         for j = [2,3,4,5,7,12]    % j = States
     %onecell = statevalues{1,i}(:,j); % Take 1 from n cells
     %figure;

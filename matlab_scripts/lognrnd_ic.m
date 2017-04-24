@@ -1,4 +1,4 @@
-function [rndmic] = lognrnd_ic(n)
+function [rndmic,ICdefault] = lognrnd_ic(n,ic)
 %n = input('How many cells? (e.g: [20]):');% n new datasets
 % Load model
 %------------toettcher2008 = IQMmodel('model_toettcher2008.txt');
@@ -8,7 +8,7 @@ function [rndmic] = lognrnd_ic(n)
 %------------t_iqm = toettcher2008sim.time;
 % Fetch the IC vector
 %------ICdefault = IQMinitialconditions(toettcher2008); %IC-vector w/ default IC
-[ic] = model_toettcher2008matlab;
+%----[ic] = model_toettcher2008matlab;
 ICdefault = ic;
 %Fetch the parameter vector
 %----[parameters,values]=IQMparameters(toettcher2008); %Parameter-vector w/ deafault parameters
