@@ -44,7 +44,7 @@ errordata = error_model(mydata);
 %Cmatrix = cell(m,n);
 
 %% Calculate C-Matrix -----------------------------------------------------
-j = 1;
+j = 3;
 cmatrix = Cmatrix(j);
 dimC = size(cmatrix);
 C = cell(dimC(1,1),1);

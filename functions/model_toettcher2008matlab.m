@@ -1,4 +1,4 @@
-function [ic] = model_toettcher2008matlab(tF)
+function [xSol] = model_toettcher2008matlab(tF)
 %% Modified final model of the cell cycle from Toettcher et. al. 2008
 
 % This file simulates the final model that has been optimized to data of
@@ -201,10 +201,10 @@ u = @(t) [1.8               % M
 % *************************************************************************
 
 
-%tic
-%tF = 0:100;    % the final timepoint of simulation
-%xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
-%toc
+tic
+tF = 0:4000;    % the final timepoint of simulation
+xSol = ode15s(@final_model_eqns, tF, ic, odeset('Jacobian', @final_model_jacobian), p, u);
+toc
 
 
 
@@ -217,21 +217,25 @@ u = @(t) [1.8               % M
 % integrated, and uses the matrix 'c' to define these linear combinations.
 % *************************************************************************
 
-% % c - a matrix defining some outputs for plotting
-% c = zeros(5, 31);
-% %c(1,[3 4 9 10 30]) = 1;    % CycBT
-% %c(2,[2 15 29]) = 1;        % CycAT
-% %c(3,[5 16 31]) = 1;        % CycET
-% %c(4,12) = 1;               % Cdc20A
-% c(5,5) = 1;               % CycE
-% %c(5,4) = 1;               % pB
-% 
-% figure(2)
-% plot(xSol.x, c*xSol.y, 'LineWidth', 2);
-% set(gca, 'YLim', [0.03 0.12])
-% legend('CycET', 'CycAT', 'CycBT', 'Cdc20A', 'CycE', 'pB');
-% xlabel('time (h)'), ylabel('concentration (AU)')
-% title('MATLAB cell cycle model')
+% c - a matrix defining some outputs for plotting
+c = zeros(10, 31);
+c(1,[3 4 9 10 30]) = 1;    % CycBT
+c(2,[2 15 29]) = 1;        % CycAT
+c(3,[5 16 31]) = 1;        % CycET
+c(4,12) = 1;               % Cdc20A
+c(5,5) = 1;               % CycE
+c(5,4) = 1;               % pB
+c(6,9) = 1;
+c(7,10) = 1;
+c(8,29) = 1;
+c(9,30) = 1;
+
+figure(2)
+plot(xSol.x, c*xSol.y, 'LineWidth', 2);
+%set(gca, 'YLim', [0.03 0.12])
+legend('CycET', 'CycAT', 'CycBT', 'Cdc20A', 'CycE', 'pB');
+xlabel('time (h)'), ylabel('concentration (AU)')
+title('MATLAB cell cycle model')
 
 %findpeaks(c*xSol.y(1,:));
 end
