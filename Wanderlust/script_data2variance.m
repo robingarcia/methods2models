@@ -1,8 +1,9 @@
+function[] = script_data2variance(datafile)
 tic
 %% Load data
 
-filename = uigetfile('~/methods2models/datasets');
-datafile = importdata(filename);
+%filename = uigetfile('~/methods2models/datasets');
+%datafile = importdata(filename);
 %data = datafile;
 data = datafile';
 %datafolder	= '~/methods2models/datasets/example/'; %Implement GUI for users
@@ -60,3 +61,4 @@ NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 options.doplots = 1;
 PlotERAVariance(data,NewPathDensity,options)
 toc
+end

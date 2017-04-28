@@ -1,4 +1,5 @@
-function [] = run_all
+%function [] = run_all
+addpath(genpath('~/methods2models'));
 %% User inputs ------------------------------------------------------------
 [filename,tF,lb,n,ic]=userinteraction;
 %% -------------------Data generation--------------------------------------
@@ -43,12 +44,39 @@ errordata = error_model(mydata);
 %Cmatrix = cell(m,n);
 
 %% Calculate C-Matrix -----------------------------------------------------
-cmatrix = Cmatrix;
-for i = 1:length(errordata)
-    measurementdata(:,i) = cmatrix * errordata(:,i);
+j = 1;
+cmatrix = Cmatrix(j);
+dimC = size(cmatrix);
+C = cell(dimC(1,1),1);
+C(:) = {zeros(j+1,32)};
+for i = 1:dimC(1,1)
+    C{i,1}(end,32) = 1; %Add DNA
+    for k = 1:dimC(1,2) %Add Species of interest
+        C{i}(dimC(1,2),cmatrix(i)) = 1;
+    end
 end
+measurementdata = cell(1,31);
+for l = 1:length(C)
+    measurementdata{l}(j+1,:) = errordata(32,:); %Add DNA
+    for o = 1:j
+        for i = 1:length(errordata)
+    measurementdata{l}(o,:) = errordata(cmatrix(l,j),:);
+    %measurementdata{l}(2,:) = C{l}(1,:)' .* errordata(l,:);
+    %measurementdata{l}(1,:) = C{l}(1,:)' .* errordata(l,:);
+        end
+    end
+end
+
+%% Wanderlust -------------------------------------------------------------
+
 %% Save workspace
 cd('~/methods2models/datasets/output/');
 save([filename '.mat'],'mydata','errordata', '-v7.3');
 cd('~/methods2models/')
+
+%% Wanderlust -------------------------------------------------------------
+for i = 5 
+script_data2variance(measurementdata{i})
 end
+%end
+
