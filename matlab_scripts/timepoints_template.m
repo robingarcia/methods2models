@@ -1,26 +1,16 @@
-function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm)
+function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm,o)
 %% This is an template for output generation
-%clear ;
-%clc;
-%addpath /Users/robin/methods2models/ /Users/robin/MATLAB/
 %% Load the data
-%filename = uigetfile('~/methods2models/datasets');
-%datafile = importdata(filename);
-%load('toetcher_statenames.mat');
-%statevalues = datafile.random_statevalues; % States
 statevalues = random_statevalues; % States
-%t = datafile.t_iqm; % Time
-%timepoints = datafile.t_iqm;
+
 t = t_iqm; % Time
-%timepoints = t_iqm;
-%t_original=timepoints./timepoints(end); %0 to 1
 n = length(statevalues); % Determine the number of cells
 m = length(t);
 %m2 = m*0.1;
 %o = m - 100;
-X = ['Max. simulation time is:', num2str(m), '[s]'];
-disp(X)
-o = input('Start timepoint t_1? (e.g: [2800]):');
+%X = ['Max. simulation time is:', num2str(m), '[s]'];
+%disp(X)
+%o = input('Start timepoint t_1? (e.g: [2800]):');
 %t=t(o:m); %Trimmed time vector
 %t_norm = t-t(1); % Set the time vector from 0 to x
 %t_cut=t./t(end); %0 to 1
@@ -28,7 +18,6 @@ o = input('Start timepoint t_1? (e.g: [2800]):');
 statevalues_cut = cell(1,n);
 for i = 1:n
     m = length(statevalues{1,i});
-%o=m-100;%o = m - 100;
 statevalues_cut{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
 end
 %% Determine the peaks of your Cyclines and APC during cellcycle
