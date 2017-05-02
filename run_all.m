@@ -40,12 +40,14 @@ mydata = cell2mat(measurement);
 %% Error model (add noise to dataset) -------------------------------------
 
 % This is necessary to gain realistic results
-errordata = error_model(mydata);
+sig = 0.2;
+errordata = error_model(mydata,sig);
 %Cmatrix = cell(m,n);
 
 %% Calculate C-Matrix -----------------------------------------------------
-j = 3;
-cmatrix = Cmatrix(j);
+j = 1;
+x = 1:32;
+cmatrix = Cmatrix(j,size(errordata,1));
 dimC = size(cmatrix);
 C = cell(dimC(1,1),1);
 C(:) = {zeros(j+1,32)};
@@ -71,12 +73,20 @@ end
 
 %% Save workspace
 cd('~/methods2models/datasets/output/');
-save([filename '.mat'],'mydata','errordata', '-v7.3');
+save([filename '.mat'],'mydata','errordata','measurementdata', '-v7.3');
 cd('~/methods2models/')
 
 %% Wanderlust -------------------------------------------------------------
-for i = 5 
-script_data2variance(measurementdata{i})
-end
+
+% 1) PathfromWanderlust
+% 2) FACS2Pathdensity
+% 3) FACSDensityTrafo 
+
+
+
+
+%for i = 5 
+%script_data2variance(measurementdata{i})
+%end
 %end
 

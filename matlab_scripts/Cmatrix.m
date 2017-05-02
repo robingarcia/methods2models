@@ -1,8 +1,15 @@
-function[C] = Cmatrix(j) 
+function[C] = Cmatrix(j,n) 
 %% Create C-Matrix
 %for j = 1
-x = 1:31;
+x = 1:n-1;
 C = nchoosek(x,j);
+
+n_perms = size(C,1);
+
+C = [C,n*ones(n_perms,1)];
+
+
+
 %end
 %MatSize = length(C);
 %Cmatri = zeros(MatSize+1,32);
