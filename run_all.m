@@ -1,13 +1,14 @@
 %function [] = run_all
 addpath(genpath('~/methods2models'));
+load('toettcher_statenames.mat');
 %% User inputs ------------------------------------------------------------
-[filename,tF,lb,n,ic]=userinteraction;
+[filename,tF,lb,N,ic]=userinteraction;
 %% -------------------Data generation--------------------------------------
 
-rndmic = lognrnd_ic(n,ic); % Generate gaussian distributed ICs
-simdata = cell(1,n);
-random_statevalues = cell(1,n);
-for i = 1:n
+rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
+simdata = cell(1,N);
+random_statevalues = cell(1,N);
+for i = 1:N
   simdata{i} = model_toettcher2008MEX(tF,rndmic{i}); %C-Model (MEX-File)
   random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
@@ -17,12 +18,12 @@ end
 %% ------------------Simulate the model------------------------------------
 
 m = size(SAMPLES,2);
-rndm_measurement = cell(1,n);
-measurement = cell(1,n);
-TSPAN = zeros(n,m+2);
+rndm_measurement = cell(1,N);
+measurement = cell(1,N);
+TSPAN = zeros(N,m+2);
 %proport = zeros(n,1);
 samples = SAMPLES;
-for i = 1:n 
+for i = 1:N 
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     TSPAN(i,:) = tspan;
     simulationIC = START{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
@@ -40,53 +41,58 @@ mydata = cell2mat(measurement);
 %% Error model (add noise to dataset) -------------------------------------
 
 % This is necessary to gain realistic results
-sig = 0.2;
+sig = 0.2; % Define your sigma
 errordata = error_model(mydata,sig);
 %Cmatrix = cell(m,n);
 
 %% Calculate C-Matrix -----------------------------------------------------
-j = 1;
+j = 1; 
 x = 1:32;
-cmatrix = Cmatrix(j,size(errordata,1));
-dimC = size(cmatrix);
-C = cell(dimC(1,1),1);
-C(:) = {zeros(j+1,32)};
-for i = 1:dimC(1,1)
-    C{i,1}(end,32) = 1; %Add DNA
-    for k = 1:dimC(1,2) %Add Species of interest
-        C{i}(dimC(1,2),cmatrix(i)) = 1;
-    end
-end
-measurementdata = cell(1,31);
-for l = 1:length(C)
-    measurementdata{l}(j+1,:) = errordata(32,:); %Add DNA
-    for o = 1:j
-        for i = 1:length(errordata)
-    measurementdata{l}(o,:) = errordata(cmatrix(l,j),:);
-    %measurementdata{l}(2,:) = C{l}(1,:)' .* errordata(l,:);
-    %measurementdata{l}(1,:) = C{l}(1,:)' .* errordata(l,:);
-        end
-    end
-end
+%cmatrix = Cmatrix(j,size(errordata,1));
+%C = zeros(size(cmatrix,2), size(errordata,1));
+for i = 4%:size(nchoosek(x,j),1)
+%   C(1,cmatrix(i,1))=1;
+%   C(end,cmatrix(i,2))=1;
+%   Y = C*errordata;
+Y = Cmatrix(i,j,size(errordata,1),errordata);   
 
+APCmax = 0.9950; %Define startpoint
 %% Wanderlust -------------------------------------------------------------
-
-%% Save workspace
-cd('~/methods2models/datasets/output/');
-save([filename '.mat'],'mydata','errordata','measurementdata', '-v7.3');
-cd('~/methods2models/')
-
-%% Wanderlust -------------------------------------------------------------
-
+load_options
+start = [-3,-1.2];
+startballsize = [0.02,0.02];
+options.wanderlust.wanderlust_weights = [];
+doplots = 1;
+num_graphs = 30;
+PathIndex = [1,2]; %User interaction with options
+manual_path = 0;
 % 1) PathfromWanderlust
+PathfromWanderlust(Y',options)
+path = G.y;
 % 2) FACS2Pathdensity
-% 3) FACSDensityTrafo 
+PathDensity = sbistFACS2PathDensity(data,path,options);
 
+% 3) FACSDensityTrafo 
+gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
+newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
+newScale.cdf = @(a) 2-2*exp(-gamma.*a);
+newScale.coDomain = [0,log(2)/gamma];
+
+NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
+
+options.doplots = 0; %0 = no plot , 1 = plot
+PlotERAVariance(data,NewPathDensity,options)
+end
 
 
 
 %for i = 5 
 %script_data2variance(measurementdata{i})
 %end
+
+%% Save workspace
+cd('~/methods2models/datasets/output/');
+save([filename '.mat'],'mydata','errordata','Y', '-v7.3');
+cd('~/methods2models/')
 %end
 

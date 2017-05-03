@@ -58,7 +58,7 @@ newScale.coDomain = [0,log(2)/gamma];
 
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 
-options.doplots = 1;
+options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options)
 toc
 end
