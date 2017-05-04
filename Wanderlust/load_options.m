@@ -4,7 +4,7 @@ options.Ynames		= statenames;
 options.PathIndex	= [1 2]; %input('Input your vector (e.g: [1 2]):')
 options.Yindex		= [1:length(statenames)];
 options.doplots	= 0;
-options.gamma		= log(2)/mean(t_period(1,:));%24;	% population growth rate (ADAPT IT!!!)
+options.gamma		= log(2)/24;%mean(t_period(1,:));%24;	% population growth rate (ADAPT IT!!!)
 % Wanderlust options
  params = [];
  params.l = 8;
