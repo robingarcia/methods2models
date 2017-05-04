@@ -61,13 +61,13 @@ APCmax = 0.9950; %Define startpoint
 load_options
 start = [-3,-1.2];
 startballsize = [0.02,0.02];
-options.wanderlust.wanderlust_weights = [];
+options.wanderlust.wanderlust_weights = [1,1];
 doplots = 1;
 num_graphs = 30;
 PathIndex = [1,2]; %User interaction with options
 manual_path = 0;
 % 1) PathfromWanderlust
-PathfromWanderlust(Y',options)
+G = PathfromWanderlust(Y',options)
 path = G.y;
 % 2) FACS2Pathdensity
 PathDensity = sbistFACS2PathDensity(data,path,options);
