@@ -1,4 +1,4 @@
-function G = PathfromWanderlust(wdata,opts)
+function G = PathfromWanderlust(wdata,opts,start)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:
@@ -39,20 +39,22 @@ if isfield(params,'s')
 end
 
 % dialog to set startpoint manually
-if ~isfield(params,'s') | emptys
-	rect = [20 20 800 600];
-	fh= figure('Color','w','Position',rect);
-	psc = scatter(data(:,1),data(:,2),'ob');
-	title('Click on starting point for wanderlust')
-	xlabel(opts.Ynames(opts.PathIndex(1)))
-	ylabel(opts.Ynames(opts.PathIndex(2)))
-	hold on
-	[x_coords,y_coords]  = ginput_ax_mod2(gca,1);
+% if ~isfield(params,'s') | emptys
+% 	rect = [20 20 800 600];
+% 	fh= figure('Color','w','Position',rect);
+% 	psc = scatter(data(:,1),data(:,2),'ob');
+% 	title('Click on starting point for wanderlust')
+% 	xlabel(opts.Ynames(opts.PathIndex(1)))
+% 	ylabel(opts.Ynames(opts.PathIndex(2)))
+% 	hold on
+    x_coords = start(1);
+    y_coords = start(end);
+	%[x_coords,y_coords]  = ginput_ax_mod2(gca,1); % Klick here :3
 	ballsize = [0.002,0.02];
-	inball = (data(:,1)-x_coords).^2 < ballsize(1) & (data(:,2)-y_coords).^2 < ballsize(2);
-	psc = scatter(data(inball,1),data(inball,2),'or');
+	inball = (data(:,1)-x_coords).^2 < ballsize(1) & (data(:,2)-y_coords).^2 < ballsize(2); %n-sphere
+	%psc = scatter(data(inball,1),data(inball,2),'or');
 	params.s = find(inball);% index to the set of start points
-end
+%end
 
 % normalize data
 if (params.normalize)
