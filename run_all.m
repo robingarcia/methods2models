@@ -53,17 +53,16 @@ errordata = error_model(mydata,sig);
 
 
 %% Calculate C-Matrix -----------------------------------------------------
-j = 1; 
-x = 1:32;
+
+for j = 2 %1:size(ic,1) j = Number of columns = Number of outputs
+x = 1:size(ic,1)+1;%32; Include DNA as 32th
 %cmatrix = Cmatrix(j,size(errordata,1));
 %C = zeros(size(cmatrix,2), size(errordata,1));
 for i = 4%:size(nchoosek(x,j),1)
 %   C(1,cmatrix(i,1))=1;
 %   C(end,cmatrix(i,2))=1;
 %   Y = C*errordata;
-Y = Cmatrix(i,j,size(errordata,1),errordata);   
-
-%APCmax = 0.9950; %Define startpoint
+[Y,options.PathIndex] = Cmatrix(i,j,size(errordata,1),errordata);   
 
 
 %% Wanderlust -------------------------------------------------------------
@@ -71,18 +70,18 @@ data = Y';
 load_options
 start = [-3,-1.2];
 startballsize = [0.02,0.02];
-options.wanderlust.wanderlust_weights = [1,1];
+options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
 doplots = 1;
 num_graphs = 30;
-PathIndex = [1,2]; %User interaction with options
+%options.PathIndex = [1,2]; %User interaction with options
 manual_path = 0;
-% 1) PathfromWanderlust
-G = PathfromWanderlust(data,options,y_0([i end]));
+% 1) PathfromWanderlust ---------------------------------------------------
+G = PathfromWanderlust(data,options,y_0);
 path = G.y;
-% 2) FACS2Pathdensity
+% 2) FACS2Pathdensity -----------------------------------------------------
 PathDensity = sbistFACS2PathDensity(data,path,options);
 
-% 3) FACSDensityTrafo 
+% 3) FACSDensityTrafo -----------------------------------------------------
 gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
@@ -92,6 +91,7 @@ NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 
 options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
+end
 end
 %% Save workspace
 cd('~/methods2models/datasets/output/');

@@ -39,7 +39,7 @@ num_graphs = 30;
 PathIndex = [1,2]; %User interaction with options
 manual_path = 0;
 
-G = PathfromWanderlust(data,options);
+G = PathfromWanderlust(data,options,y_0([i end]));
 path = G.y;
 
 %% Plot data and path
@@ -58,7 +58,7 @@ newScale.coDomain = [0,log(2)/gamma];
 
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 
-options.doplots = 0; %0 = no plot , 1 = plot
+options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options)
 toc
 end

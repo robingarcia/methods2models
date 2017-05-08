@@ -24,13 +24,15 @@ if isfield(opts,'wanderlust')
 else
 end
 
-if ~isfield(params,'wanderlust_weights') 
+if isfield(params,'wanderlust_weights') 
 	params.wanderlust_weights = ones(1,length(opts.PathIndex));
 end
 
 % prepare data for wanderlust  (nxd)
-o_data	= wdata(:,opts.PathIndex);
-data	= o_data;
+%o_data	= wdata(:,opts.PathIndex);
+%o_data	= wdata(opts.PathIndex,:);
+%data	= o_data;
+data = wdata;
 
 % set start point
 emptys = 0;
@@ -39,22 +41,29 @@ if isfield(params,'s')
 end
 
 % dialog to set startpoint manually
-% if ~isfield(params,'s') | emptys
-% 	rect = [20 20 800 600];
-% 	fh= figure('Color','w','Position',rect);
-% 	psc = scatter(data(:,1),data(:,2),'ob');
-% 	title('Click on starting point for wanderlust')
-% 	xlabel(opts.Ynames(opts.PathIndex(1)))
-% 	ylabel(opts.Ynames(opts.PathIndex(2)))
-% 	hold on
-    x_coords = start(1);
+if ~isfield(params,'s') | emptys
+	rect = [20 20 800 600];
+	fh= figure('Color','w','Position',rect);
+	psc = scatter(data(:,1),data(:,2),'ob');
+	title('Click on starting point for wanderlust')
+	xlabel(opts.Ynames(opts.PathIndex(1)))
+	ylabel(opts.Ynames(opts.PathIndex(2)))
+	hold on
+    %x_coords = start(1);
+    for z = 1:size(opts.PathIndex,2)-1
+        %for i = opts.PathIndex(z)
+    x_coords = start(opts.PathIndex(z));
     y_coords = start(end);
 	%[x_coords,y_coords]  = ginput_ax_mod2(gca,1); % Klick here :3
 	ballsize = [0.002,0.02];
-	inball = (data(:,1)-x_coords).^2 < ballsize(1) & (data(:,2)-y_coords).^2 < ballsize(2); %n-sphere
-	%psc = scatter(data(inball,1),data(inball,2),'or');
+	%inball = (data(:,1)-x_coords).^2 < ballsize(1) & (data(:,2)-y_coords).^2 < ballsize(2); %n-sphere
+    X_Cor = bsxfun(@minus, data(:,z),x_coords);
+    inball = (X_Cor).^2 < ballsize(1) & (data(:,end)-y_coords).^2 < ballsize(2); %n-sphere
+	psc = scatter(data(inball,1),data(inball,2),'or');
 	params.s = find(inball);% index to the set of start points
-%end
+    %end
+    end
+end
 
 % normalize data
 if (params.normalize)
@@ -70,6 +79,6 @@ G = wanderlust(data,params);
 
 %% Visualize the result
 % get mean wanderlust path
-G = getMeanWanderlustPath(G,o_data,opts);
+G = getMeanWanderlustPath(G,data,opts);
 
 
