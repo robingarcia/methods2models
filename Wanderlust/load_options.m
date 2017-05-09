@@ -1,7 +1,7 @@
 
 
 options.Ynames		= statenames;
-options.PathIndex	= [1 2]; %input('Input your vector (e.g: [1 2]):')
+%options.PathIndex	= [1 2]; %input('Input your vector (e.g: [1 2]):')
 options.Yindex		= [1:length(statenames)];
 options.doplots	= 0;
 options.gamma		= log(2)/mean(t_period(1,:));%24;	% population growth rate (ADAPT IT!!!)
@@ -16,6 +16,6 @@ options.gamma		= log(2)/mean(t_period(1,:));%24;	% population growth rate (ADAPT
  params.band_sample = true;
  params.voting_scheme = 'exponential';
  params.flock_landmarks = 2;
- params.wanderlust_weights = [1,1];		% weights for the dimensions of the dataset used for wanderlust
+ params.wanderlust_weights = ones(1,length(options.PathIndex));		% weights for the dimensions of the dataset used for wanderlust
 params.verbose	= false;
 options.wanderlust = params;

@@ -98,6 +98,7 @@ else
 % new method to get the pdf with probability density of each datapoint on s
 % function handle for each gaussian (taken from p_dimensional_Gaussian2)
 
+%mu = data(:,opts.PathIndex);
 mu = data(:,opts.PathIndex);
 Sigma = diag(gaussbandwidth(opts.PathIndex).*path_weights').^2;
 % [fh,jh,hh,fk,jk,hiik] = p_dimensional_Gaussian2(mu,Sigma,0);
