@@ -42,15 +42,18 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-x_data = data;
+alpha = 0.1;
+x_data = data';
 y_data = cmatrix * x_data;
 x_coords = start;
 y_coords = cmatrix * x_coords;
+ballsize = range(y_data,1)*alpha;
 X_Cor = bsxfun(@minus, x_data, x_coords);
+X_Cor2 = bsxfun(@times, X_Cor.^2, 1./ballsize.^2);
 Y_Cor = bsxfun(@minus, y_data, y_coords);
-ballsize = range(y_data)*alpha;
-y_inball = bsxfun(@lt, (Y_cor).^2, ballsize);
-inball = all(y_inball,1);
+
+%y_inball = bsxfun(@lt, (Y_cor).^2, ballsize);
+inball = sum(X_Cor2,2) <1; %all(y_inball,1);
 %-----------------------------
 if ~isfield(params,'s') | emptys
 	rect = [20 20 800 600];
@@ -61,23 +64,23 @@ if ~isfield(params,'s') | emptys
 	ylabel(opts.Ynames(opts.PathIndex(2)))
 	hold on
     %x_coords = start(1);
-    for z = 1:size(opts.PathIndex,2)-1 %Without DNA, y_coords = DNA
+%---    for z = 1:size(opts.PathIndex,2)-1 %Without DNA, y_coords = DNA
         %for i = opts.PathIndex(z)
-    x_coords = start(opts.PathIndex(z)); %All other measurement outputs
-    y_coords = start(end); %DNA
+%---    x_coords = start(opts.PathIndex(z)); %All other measurement outputs
+%---    y_coords = start(end); %DNA
 	%[x_coords,y_coords]  = ginput_ax_mod2(gca,1); % Klick here :3
-	ballsize = [0.002,0.02];
+%---	ballsize = [0.002,0.02];
 	%inball = (data(:,1)-x_coords).^2 < ballsize(1) & (data(:,2)-y_coords).^2 < ballsize(2); %n-sphere
-    X_Cor = bsxfun(@minus, data(:,z),x_coords);
+%---    X_Cor = bsxfun(@minus, data(:,z),x_coords);
     %X_Cor = bsxfun(@minus, x_data,x_coords);
     %Y_Cor = bsxfun(@minus, y_data, y_coords);
     
-    inball = (X_Cor).^2 < ballsize(1) & (data(:,end)-y_coords).^2 < ballsize(2); %n-sphere ???!!!
-	psc = scatter(data(inball,1),data(inball,2),'or');
+%---    inball = (X_Cor).^2 < ballsize(1) & (data(:,end)-y_coords).^2 < ballsize(2); %n-sphere ???!!!
+%---	psc = scatter(data(inball,1),data(inball,2),'or');
 	params.s = find(inball);% index to the set of start points
     %end
     end
-end
+%end
 
 % normalize data
 if (params.normalize)
@@ -85,8 +88,9 @@ if (params.normalize)
 	data = data./repmat(prctile((data), 99, 1),size(data,1),1);
 end
 
-% weight the data
-data = data.*repmat(params.wanderlust_weights,size(data,1),1);
+% weight the data (STILL ERROR!!!)
+dataa = data';
+data = dataa.*repmat(params.wanderlust_weights,size(data,1),1);
 
 % compute trajectory
 G = wanderlust(data,params);
