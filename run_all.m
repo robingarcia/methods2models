@@ -69,8 +69,8 @@ for i = 2%:size(nchoosek(x,j),1)
 %data = Y';
 data = errordata';
 load_options
-start = [-3,-1.2];
-startballsize = [0.02,0.02];
+%start = [-3,-1.2];
+%startballsize = [0.02,0.02];
 options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
 doplots = 1;
 num_graphs = 30;

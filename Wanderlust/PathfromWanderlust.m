@@ -29,10 +29,9 @@ if isfield(params,'wanderlust_weights')
 end
 
 % prepare data for wanderlust  (nxd)
-%o_data	= wdata(:,opts.PathIndex);
-%o_data	= wdata(opts.PathIndex,:);
-%data	= o_data;
-data = wdata;
+o_data	= wdata(:,opts.PathIndex);
+data	= o_data;
+%data = wdata;
 
 % set start point
 emptys = 0;
@@ -44,7 +43,7 @@ end
 % --- Preparation -----------
 alpha = 0.1;
 x_data = data';
-y_data = cmatrix * x_data;
+y_data = cmatrix' * x_data;
 x_coords = start;
 y_coords = cmatrix * x_coords;
 ballsize = range(y_data,1)*alpha;
@@ -84,19 +83,18 @@ if ~isfield(params,'s') | emptys
 
 % normalize data
 if (params.normalize)
-	data = data-repmat(prctile(data, 1, 1), size(data,1),1);
-	data = data./repmat(prctile((data), 99, 1),size(data,1),1);
+	y_data = y_data-repmat(prctile(y_data, 1, 1), size(y_data,1),1);
+	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
 end
 
 % weight the data (STILL ERROR!!!)
-dataa = data';
-data = dataa.*repmat(params.wanderlust_weights,size(data,1),1);
+y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
 
 % compute trajectory
-G = wanderlust(data,params);
+G = wanderlust(y_data,params);
 
 %% Visualize the result
 % get mean wanderlust path
-G = getMeanWanderlustPath(G,data,opts);
-
+G = getMeanWanderlustPath(G,y_data,opts);
+end
 
