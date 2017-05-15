@@ -29,9 +29,9 @@ if isfield(params,'wanderlust_weights')
 end
 
 % prepare data for wanderlust  (nxd)
-o_data	= wdata(:,opts.PathIndex);
-data	= o_data;
-%data = wdata;
+%o_data	= wdata(:,opts.PathIndex); % <-- not neccessary because C-matrix
+%data	= o_data;
+data = wdata; % Nxn)
 
 % set start point
 emptys = 0;
@@ -42,22 +42,25 @@ end
 % dialog to set startpoint manually
 % --- Preparation -----------
 alpha = 0.1;
-x_data = data';
-y_data = cmatrix' * x_data;
-x_coords = start;
-y_coords = cmatrix * x_coords;
-ballsize = range(y_data,1)*alpha;
-X_Cor = bsxfun(@minus, x_data, x_coords);
-X_Cor2 = bsxfun(@times, X_Cor.^2, 1./ballsize.^2);
+x_data = data; % (nxN) ---------- all data
+y_data = cmatrix * x_data; % (mxN) -------- measured data
+y_data = y_data'; %
+x_coords = start; % Initial conditions from Toettcher model
+y_coords = cmatrix * x_coords; % IC for measured outputs
+y_coords = y_coords'; %
+ballsize = range(y_data,2)*alpha; % (Nx?)
+X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
+%X_Cor2 = bsxfun(@times, X_Cor.^2, 1./ballsize.^2);
 Y_Cor = bsxfun(@minus, y_data, y_coords);
 
-%y_inball = bsxfun(@lt, (Y_cor).^2, ballsize);
-inball = sum(X_Cor2,2) <1; %all(y_inball,1);
+y_inball = bsxfun(@lt, Y_Cor.^2, ballsize);
+inball = all(y_inball,1);
+%y_inball = sum(X_Cor2,2) <1; %all(y_inball,1);
 %-----------------------------
 if ~isfield(params,'s') | emptys
 	rect = [20 20 800 600];
 	fh= figure('Color','w','Position',rect);
-	psc = scatter(data(:,1),data(:,2),'ob');
+	psc = scatter(y_data(:,1),y_data(:,2),'ob');
 	title('Click on starting point for wanderlust')
 	xlabel(opts.Ynames(opts.PathIndex(1)))
 	ylabel(opts.Ynames(opts.PathIndex(2)))
@@ -87,7 +90,7 @@ if (params.normalize)
 	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
 end
 
-% weight the data (STILL ERROR!!!)
+% weight the data
 y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
 
 % compute trajectory

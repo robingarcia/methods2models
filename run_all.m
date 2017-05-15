@@ -54,11 +54,11 @@ errordata = error_model(mydata,sig);
 
 %% Calculate C-Matrix -----------------------------------------------------
 
-for j = 1 %1:size(ic,1) j = Number of columns = Number of outputs
+for j = 2%:size(ic,1) %j = Number of columns = Number of outputs
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 %cmatrix = Cmatrix(j,size(errordata,1));
 %C = zeros(size(cmatrix,2), size(errordata,1));
-for i = 2%:size(nchoosek(x,j),1)
+for i = 5%:size(nchoosek(x,j),1)
 %   C(1,cmatrix(i,1))=1;
 %   C(end,cmatrix(i,2))=1;
 %   Y = C*errordata;
@@ -67,11 +67,11 @@ for i = 2%:size(nchoosek(x,j),1)
 
 %% Wanderlust -------------------------------------------------------------
 %data = Y';
-data = errordata';
+data = errordata;
 load_options
 %start = [-3,-1.2];
 %startballsize = [0.02,0.02];
-options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
+%--options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
 doplots = 1;
 num_graphs = 30;
 %options.PathIndex = [1,2]; %User interaction with options
