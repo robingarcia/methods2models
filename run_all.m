@@ -47,7 +47,7 @@ mydata = cell2mat(measurement);
 %% Error model (add noise to dataset) -------------------------------------
 
 % This is necessary to gain realistic results
-sig = 0.3; % Define your sigma
+sig = 0.2; % Define your sigma
 errordata = error_model(mydata,sig);
 %Cmatrix = cell(m,n);
 
@@ -58,7 +58,7 @@ for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 %cmatrix = Cmatrix(j,size(errordata,1));
 %C = zeros(size(cmatrix,2), size(errordata,1));
-for i = 7%:size(nchoosek(x,j),1)
+for i = 14%:size(nchoosek(x,j),1)
 %   C(1,cmatrix(i,1))=1;
 %   C(end,cmatrix(i,2))=1;
 %   Y = C*errordata;
