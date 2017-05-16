@@ -15,7 +15,7 @@ for i = 1:31
     hold on
     %scatter(errordata(x,:), errordata(y,:),'r')%, errordata(32,:));
     %scatter3(measurement(i,:),measurement(2,:),measurement(466,:))
-    s(i) = scatter(measurementdata{i}(1,:), measurementdata{i}(2,:));
+    s(i) = scatter(errordata(1,:), errordata(32,:));
     %scatterhist(measurementdata{1}(2,:),measurementdata{1}(1,:));
 end
 

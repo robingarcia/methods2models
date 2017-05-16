@@ -31,7 +31,7 @@ end
 % prepare data for wanderlust  (nxd)
 %o_data	= wdata(:,opts.PathIndex); % <-- not neccessary because C-matrix
 %data	= o_data;
-data = wdata; % Nxn)
+data = wdata; % (Nxn)
 
 % set start point
 emptys = 0;
@@ -78,7 +78,7 @@ if ~isfield(params,'s') | emptys
     %Y_Cor = bsxfun(@minus, y_data, y_coords);
     
 %---    inball = (X_Cor).^2 < ballsize(1) & (data(:,end)-y_coords).^2 < ballsize(2); %n-sphere ???!!!
-%---	psc = scatter(data(inball,1),data(inball,2),'or');
+    psc = scatter(data(inball,1),data(inball,2),'or');
 	params.s = find(inball);% index to the set of start points
     %end
     end
