@@ -58,14 +58,16 @@ inball = all(y_inball,2); % 1 or 2? Which dim?
 
 %-----------------------------
 if ~isfield(params,'s') | emptys
-% 	rect = [20 20 800 600];
-% 	fh= figure('Color','w','Position',rect);
-% 	psc = scatter(y_data(:,2),y_data(:,1),'ob');
-% 	title('Click on starting point for wanderlust')
-% 	xlabel(opts.Ynames(opts.PathIndex(2)))
-% 	ylabel(opts.Ynames(opts.PathIndex(1)))
-% 	hold on
-%     psc = scatter(y_data(inball,2),y_data(inball,1),'or');
+    
+	rect = [20 20 800 600];
+	fh= figure('Color','w','Position',rect);
+	psc = scatter(y_data(:,2),y_data(:,1),'ob');
+	title('Click on starting point for wanderlust')
+	xlabel(opts.Ynames(opts.PathIndex(2)))
+	ylabel(opts.Ynames(opts.PathIndex(1)))
+	hold on
+    psc = scatter(y_data(inball,2),y_data(inball,1),'or');
+    
 	params.s = find(inball);% index to the set of start points
     end
 

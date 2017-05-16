@@ -77,21 +77,27 @@ num_graphs = 30;
 %options.PathIndex = [1,2]; %User interaction with options
 manual_path = 0;
 % 1) PathfromWanderlust ---------------------------------------------------
+tic
 G = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y;
+toc
 % 2) FACS2Pathdensity -----------------------------------------------------
-PathDensity = sbistFACS2PathDensity(data,path,options);
-
+tic
+PathDensity = sbistFACS2PathDensity(data,path,options,cmatrix);
+toc
 % 3) FACSDensityTrafo -----------------------------------------------------
+tic
 gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-
+toc
+tic
 options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
+toc
 end
 end
 %% Save workspace

@@ -1,7 +1,15 @@
 function [rndmic,ICdefault] = lognrnd_ic(n,ic)
-%lognrnd_ic generates normal distributed initial conditions.
-
-
+%% Function for the generation of normal distributed initial conditions.
+%
+%
+%% Inputs
+%  n                - Number of cells
+%  ic               - Initial conditions
+%
+%
+%% Outputs
+%  rndmic           - Gaussian distributed initial conditions
+%  ICdefault        - Default initial conditions
 ICdefault = ic;
 % Change the IC value log normally distributed
 IC_not_zero = (ICdefault ~=0); %31-27

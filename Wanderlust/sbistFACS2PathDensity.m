@@ -1,5 +1,5 @@
 
-function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts)
+function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts,cmatrix)
 
 %% Function to construct a density of flow datapoints along a given path
 % bla
@@ -19,6 +19,8 @@ function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts)
 fs = 12; % Font size
 % gaussbandwidth = [0.000653,0.0049];
 % data_DAPI_Gemini  = data(opts.PathIndex,:);
+data = cmatrix * data;
+data = data'; % dxn -> nxd Correct?
 [n,d]	= size(data);
 
 % Do Plots  (default = 1)
@@ -48,10 +50,11 @@ if isfield(opts,'path_bandwidths')
 else
 	% find rigth bandwidths in the different dimensions and take the mean
 	bws = zeros(d,d);
+    
 	for i=1:d
-		for j=1:d
-			bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2
-			bws(i,j) = bandwidth(1);
+		for j=1:d            
+			bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
+			bws(i,j) = bandwidth(1);                    
 		end
 	end
 	gaussbandwidth = mean(bws,2);
@@ -67,10 +70,10 @@ end
 PathDensity =[];
 
 %% If Wanderlust provided, 
-% then generate singel cell contribution to the path with the output from
+% then generate single cell contribution to the path with the output from
 % wanderlust by useing the ksdensity function on all trajactories from
 % wanderlust for each single datapoint
-n_path_points = 200;
+n_path_points = 200; %Why 200?
 Sout = linspace(0,1,n_path_points)';
 if isstruct(path_coordinates)
 	G = path_coordinates;
@@ -98,9 +101,9 @@ else
 % new method to get the pdf with probability density of each datapoint on s
 % function handle for each gaussian (taken from p_dimensional_Gaussian2)
 
-%mu = data(:,opts.PathIndex);
-mu = data(:,opts.PathIndex);
-Sigma = diag(gaussbandwidth(opts.PathIndex).*path_weights').^2;
+% [1:length(opts.PathIndex)] <-- length of opts.PathIndex for position!
+mu = data(:,[1:length(opts.PathIndex)]);
+Sigma = diag(gaussbandwidth([1:length(opts.PathIndex)]).*path_weights').^2;
 % [fh,jh,hh,fk,jk,hiik] = p_dimensional_Gaussian2(mu,Sigma,0);
 fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x-mu(n,:)')' * (Sigma\(x-mu(n,:)')) ),1:n);
 
@@ -114,7 +117,7 @@ Sin = [0; cumsum(seglen)] / len;
 
 % linear interpolation with my function
 % [Xout] = mySpaceCurveInterpolation(path_coordinates,Sin,Sout);
-% fh_coords = @(s) mySpaceCurveInterpolation(path_coordinates,Sin,s);
+%fh_coords = @(s) mySpaceCurveInterpolation(path_coordinates,Sin,s);
 
 % interpolation with pchip
 pp = pchip(Sin',path_coordinates);
@@ -127,13 +130,13 @@ test = cell(n_path_points,1);
 parfor i = 1:n_path_points
     test{i} = fk(s_coords{i})';
 end
-testmat = [test{:}]';
+testmat = [test{:}]'; % TESTMAT is empty!!! Why???
 
 end
 % weights for each datapoint test is the contribution of each single datapoint
 % as density on s 
 weights = trapz(Sout,testmat);
-testmatnormed = testmat * diag(1./weights);
+testmatnormed = testmat * diag(1./weights); %(ERROR!!!)
 
 s_single_cell = mat2cell(testmatnormed,length(Sout),ones(n,1));
 
@@ -146,7 +149,7 @@ spdf = pdfpoints ./ trapz(Sout,pdfpoints);
 fh_spdf = @(s) interp1(Sout,spdf,s,'linear',eps);
 
 scdf = arrayfun(@(s) integral(fh_spdf,0,s),Sout);
-scdf([1,end]) = [0,1];
+scdf([1,end]) = [0,1]; %Probability
 fh_scdf = @(s) interp1(Sout,scdf,s);
 
 sdpdf = gradient(spdf,diff(Sout(1:2)));
