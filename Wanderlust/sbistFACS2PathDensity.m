@@ -44,7 +44,7 @@ else
 	path_weights = ones(size(opts.PathIndex));
 end
 
-% if path bandwidth is given, then use that else calculate
+% if path bandwidth (h) is given, then use that else calculate
 if isfield(opts,'path_bandwidths')
 	gaussbandwidth = opts.path_bandwidths;
 else

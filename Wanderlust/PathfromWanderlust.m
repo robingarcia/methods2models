@@ -1,4 +1,4 @@
-function G = PathfromWanderlust(wdata,opts,start,cmatrix)
+function [G,y_data,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:
@@ -41,7 +41,7 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.05;
+alpha = 0.005;
 x_data = data; % (nxN) ---------- all data
 y_data = cmatrix * x_data; % (mxN) -------- measured data
 y_data = y_data'; %
@@ -59,14 +59,15 @@ inball = all(y_inball,2); % 1 or 2? Which dim?
 %-----------------------------
 if ~isfield(params,'s') | emptys
     
-	rect = [20 20 800 600];
-	fh= figure('Color','w','Position',rect);
-	psc = scatter(y_data(:,2),y_data(:,1),'ob');
-	title('Click on starting point for wanderlust')
-	xlabel(opts.Ynames(opts.PathIndex(2)))
-	ylabel(opts.Ynames(opts.PathIndex(1)))
-	hold on
-    psc = scatter(y_data(inball,2),y_data(inball,1),'or');
+% 	rect = [20 20 800 600];
+% 	fh= figure('Color','w','Position',rect);
+% 	psc = scatter(y_data(:,1),y_data(:,2),'ob');
+% 	title('Click on starting point for wanderlust')
+% 	xlabel(opts.Ynames(opts.PathIndex(1)))
+% 	ylabel(opts.Ynames(opts.PathIndex(2)))
+% 	hold on
+%     psc = scatter(y_data(inball,1),y_data(inball,2),'or');
+    
     
 	params.s = find(inball);% index to the set of start points
     end
