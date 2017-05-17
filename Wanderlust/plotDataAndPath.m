@@ -1,4 +1,4 @@
-function fh = plotDataAndPath(data,apath,opts,opt_only_path,lineopts,figpath)
+function fh = plotDataAndPath(data,apath,opts,figpath,opt_only_path,lineopts)
 
 %% Function to plot a path in a dataset
 %

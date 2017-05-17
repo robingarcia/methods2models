@@ -97,7 +97,7 @@ rect = [20 20 800 600];
     
 figpath = subplot(1,2,2);    
 %figpath=figure('Color','w','Position',[50,50,800,600])
-fhh = plotDataAndPath(data(:,options.PathIndex),path,options,0,0,figpath);
+fhh = plotDataAndPath(data(:,options.PathIndex),path,options,figpath);
 %==========================================================================
 % % 2) FACS2Pathdensity -----------------------------------------------------
 % tic
