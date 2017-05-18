@@ -41,32 +41,33 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.005;
+alpha = 0.05;
 x_data = data; % (nxN) ---------- all data
 y_data = cmatrix * x_data; % (mxN) -------- measured data
-y_data = y_data'; %
+y_data = y_data'; % (mxN) -> (Nxm) 
 x_coords = start; % Initial conditions from Toettcher model
 y_coords = cmatrix * x_coords; % IC for measured outputs
 y_coords = y_coords'; %
-ballsize = range(y_data,2)*alpha; % (Nx?)
-%X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
+ballsize = range(y_data,1)*alpha % (mx?)
+%ballsize(end)=ballsize(end)*alpha;
+X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
 
 Y_Cor = bsxfun(@minus, y_data, y_coords);
 
-y_inball = bsxfun(@lt, Y_Cor.^2, ballsize);
-inball = all(y_inball,2); % 1 or 2? Which dim?
+y_inball = bsxfun(@lt, (Y_Cor).^2, ballsize);
+inball = all(y_inball,2); % 1 = within the ball, 0=not within ball
 
 %-----------------------------
 if ~isfield(params,'s') | emptys
     
-% 	rect = [20 20 800 600];
-% 	fh= figure('Color','w','Position',rect);
-% 	psc = scatter(y_data(:,1),y_data(:,2),'ob');
-% 	title('Click on starting point for wanderlust')
-% 	xlabel(opts.Ynames(opts.PathIndex(1)))
-% 	ylabel(opts.Ynames(opts.PathIndex(2)))
-% 	hold on
-%     psc = scatter(y_data(inball,1),y_data(inball,2),'or');
+	rect = [20 20 800 600];
+	fh= figure('Color','w','Position',rect);
+	psc = scatter(y_data(:,1),y_data(:,2),'ob');
+	title('Click on starting point for wanderlust')
+	xlabel(opts.Ynames(opts.PathIndex(1)))
+	ylabel(opts.Ynames(opts.PathIndex(2)))
+	hold on
+    psc = scatter(y_data(inball,1),y_data(inball,2),'or');
     
     
 	params.s = find(inball);% index to the set of start points

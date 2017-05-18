@@ -17,7 +17,7 @@ original_data = model_toettcher2008MEX(tF,ic);
 original_statevalues = original_data.statevalues';
 [pks_apc,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
-y_0(end+1)=2; % DNA = 2N at Cellcycle start 
+y_0(end+1)=2.2; % DNA = 2N at Cellcycle start 
 %% ---------------------Measurement----------------------------------------
 
 [START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF, lb);
@@ -47,18 +47,22 @@ mydata = cell2mat(measurement);
 %% Error model (add noise to dataset) -------------------------------------
 
 % This is necessary to gain realistic results
-sig = 0.2; % Define your sigma
+sig = 0.05;%0.02; % Define your sigma (0.2)
 errordata = error_model(mydata,sig);
 %Cmatrix = cell(m,n);
-
-
+for i=1:32
+figure
+scatter(mydata(32,:),mydata(i,:), 'ob');
+hold on
+scatter(errordata(32,:),errordata(i,:),'or')
+end
 %% Calculate C-Matrix -----------------------------------------------------
 
 for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 %cmatrix = Cmatrix(j,size(errordata,1));
 %C = zeros(size(cmatrix,2), size(errordata,1));
-for i = 1%:size(nchoosek(x,j),1)
+for i = 14%:size(nchoosek(x,j),1)
 %   C(1,cmatrix(i,1))=1;
 %   C(end,cmatrix(i,2))=1;
 %   Y = C*errordata;
@@ -84,20 +88,22 @@ path = G.y; % Check these values first !!!
 toc
 % =========================================================================
 %% Plot data and path
-figure(i)
-fh = subplot(1,2,1);
-rect = [20 20 800 600];
-	%fh= figure('Color','w','Position',rect);
-	psc = scatter(fh,y_data(:,1),y_data(:,2),'ob');
-	title(fh,'Autoselect')
-	xlabel(options.Ynames(options.PathIndex(1)))
-	ylabel(options.Ynames(options.PathIndex(2)))
-	hold on
-    psc = scatter(fh,y_data(inball,1),y_data(inball,2),'or');
+% k=i+j;
+% rect = [20 20 800 600];
+% figure('Color','w','Position',rect)
+% fh = subplot(1,2,1);
+% 
+% 	%fh= figure('Color','w','Position',rect);
+% 	psc = scatter(fh,y_data(:,1),y_data(:,2),'ob');
+% 	title(fh,'Autoselect')
+% 	xlabel(options.Ynames(options.PathIndex(1)))
+% 	ylabel(options.Ynames(options.PathIndex(2)))
+% 	hold on
+%     psc = scatter(fh,y_data(inball,1),y_data(inball,2),'or');
     
-figpath = subplot(1,2,2);    
-%figpath=figure('Color','w','Position',[50,50,800,600])
-fhh = plotDataAndPath(data(:,options.PathIndex),path,options,figpath);
+%figpath = subplot(1,2,2);    
+figure('Color','w','Position',[50,50,800,600])
+plotDataAndPath(data(:,options.PathIndex),path,options);
 %==========================================================================
 % % 2) FACS2Pathdensity -----------------------------------------------------
 % tic

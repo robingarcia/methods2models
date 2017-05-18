@@ -1,4 +1,4 @@
-function fh = plotDataAndPath(data,apath,opts,figpath,opt_only_path,lineopts)
+function fh = plotDataAndPath(data,apath,opts,opt_only_path,lineopts)
 
 %% Function to plot a path in a dataset
 %
@@ -47,11 +47,11 @@ for i = 1:size(C,1)
 	[~,dens,X,Y] = kde2d(data(:,C(i,:)),2^6);
 	pcolor(X,Y,dens); shading interp							% density
 	hold on
-	scatter(figpath,data(:,C(i,1)),data(:,C(i,2)),1,'w.')				% all datapoints 
+	scatter(data(:,C(i,1)),data(:,C(i,2)),1,'w.')				% all datapoints 
     end
     
     if ~isempty(apath)
-        plot(figpath,apath(C(i,1),:),apath(C(i,2),:),'r','LineWidth',3,myopts{:})		% path
+        plot(apath(C(i,1),:),apath(C(i,2),:),'r','LineWidth',3,myopts{:})		% path
     end
     hold on
 	xlabel(dimension_names{C(i,1)})
