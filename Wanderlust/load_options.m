@@ -17,5 +17,5 @@ options.gamma		= log(2)/mean(t_period(1,:));%24;	% population growth rate (ADAPT
  params.voting_scheme = 'exponential';
  params.flock_landmarks = 2;
  params.wanderlust_weights = ones(1,length(options.PathIndex));		% weights for the dimensions of the dataset used for wanderlust
-params.verbose	= false;
+ params.verbose	= false;
 options.wanderlust = params;

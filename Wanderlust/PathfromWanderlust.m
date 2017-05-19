@@ -25,12 +25,11 @@ else
 end
 
 if isfield(params,'wanderlust_weights') 
-	params.wanderlust_weights = ones(1,length(opts.PathIndex));
+	params.wanderlust_weights = ones(1,length(opts.PathIndex))*10;
+    %params.wanderlust_weights = ones(1,size(wdata,2))*10;
 end
 
 % prepare data for wanderlust  (nxd)
-%o_data	= wdata(:,opts.PathIndex); % <-- not neccessary because C-matrix
-%data	= o_data;
 data = wdata; % (Nxn)
 
 % set start point
@@ -41,14 +40,14 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.05;
+alpha = 0.001;
 x_data = data; % (nxN) ---------- all data
 y_data = cmatrix' * x_data'; % (mxN) -------- measured data
 y_data = y_data'; % (mxN) -> (Nxm) 
 x_coords = start; % Initial conditions from Toettcher model
 y_coords = cmatrix' * x_coords; % IC for measured outputs
 y_coords = y_coords'; %
-ballsize = range(y_data,1)*alpha % (mx?)
+ballsize = range(y_data,1)*alpha; % (mx?)
 %ballsize(end)=ballsize(end)*alpha;
 %X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
 
@@ -58,8 +57,9 @@ y_inball = bsxfun(@lt, (Y_Cor).^2, ballsize);
 inball = all(y_inball,2); % 1 = within the ball, 0=not within ball
 
 %-----------------------------
-if ~isfield(params,'s') | emptys
-    
+if ~isfield(params,'s') || emptys
+    params.s = find(inball);% index to the set of start points
+end
 % 	rect = [20 20 800 600];
 % 	fh= figure('Color','w','Position',rect);
 % 	psc = scatter(y_data(:,1),y_data(:,2),'ob');
@@ -68,10 +68,6 @@ if ~isfield(params,'s') | emptys
 % 	ylabel(opts.Ynames(opts.PathIndex(2)))
 % 	hold on
 %     psc = scatter(y_data(inball,1),y_data(inball,2),'or');
-    
-    
-	params.s = find(inball);% index to the set of start points
-    end
 
 
 % normalize data

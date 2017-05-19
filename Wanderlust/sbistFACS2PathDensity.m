@@ -1,5 +1,5 @@
 
-function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts,cmatrix)
+function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts)
 
 %% Function to construct a density of flow datapoints along a given path
 % bla
@@ -19,8 +19,8 @@ function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts,cmatrix)
 fs = 12; % Font size
 % gaussbandwidth = [0.000653,0.0049];
 % data_DAPI_Gemini  = data(opts.PathIndex,:);
-data = cmatrix * data';
-data = data'; % dxn -> nxd Correct?
+%data = cmatrix * data';
+%data = data'; % dxn -> nxd Correct?
 [n,d]	= size(data);
 
 % Do Plots  (default = 1)
@@ -102,8 +102,10 @@ else
 % function handle for each gaussian (taken from p_dimensional_Gaussian2)
 
 % [1:length(opts.PathIndex)] <-- length of opts.PathIndex for position!
-mu = data(:,[1:length(opts.PathIndex)]);
-Sigma = diag(gaussbandwidth([1:length(opts.PathIndex)]).*path_weights').^2;
+% mu = data(:,[1:length(opts.PathIndex)]);
+% Sigma = diag(gaussbandwidth([1:length(opts.PathIndex)]).*path_weights').^2;
+mu = data;
+Sigma = diag(gaussbandwidth.*path_weights').^2;
 % [fh,jh,hh,fk,jk,hiik] = p_dimensional_Gaussian2(mu,Sigma,0);
 fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x-mu(n,:)')' * (Sigma\(x-mu(n,:)')) ),1:n);
 
@@ -130,13 +132,13 @@ test = cell(n_path_points,1);
 parfor i = 1:n_path_points
     test{i} = fk(s_coords{i})';
 end
-testmat = [test{:}]'; % TESTMAT is empty!!! Why???
+testmat = [test{:}]';
 
 end
 % weights for each datapoint test is the contribution of each single datapoint
 % as density on s 
 weights = trapz(Sout,testmat);
-testmatnormed = testmat * diag(1./weights); %(ERROR!!!)
+testmatnormed = testmat * diag(1./weights);
 
 s_single_cell = mat2cell(testmatnormed,length(Sout),ones(n,1));
 
