@@ -62,17 +62,17 @@ for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 %cmatrix = Cmatrix(j,size(errordata,1));
 %C = zeros(size(cmatrix,2), size(errordata,1));
-for i = 14%:size(nchoosek(x,j),1)
+for i = 13%:size(nchoosek(x,j),1)
 %   C(1,cmatrix(i,1))=1;
 %   C(end,cmatrix(i,2))=1;
 %   Y = C*errordata;
 %[Y,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata); 
 [Y,options.PathIndex,cmatrix] = Cmatrix(i,j,size(mydata,1),mydata); 
-
+cmatrix = cmatrix';
 
 %% Wanderlust -------------------------------------------------------------
 %data = Y';
-data = errordata;
+data = errordata';
 load_options
 %start = [-3,-1.2];
 %startballsize = [0.02,0.02];
@@ -88,40 +88,42 @@ path = G.y; % Check these values first !!!
 toc
 % =========================================================================
 %% Plot data and path
-% k=i+j;
-% rect = [20 20 800 600];
-% figure('Color','w','Position',rect)
-% fh = subplot(1,2,1);
-% 
-% 	%fh= figure('Color','w','Position',rect);
-% 	psc = scatter(fh,y_data(:,1),y_data(:,2),'ob');
-% 	title(fh,'Autoselect')
-% 	xlabel(options.Ynames(options.PathIndex(1)))
-% 	ylabel(options.Ynames(options.PathIndex(2)))
-% 	hold on
-%     psc = scatter(fh,y_data(inball,1),y_data(inball,2),'or');
+k=i+j;
+rect = [20 20 800 600];
+figure('Color','w','Position',rect)
+fh = subplot(1,2,1);
+
+	%fh= figure('Color','w','Position',rect);
+	psc = scatter(fh,y_data(:,1),y_data(:,2),'ob');
+	title(fh,'Autoselect')
+	xlabel(options.Ynames(options.PathIndex(1)))
+	ylabel(options.Ynames(options.PathIndex(2)))
+	hold on
+    psc = scatter(fh,y_data(inball,1),y_data(inball,2),'or');
     
-%figpath = subplot(1,2,2);    
-figure('Color','w','Position',[50,50,800,600])
-plotDataAndPath(data(:,options.PathIndex),path,options);
+figpath = subplot(1,2,2); 
+title(figpath,'Trajectory')
+%figure('Color','w','Position',[50,50,800,600])
+%plotDataAndPath(data(:,options.PathIndex),path,options);
+plotDataAndPath(y_data(:,[1:length(options.PathIndex)]),path,options);
 %==========================================================================
-% % 2) FACS2Pathdensity -----------------------------------------------------
-% tic
-% PathDensity = sbistFACS2PathDensity(data,path,options,cmatrix);
-% toc
-% % 3) FACSDensityTrafo -----------------------------------------------------
-% tic
-% gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
-% newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
-% newScale.cdf = @(a) 2-2*exp(-gamma.*a);
-% newScale.coDomain = [0,log(2)/gamma];
-% 
-% NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-% toc
-% tic
-% options.doplots = 1; %0 = no plot , 1 = plot
-% PlotERAVariance(data,NewPathDensity,options);
-% toc
+% 2) FACS2Pathdensity -----------------------------------------------------
+tic
+PathDensity = sbistFACS2PathDensity(y_data,path,options,cmatrix);
+toc
+% 3) FACSDensityTrafo -----------------------------------------------------
+tic
+gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
+newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
+newScale.cdf = @(a) 2-2*exp(-gamma.*a);
+newScale.coDomain = [0,log(2)/gamma];
+
+NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
+toc
+tic
+options.doplots = 1; %0 = no plot , 1 = plot
+PlotERAVariance(data,NewPathDensity,options);
+toc
 end
 end
 %% Save workspace

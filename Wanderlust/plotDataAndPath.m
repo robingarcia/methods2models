@@ -38,7 +38,8 @@ end
 C = nchoosek(1:d,2);
 a = floor(size(C,1)^(1/2));
 b = ceil(size(C,1)/a);
-
+%data=data'; % For kde2d !!!
+%apath = apath';
 for i = 1:size(C,1)
     if size(C,1) > 1
         subplot(a,b,i)

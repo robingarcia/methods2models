@@ -19,7 +19,7 @@ function PathDensity = sbistFACS2PathDensity(data,path_coordinates,opts,cmatrix)
 fs = 12; % Font size
 % gaussbandwidth = [0.000653,0.0049];
 % data_DAPI_Gemini  = data(opts.PathIndex,:);
-data = cmatrix * data;
+data = cmatrix * data';
 data = data'; % dxn -> nxd Correct?
 [n,d]	= size(data);
 
