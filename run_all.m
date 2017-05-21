@@ -49,13 +49,18 @@ mydata = cell2mat(measurement);
 % This is necessary to gain realistic results
 sig = 0.05;%0.02; % Define your sigma (0.2)
 errordata = error_model(mydata,sig);
+
+
 %% Calculate C-Matrix -----------------------------------------------------
 tic
 load_options
+results=cell(1,size(ic,1));%Preallocation
+
 zero_value = find(not(errordata(:,1)));
-for j = 1:size(ic,1) %j = Number of columns = Number of outputs
+for j = 2%:size(ic,1) %j = Number of columns = Number of outputs
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 tic
+combinations = cell(1,size(nchoosek(x,j),1));%Preallocation
 for i=1:size(nchoosek(x,j),1)
 [Y,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
@@ -79,27 +84,6 @@ tic
 [G,y_data,inball] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
 toc
-% =========================================================================
-%% Plot data and path
-% k=i+j;
-% rect = [20 20 800 600];
-% figure('Color','w','Position',rect)
-% fh = subplot(1,2,1);
-% 
-% 	%fh= figure('Color','w','Position',rect);
-% 	psc = scatter(fh,y_data(:,1),y_data(:,2),'ob');
-% 	title(fh,'Autoselect')
-% 	xlabel(options.Ynames(options.PathIndex(1)))
-% 	ylabel(options.Ynames(options.PathIndex(2)))
-% 	hold on
-%     psc = scatter(fh,y_data(inball,1),y_data(inball,2),'or');
-%     
-% figpath = subplot(1,2,2); 
-% title(figpath,'Trajectory')
-%figure('Color','w','Position',[50,50,800,600])
-%plotDataAndPath(data(:,options.PathIndex),path,options);
-%plotDataAndPath(y_data(:,(1:length(options.PathIndex))),path,options);
-%==========================================================================
 % 2) FACS2Pathdensity -----------------------------------------------------
 %options.path_weights = ones(size(y_data,2),1)*10;
 options.path_weights = ones(1,length(options.PathIndex))*10;
@@ -110,13 +94,15 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-disp(NewPathDensity)
+disp(NewPathDensity);
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 else
     
 end
+combinations{i} = NewPathDensity;
 end
+results{j} = combinations;
 end
 toc
 toc
