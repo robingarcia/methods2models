@@ -2,16 +2,26 @@ function [results,Summary] = run_all
 profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
-%% User inputs ------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% User inputs -----------------------------------------------------------%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [~,tF,lb,N,ic]=userinteraction;
-%% Original statevalues ---------------------------------------------------
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Original statevalues --------------------------------------------------%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 original_data = model_toettcher2008MEX(tF,ic);
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
-y_0(end+1)=2; % DNA = 2N at Cellcycle start 
-%% -------------------Data generation--------------------------------------
+y_0(end+1)=2; % DNA = 2N at Cellcycle start
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% -------------------Data generation--------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 simdata = cell(1,N);
 random_statevalues = cell(1,N);
@@ -19,21 +29,28 @@ for i = 1:N
   simdata{i} = model_toettcher2008MEX(tF,rndmic{i}); %C-Model (MEX-File)
   random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ---------------------Measurement----------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[start, samples,t_period] = timepoints_template(random_statevalues, tF, lb);
 
-[START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF, lb);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ------------------Simulate the model------------------------------------
-
-m = size(SAMPLES,2);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+m = size(samples,2);
 rndm_measurement = cell(1,N);
 measurement = cell(1,N);
 TSPAN = zeros(N,m+2);
-%proport = zeros(n,1);
-samples = SAMPLES;
+
 for i = 1:N 
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     TSPAN(i,:) = tspan;
-    simulationIC = START{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
+    simulationIC = start{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
 %--------------------------------------------------------------------------
 % NEW SIMULATION (SNAPSHOTS)
 rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
@@ -45,14 +62,21 @@ measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
 measurement{i} = measurement{i}(:,2:end-1);
 end
 mydata = cell2mat(measurement);
-%% Error model (add noise to dataset) -------------------------------------
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Error model (add noise to dataset) -------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
 sig = 0.05;%0.02; % Define your sigma (0.2)
 errordata = error_model(mydata,sig);
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Calculate C-Matrix -----------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 load_options
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
@@ -67,21 +91,17 @@ Variance_A = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
 zero_value = find(not(errordata(:,1)));
 for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 tic
-for i=1:size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
+for i=1:3%size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 if ismem == 0 %No zero columns/rows contained
 cmatrix = cmatrix';
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Wanderlust -------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
-%load_options
-%start = [-3,-1.2];
-%startballsize = [0.02,0.02];
-%--options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
-%doplots = 1;
-%num_graphs = 30;
-%options.PathIndex = [1,2]; %User interaction with options
-%manual_path = 0;
 % 1) PathfromWanderlust ---------------------------------------------------
 tic
 [G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
