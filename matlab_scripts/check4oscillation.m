@@ -50,7 +50,7 @@ freq = cell(1,z(1,2));
 figure
 for c = [2,3,4,5,9,10,12,15,16,29,30,31] %:31; % Number of variables
     allfreq = zeros(1,n);
-    for d = 1:n; % Number of ICs
+    for d = 1:n % Number of ICs
         statefreq{c,d} = datafile{d}(:,c);
         [autocor,lags] = xcorr(statefreq{c,d}-mean(statefreq{c,d}));
         [~,pos] =findpeaks(autocor);

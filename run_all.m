@@ -1,8 +1,15 @@
-%function [] = run_all
+function [results,Summary] = run_all
+profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
 %% User inputs ------------------------------------------------------------
-[filename,tF,lb,N,ic]=userinteraction;
+[~,tF,lb,N,ic]=userinteraction;
+%% Original statevalues ---------------------------------------------------
+original_data = model_toettcher2008MEX(tF,ic);
+original_statevalues = original_data.statevalues';
+[~,locs_apc] = findpeaks(original_statevalues(6,:));
+y_0 = original_statevalues(:,locs_apc(end));
+y_0(end+1)=2; % DNA = 2N at Cellcycle start 
 %% -------------------Data generation--------------------------------------
 
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
@@ -12,12 +19,6 @@ for i = 1:N
   simdata{i} = model_toettcher2008MEX(tF,rndmic{i}); %C-Model (MEX-File)
   random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
-%% Original statevalues ---------------------------------------------------
-original_data = model_toettcher2008MEX(tF,ic);
-original_statevalues = original_data.statevalues';
-[pks_apc,locs_apc] = findpeaks(original_statevalues(6,:));
-y_0 = original_statevalues(:,locs_apc(end));
-y_0(end+1)=2; % DNA = 2N at Cellcycle start 
 %% ---------------------Measurement----------------------------------------
 
 [START, SAMPLES,t_period] = timepoints_template(random_statevalues, tF, lb);
@@ -54,34 +55,36 @@ errordata = error_model(mydata,sig);
 %% Calculate C-Matrix -----------------------------------------------------
 tic
 load_options
+x = 1:size(ic,1)+1;%32; Include DNA as 32th
 results=cell(1,size(ic,1));%Preallocation
+Summary=cell(1,size(ic,1));%Preallocation
+combinations = cell(1,size(nchoosek(x,size(ic,1)),1));%Preallocation
+combination = cell(1,size(nchoosek(x,size(ic,1)),1)); %Combination names
+comb = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
+Variance_S = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
+Variance_A = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
 
 zero_value = find(not(errordata(:,1)));
-for j = 2%:size(ic,1) %j = Number of columns = Number of outputs
-x = 1:size(ic,1)+1;%32; Include DNA as 32th
+for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 tic
-combinations = cell(1,size(nchoosek(x,j),1));%Preallocation
-for i=1:size(nchoosek(x,j),1)
-[Y,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
+for i=1:size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
+[~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 if ismem == 0 %No zero columns/rows contained
-combination=options.Ynames(options.PathIndex);
-disp(combination');
 cmatrix = cmatrix';
-
 %% Wanderlust -------------------------------------------------------------
 data = errordata';
 %load_options
 %start = [-3,-1.2];
 %startballsize = [0.02,0.02];
 %--options.wanderlust.wanderlust_weights = ones(1,length(options.PathIndex));
-doplots = 1;
-num_graphs = 30;
+%doplots = 1;
+%num_graphs = 30;
 %options.PathIndex = [1,2]; %User interaction with options
-manual_path = 0;
+%manual_path = 0;
 % 1) PathfromWanderlust ---------------------------------------------------
 tic
-[G,y_data,inball] = PathfromWanderlust(data,options,y_0,cmatrix);
+[G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
 toc
 % 2) FACS2Pathdensity -----------------------------------------------------
@@ -94,21 +97,32 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-disp(NewPathDensity);
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 else
     
 end
 combinations{i} = NewPathDensity;
+combination{i,1} = options.PathIndex;
+comb{i,1} = strjoin(options.Ynames(combination{i}));
+Variance_S{i,1} = mean(combinations{:,i}.s_single_cell_Variance);
+Variance_A{i,1} = mean(combinations{:,i}.a_single_cell_Variance);
 end
+summary =([]);
+summary.comb = comb;
+summary.Variance_S = Variance_S;
+summary.Variance_A = Variance_A;
+%struct2table(summary)
+
+Summary{j} = summary;
+struct2table(Summary{j})
 results{j} = combinations;
 end
 toc
 toc
 %% Save workspace
 % cd('~/methods2models/datasets/output/');
-% save([filename '.mat'],'mydata','errordata','Y', '-v7.3');
+% save([filename '.mat'],'results', '-v7.3');
 % cd('~/methods2models/')
-%end
+end
 
