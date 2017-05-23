@@ -2,16 +2,17 @@ function [results,Summary] = run_all
 profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% User inputs -----------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [~,tF,lb,N,ic]=userinteraction;
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Original statevalues --------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-original_data = model_toettcher2008MEX(tF,ic);
+%original_data = model_toettcher2008MEX(tF,ic);
+original_data = model_toettcher2008mex(tF,ic);
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
@@ -19,7 +20,7 @@ y_0(end+1)=2; % DNA = 2N at Cellcycle start
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% -------------------Data generation--------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
@@ -32,14 +33,14 @@ end
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% ---------------------Measurement----------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [start, samples,t_period] = timepoints_template(random_statevalues, tF, lb);
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% ------------------Simulate the model------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 m = size(samples,2);
@@ -65,7 +66,7 @@ mydata = cell2mat(measurement);
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Error model (add noise to dataset) -------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
@@ -74,7 +75,7 @@ errordata = error_model(mydata,sig);
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Calculate C-Matrix -----------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
@@ -91,14 +92,14 @@ Variance_A = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
 zero_value = find(not(errordata(:,1)));
 for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
 tic
-for i=1:3%size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
+for i=1%:size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 if ismem == 0 %No zero columns/rows contained
 cmatrix = cmatrix';
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Wanderlust -------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';

@@ -1,5 +1,22 @@
 function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm,o)
-%% This is an template for output generation
+% This is an template for output generation
+% This function generates the snapshots
+% 
+% [SYNTAX]
+% [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm,o)
+% 
+% [INPUTS]
+% random_statevalues
+% t_iqm
+% o
+% 
+% [OUTPUTS]
+% START
+% samples
+% T
+% G
+% GAMMMA
+%--------------------------------------------------------------------------
 %% Load the data
 statevalues = random_statevalues; % States
 
@@ -16,16 +33,17 @@ j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
 G = cell(4,n);
 T = zeros(3,n);
+Tstart = zeros(1,n);
 for i = 1:n        % i = Number of cells
     for k = 6
-        [pks,locs2]=findpeaks(statevalues{1,i}((o:m),k));
+        [~,locs2]=findpeaks(statevalues{1,i}((o:m),k));
         for j = [2,3,4,5,7,12]    % j = States
     
-    [pks,locs, widths, proms]=findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
+    [~,locs, widths, proms]=findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
     
     AverageDistance_Peaks = diff(locs2);
     AverageDistance_Peaks = AverageDistance_Peaks(end);
-    F{1,j} = pks;        %Peakvalue
+    %F{1,j} = pks;        %Peakvalue
     F{2,j} = locs;       %Position
     F{3,j} = widths;     %
     F{4,j} = proms;      %Prominence
@@ -53,7 +71,8 @@ for i = 1:n        % i = Number of cells
     sDuration = pBTransEnd; %- Cdc20ATransMinus;
     
     T(3,i) = sDuration/T(1,i); %G{1, i}{5, 6};
-    end
+end
+
 %% Inverse method alorithm
     m = 2;
     samples = zeros(n,m);%n=cells and m = timepoints

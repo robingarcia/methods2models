@@ -1,5 +1,5 @@
 function [ y_DNA ] = DNAcontent(time,T,G1,S)
-%UNTITLED Summary of this function goes here
+%This function simulates the DNA duplication during cell cycle (2N -> 4N)
 %   Detailed explanation goes here
 % Mitotic Index
 %
