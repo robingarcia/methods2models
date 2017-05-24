@@ -1,5 +1,21 @@
 function[Y,combi,cmatrix] = Cmatrix(i,j,n, errordata) 
 %% Create C-Matrix
+%This function selects your measurement.
+%
+% [SYNTAX]
+% [Y,combi,cmatrix] = Cmatrix(i,j,n, errordata)
+%
+%  [INPUT]
+%  i:             number: Number of combinations
+%  j:             number: Number of measurement outputs
+%  n:             number: Number of cells
+%  errordata:     number: Dataset
+%  
+%  [OUTPUT]
+%  Y:             Number: Measured dataset
+%  combi:         String: Measurement combination
+%  cmatrix:       Number: ?
+
 x = 1:n-1; %Substract the DNA part
 C = nchoosek(x,j);
 n_perms = size(C,1); % size(C, Dimension=1)/ How many possible combinations?

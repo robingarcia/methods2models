@@ -3,13 +3,11 @@ profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
 
-%% User inputs -----------------------------------------------------------%
+%% 1) User inputs --------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [~,tF,lb,N,ic]=userinteraction;
 
-
-
-%% Original statevalues --------------------------------------------------%
+%% 2) Original statevalues -----------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %original_data = model_toettcher2008MEX(tF,ic);
 original_data = model_toettcher2008mex(tF,ic);
@@ -18,36 +16,33 @@ original_statevalues = original_data.statevalues';
 y_0 = original_statevalues(:,locs_apc(end));
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 
-
-
-
-%% -------------------Data generation--------------------------------------
+%% 3) Randomize IC -------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
-simdata = cell(1,N);
-random_statevalues = cell(1,N);
+
+%% 4) Data generation-----------------------------------------------------%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%-----> Preallocation <--------%
+simdata = cell(1,N);           %
+random_statevalues = cell(1,N);%
+%------------------------------%
 for i = 1:N
-  simdata{i} = model_toettcher2008MEX(tF,rndmic{i}); %C-Model (MEX-File)
+  simdata{i} = model_toettcher2008mex(tF,rndmic{i}); %C-Model (MEX-File)
   random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
 
-
-
-
-%% ---------------------Measurement----------------------------------------
+%% 5) Measurement---------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [start, samples,t_period] = timepoints_template(random_statevalues, tF, lb);
 
-
-
-
-%% ------------------Simulate the model------------------------------------
+%% 6) Simulate the model--------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-m = size(samples,2);
-rndm_measurement = cell(1,N);
-measurement = cell(1,N);
-TSPAN = zeros(N,m+2);
-
+%--> Preallocation <---------%
+m = size(samples,2);         %
+rndm_measurement = cell(1,N);%
+measurement = cell(1,N);     %
+TSPAN = zeros(N,m+2);        %
+%----------------------------%
 for i = 1:N 
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     TSPAN(i,:) = tspan;
@@ -64,19 +59,13 @@ measurement{i} = measurement{i}(:,2:end-1);
 end
 mydata = cell2mat(measurement);
 
-
-
-
-%% Error model (add noise to dataset) -------------------------------------
+%% 7) Error model (add noise to dataset) ---------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
-sig = 0.05;%0.02; % Define your sigma (0.2)
+sig = 0.05;% Define your sigma (e.g 0.2)
 errordata = error_model(mydata,sig);
 
-
-
-
-%% Calculate C-Matrix -----------------------------------------------------
+%% 8) Measurement (Calculate C-Matrix) -----------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 load_options
@@ -100,19 +89,19 @@ cmatrix = cmatrix';
 
 
 
-%% Wanderlust -------------------------------------------------------------
+%% 9) Wanderlust ---------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
-% 1) PathfromWanderlust ---------------------------------------------------
+% 9.1) PathfromWanderlust -------------------------------------------------
 tic
 [G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
 toc
-% 2) FACS2Pathdensity -----------------------------------------------------
+% 9.2) FACS2Pathdensity ---------------------------------------------------
 %options.path_weights = ones(size(y_data,2),1)*10;
 options.path_weights = ones(1,length(options.PathIndex))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options);
-% 3) FACSDensityTrafo -----------------------------------------------------
+% 9.3) FACSDensityTrafo ---------------------------------------------------
 gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
