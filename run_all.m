@@ -1,4 +1,4 @@
-function [results,Summary] = run_all
+%function [results,Summary] = run_all
 profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
@@ -34,7 +34,7 @@ end
 %% 5) Measurement---------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [start, samples,t_period] = timepoints_template(random_statevalues, tF, lb);
-
+% Attention: Use N as input for timepoints!!!
 %% 6) Simulate the model--------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
@@ -67,7 +67,6 @@ errordata = error_model(mydata,sig);
 
 %% 8) Measurement (Calculate C-Matrix) -----------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-tic
 load_options
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 results=cell(1,size(ic,1));%Preallocation
@@ -80,34 +79,29 @@ Variance_A = cell(size(nchoosek(x,size(ic,1)),1)-1,1);
 
 zero_value = find(not(errordata(:,1)));
 for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
-tic
 for i=1%:size(nchoosek(x,j),1)-1 %-1 to exclude DNA-DNA combination
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 if ismem == 0 %No zero columns/rows contained
 cmatrix = cmatrix';
 
-
-
 %% 9) Wanderlust ---------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
 % 9.1) PathfromWanderlust -------------------------------------------------
-tic
 [G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
-toc
 % 9.2) FACS2Pathdensity ---------------------------------------------------
 %options.path_weights = ones(size(y_data,2),1)*10;
 options.path_weights = ones(1,length(options.PathIndex))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options);
 % 9.3) FACSDensityTrafo ---------------------------------------------------
-gamma = log(2)/mean(t_period(1,:));%18;  % growthrate 18 = average cell cycle duration
+gamma = log(2)/mean(t_period(1,:));% growthrate 18 = average cell cycle duration
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-options.doplots = 0; %0 = no plot , 1 = plot
+options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 else
     
@@ -128,11 +122,9 @@ Summary{j} = summary;
 struct2table(Summary{j})
 results{j} = combinations;
 end
-toc
-toc
 %% Save workspace
 % cd('~/methods2models/datasets/output/');
 % save([filename '.mat'],'results', '-v7.3');
 % cd('~/methods2models/')
-end
+%end
 
