@@ -1,4 +1,4 @@
-function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm,o,N)
+function [START, samples,T,G,GAMMMA] = M2Mtimepoints(random_statevalues,t_iqm,o,N,m)
 % This is an template for output generation
 % This function generates the snapshots
 % 
@@ -20,14 +20,14 @@ function [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_
 %% Load the data
 statevalues = random_statevalues; % States
 
-t = t_iqm; % Time
+%t = t_iqm; % Time
 %N = length(statevalues); % Determine the number of cells
-m = length(t);
-statevalues_cut = cell(1,N);
-for i = 1:N
-    m = length(statevalues{1,i});
-statevalues_cut{1,i} = statevalues{1,i}((o:m),:); % Cut your dataset
-end
+%p = length(t);
+%statevalues_cut = cell(1,N);
+%for i = 1:N
+    p = length(statevalues);
+statevalues_cut = statevalues((o:p),:); % Cut your dataset
+%end
 %% Determine the peaks of your Cyclines and APC during cellcycle
 j = [2,3,4,5,6,7,12]; %States which should be analyzed
 F = cell(5,length(j));
@@ -36,10 +36,10 @@ T = zeros(3,N);
 Tstart = zeros(1,N);
 for i = 1:N        % i = Number of cells
     for k = 6
-        [~,locs2]=findpeaks(statevalues{1,i}((o:m),k));
+        [~,locs2]=findpeaks(statevalues((o:p),k));
         for j = [2,3,4,5,7,12]    % j = States
     
-    [~,locs, widths, proms]=findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
+    [~,locs, widths, proms]=findpeaks(statevalues_cut((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
     
     AverageDistance_Peaks = diff(locs2);
     AverageDistance_Peaks = AverageDistance_Peaks(end);
@@ -74,29 +74,29 @@ for i = 1:N        % i = Number of cells
 end
 
 %% Inverse method alorithm
-    m = 2;
-    samples = zeros(N,m);%n=cells and m = timepoints
+    %m = 2;
+    %samples = zeros(N,m);%n=cells and m = timepoints
     
-    GAMMMA = zeros(1,N); %Just preallocation
-    for i = 1:N
+    %GAMMMA = zeros(1,N); %Just preallocation
+    %for i = 1:N
         gammma = log(2)/T(1,i); % G{2,i}; % G{2,i} is the period!
-        GAMMMA(1,i) = gammma;
+        GAMMMA = gammma;
     
     P = rand(1,m);% Number of cells (=n) or time (=m)?
     
     x=@(P,gammma)((log(-2./(P-2))/gammma));
-    samples(i,:) = x(P,gammma); %ceil or round
-    end   
+    samples = x(P,gammma); %ceil or round
+    %end   
 %% New simulated IC (extracted from a simulation = cellcycle start)
-START = cell(2,N);
-for i = 1:N
+%START = cell(2,N);
+%for i = 1:N
     startpoint = Tstart(1,i); %Choose 3-4 periods (But only one period is required here!)
-    START{1,i} = startpoint-1; % Startpoints of the cellcycle
+    %START{1,i} = startpoint-1; % Startpoints of the cellcycle
 
-             A = statevalues_cut{1,i};
+             A = statevalues_cut;
         
-        START{2,i} = A(startpoint-1,:); %New IC from simulated dataset
-end
+        START = A(startpoint-1,:); %New IC from simulated dataset
+%end
 %% Print some information
 % Define names 
 Cells = N;

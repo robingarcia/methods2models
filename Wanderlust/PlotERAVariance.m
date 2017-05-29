@@ -14,7 +14,7 @@ shading interp
 xlabel(opts.Ynames{opts.PathIndex(1)})
 ylabel(opts.Ynames{opts.PathIndex(2)})
 subplot(1,2,2)
-scatterhist([ERA.a_single_cell_Expectation{:}],ERA.a_single_cell_Variance,8,ERA.a_single_cell_Variance)
+scatter([ERA.a_single_cell_Expectation{:}],ERA.a_single_cell_Variance,8,ERA.a_single_cell_Variance)
 set(gca,'CLim',[0,prctile(ERA.a_single_cell_Variance,95)*1.2])
 colorbar
 xlabel('E(a)')

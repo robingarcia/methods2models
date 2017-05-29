@@ -9,7 +9,16 @@ load('toettcher_statenames.mat');
 
 %% 2) Original statevalues -----------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%original_data = model_toettcher2008MEX(tF,ic);
+%--> Preallocation area <--
+simdata = cell(1,N);
+random_statevalues = cell(1,N);
+m = N; %size(samples,2);         
+rndm_measurement = cell(1,N);
+measurement = cell(1,N);
+mydata = zeros(32,2*N);
+%TSPAN = zeros(N,m+2);    
+
+%for i = 1:N
 original_data = model_toettcher2008mex(tF,ic);
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));
@@ -18,47 +27,50 @@ y_0(end+1)=2; % DNA = 2N at Cellcycle start
 % --> No loop detected!
 %% 3) Randomize IC -------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
+for i = 1:N
+rndmic = M2Mlognrnd_ic(ic); % Generate gaussian distributed ICs
 %--> Loop detected! (Results stored in a CELL!)
 %% 4) Data generation-----------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----> Preallocation <--------%
-simdata = cell(1,N);           %
-random_statevalues = cell(1,N);%
+%simdata = cell(1,N);           %
+%random_statevalues = cell(1,N);%
 %------------------------------%
-for i = 1:N
-  simdata{i} = model_toettcher2008mex(tF,rndmic{i}); %C-Model (MEX-File)
-  random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
-end
+%for i = 1:N
+  simdata = model_toettcher2008mex(tF,rndmic); %C-Model (MEX-File)
+  random_statevalues = simdata.statevalues; %Extract the statevalues
+%end
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[start, samples,t_period] = timepoints_template(random_statevalues, tF, lb,N);
+snap=2;
+[start, samples,t_period] = M2Mtimepoints(random_statevalues, tF, lb,N,snap);
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
-m = size(samples,2);         %
-rndm_measurement = cell(1,N);%
-measurement = cell(1,N);     %
-TSPAN = zeros(N,m+2);        %
+%m = size(samples,2);         %
+%rndm_measurement = cell(1,N);%
+%measurement = cell(1,N);     %
+%TSPAN = zeros(N,m+2);        %
 %----------------------------%
-for i = 1:N 
-    tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
-    TSPAN(i,:) = tspan;
-    simulationIC = start{2,i}; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
+%for i = 1:N 
+    tspan = horzcat(0,sort(samples,2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    %TSPAN(i,:) = tspan;
+    simulationIC = start; %APC peak = start = IC = t0 (with (1,:) only one period is used here)
 %--------------------------------------------------------------------------
 % NEW SIMULATION (SNAPSHOTS)
-rndm_measurement{i} = model_toettcher2008MEX(tspan,simulationIC);
-measurement{i} = rndm_measurement{1,i}.statevalues;
+rndm_measurement= model_toettcher2008MEX(tspan,simulationIC);
+measurement = rndm_measurement.statevalues;
 %--------------------DNA Simulation----------------------------------------
-y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
+y_DNA = M2MDNAsim(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
 %--------------------------------------------------------------------------
-measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
-measurement{i} = measurement{i}(:,2:end-1);
-end
-mydata = cell2mat(measurement);
+measurement = horzcat(measurement,y_DNA)'; %Save statevalues only
+measurement = measurement(:,2:end-1);
+mydata=[measurement]; %ERROR !!!
+%end
+%mydata = cell2mat(measurement);
 
 %% 7) Error model (add noise to dataset) ---------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,7 +78,7 @@ mydata = cell2mat(measurement);
 sig = 0.05;% Define your sigma (e.g 0.2)
 errordata = error_model(mydata,sig);
 
-
+end
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

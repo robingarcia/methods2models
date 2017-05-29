@@ -1,4 +1,4 @@
-function [rndmic,ICdefault] = lognrnd_ic(N,ic)
+function [rndmic,ICdefault] = M2Mlognrnd_ic(ic)
 % Function for the generation of normal distributed initial conditions.
 % Usually cells are asynchonous. To simulate realistic behaviour 
 % the initial conditions will be randomised.
@@ -24,10 +24,11 @@ V = sigma .* M;
 MU = log(M.^2 ./ sqrt(V+M.^2));
 SIGMA = sqrt(log(V./M.^2 + 1));
 % preallocate rndmic and set initial values
-rndmic = cell(1,N);
-[rndmic{:}] = deal(zeros(size(ICdefault)));
-        for i = 1:N %ICdefault = 0; 
+%rndmic = cell(1,n);
+%[rndmic{:}] = deal(zeros(size(ICdefault)));
+%        for i = 1:n %ICdefault = 0; 
             this_randIC = lognrnd(MU,SIGMA);
-            rndmic{i}(IC_not_zero) = this_randIC;
-        end
+%            rndmic{i}(IC_not_zero) = this_randIC;
+            rndmic(IC_not_zero) = this_randIC;
+%        end
 end
