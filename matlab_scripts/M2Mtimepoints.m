@@ -97,15 +97,4 @@ end
         
         START = A(startpoint-1,:); %New IC from simulated dataset
 %end
-%% Print some information
-% Define names 
-Cells = N;
-Period = mean(T(1,:));
-%SimulationTime = datafile.t_iqm(end);
-SimulationTime = t_iqm(end);
-
-GrowthRate = mean(GAMMMA(1,:));
-RESULTS = table(Cells,SimulationTime, Period, GrowthRate);
-disp(RESULTS);
-
 end

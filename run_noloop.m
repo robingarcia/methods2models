@@ -27,8 +27,11 @@ y_0(end+1)=2; % DNA = 2N at Cellcycle start
 % --> No loop detected!
 %% 3) Randomize IC -------------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+rndmic = M2Mlognrnd_ic(ic);
 for i = 1:N
-rndmic = M2Mlognrnd_ic(ic); % Generate gaussian distributed ICs
+    tic
+    disp(i);
+% rndmic = M2Mlognrnd_ic(ic); % Generate gaussian distributed ICs
 %--> Loop detected! (Results stored in a CELL!)
 %% 4) Data generation-----------------------------------------------------%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -77,7 +80,7 @@ mydata=[measurement]; %ERROR !!!
 % This is necessary to gain realistic results
 sig = 0.05;% Define your sigma (e.g 0.2)
 errordata = error_model(mydata,sig);
-
+toc
 end
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

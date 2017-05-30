@@ -1,4 +1,4 @@
-function [filename,tF,lb,n,ic] = userinteraction
+function [filename,tF,lb,n,ic,sig] = userinteraction
 % This function submits parameters like simulation time, cell number etc. 
 % 
 % 
@@ -10,6 +10,7 @@ function [filename,tF,lb,n,ic] = userinteraction
 % tF:             number: The interval from 0 to tmax
 % lb:             number: Determine your interval of interest (lower bound)
 % n:              number: How many cells should be simulated?
+% sig:            number: Measure for noise
 % inputpath:      string: Set path where your IC inputfiles are stored
 % inputfile:      string: Choose your input file
 % 
@@ -29,10 +30,11 @@ X = ['Max. simulation time is:', num2str(tmax), '[s]'];
 disp(X);
 lb = input('Start timepoint t_1? (e.g: [2800]):');
 n = input('How many cells? (e.g: [20]):');% n new datasets
+sig = input('Choose your sigma (e.g: [0.05]):');% Sigma for errordata
 cd('~/methods2models/datasets/input/');
-disp(pwd);
-inputpath = input('Where are your input files?:','s');% set a path
-cd(inputpath);
+%disp(pwd);
+%inputpath = input('Where are your input files?:','s');% set a path
+%cd(inputpath);
 ls -l
 inputfile = input('Which *.csv file?:','s');% choose file
 ic = csvread(inputfile);
