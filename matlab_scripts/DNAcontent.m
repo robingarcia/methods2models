@@ -15,13 +15,13 @@ function [ y_DNA ] = DNAcontent(time,T,G1,S)
 % y_DNA:      number: Simulated DNA
 % Example:
 
+G1 = G1/T; % Neccessary??
+S = S/T;   % Neccessary??
 
-dS = T*(S-G1); %Duration of S-Phase
-G1 = T*G1;% Duration G1-Phase
-slope = 2/dS; % Slope between 2N -> 4N
+dS = T*(S-G1);  %Duration of S-Phase
+G1 = T*G1;      % Duration G1-Phase
+slope = 2/dS;   % Slope between 2N -> 4N
 y_DNA = zeros(1,length(time));
-% f_1=@(time)(2);
-% f_2=@(time)(4);
 f_3=@(time)(slope.*time+(2-(slope*G1)));
 y_DNA(time < G1) = 2;
 y_DNA(time > S*T) = 4;
