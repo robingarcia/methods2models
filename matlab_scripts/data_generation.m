@@ -1,4 +1,4 @@
-function [mydata,errordata,y_0,t_period] = data_generation
+function [ic,mydata,errordata,y_0,t_period] = data_generation
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 profile on
