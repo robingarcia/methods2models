@@ -1,13 +1,14 @@
-%function [errordata] = run_all
+function [errordata,result_areaS,result_areaA,result_combn] = run_all
 profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
-
 %% 1) User inputs --------------------------------------------------------%
+disp('User inputs --------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [~,tF,lb,N,ic,snaps,sig]=userinteraction;
 
 %% 2) Original statevalues -----------------------------------------------%
+disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %original_data = model_toettcher2008MEX(tF,ic);
 tic
@@ -19,12 +20,14 @@ y_0(end+1)=2; % DNA = 2N at Cellcycle start
 % --> No loop detected!
 toc
 %% 3) Randomize IC -------------------------------------------------------%
+disp('Randomize IC -------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 toc
 %--> Loop detected! (Results stored in a CELL!)
 %% 4) Data generation-----------------------------------------------------%
+disp('Data generation-----------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
@@ -38,6 +41,7 @@ end
 toc
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
+disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 [start, samples,t_period] = timepoints_template(random_statevalues,lb,N,snaps);
@@ -45,6 +49,7 @@ toc
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%
+disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
 %m = size(samples,2);         %
@@ -71,6 +76,7 @@ toc
 mydata = cell2mat(measurement);
 
 %% 7) Error model (add noise to dataset) ---------------------------------%
+disp('Error model (add noise to dataset) ---------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
 tic
@@ -78,6 +84,7 @@ errordata = error_model(mydata,sig);
 toc
 
 %% 8) Measurement (Calculate C-Matrix) -----------------------------------%
+disp('Measurement (Calculate C-Matrix) -----------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 load_options
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
@@ -91,21 +98,22 @@ Variance_S = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps); %cell(size(VChoose
 Variance_A = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
 s_E = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);
 a_E = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);
-%NPD = zeros(size(VChooseK(x,size(ic,1)),1)-1,1);
 area_S = zeros(size(VChooseK(x,size(ic,1)),1)-1,1);
 area_A = zeros(size(VChooseK(x,size(ic,1)),1)-1,1);
 zero_value = find(not(errordata(:,1)));
 tic
-for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
+for j = 1:2%:size(ic,1) %j = Number of columns = Number of outputs
     tic
-for i=1:4%size(VChooseK(x,j),1)-1 %-1 to exclude DNA-DNA combination
+for i=1:5%size(VChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 if ismem == 0 %No zero columns/rows contained
 cmatrix = cmatrix';
-
+%c_matrix{j,i}=cmatrix;
+disp_var = ['Wanderlust --------------------:',num2str(options.PathIndex)];
 %% 9) Wanderlust ---------------------------------------------------------%
+disp(disp_var)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
 %% 9.1) PathfromWanderlust -------------------------------------------------
@@ -123,7 +131,7 @@ newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
-else
+else 
     
 end
 
@@ -139,9 +147,9 @@ area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
 Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);
 area_A(i)= trapz(a_E(i,:), Variance_A(i,:));
 end
-
+toc
 summary =([]);
-%summary.comb = comb;
+
 summary.s_E = s_E;
 summary.a_E = a_E;
 summary.Variance_S = Variance_S;
@@ -149,6 +157,7 @@ summary.Variance_A = Variance_A;
 summary.area_S = area_S;
 summary.area_A = area_A;
 summary.comb = combination;
+summary.combn = comb;
 %struct2table(summary)
 
 Summary{j} = summary;
@@ -163,18 +172,23 @@ results{j} = combinations;
 % disp(recomm)
 %Barplot 
 %bar(options.PathIndex(1),min_a); %Plot the mininal Variance as barplot
-combi=cell2mat(summary.comb);
-c = categorical(combi);
+%combi=cell2mat(summary.comb);
+
 %bar(summary.area_A)
 
 %bar(all_comb{1,j}{i,:},summary.area_A(i))
 %bar(combi(i,:),summary.area_A(i))
-bar(Summary{1,j}.area_A)
+result_areaS = cat(1,Summary{1,j}.area_S(:,1));
+result_areaA = cat(1,Summary{1,j}.area_A(:,1));
+result_combn = cat(1,Summary{1,j}.combn);
 end
+result_combn = categorical(result_combn);
+% barh(result_combn,result_areaA)
 toc
 %% Save workspace
-% cd('~/methods2models/datasets/output/');
-% save([filename '.mat'],'results', '-v7.3');
-% cd('~/methods2models/')
-%end
+cd('~/methods2models/datasets/output/');
+save([filename '.mat'],'result_combn','result_areaS','result_areaA', '-v7.3');
+cd('~/methods2models/')
+disp('End')
+end
 
