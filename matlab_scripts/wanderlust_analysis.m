@@ -23,7 +23,7 @@ zero_value = find(not(errordata(:,1)));
 tic
 for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
     tic
-for i=15%:size(WChooseK(1:size(ic,1),j),1)%without DNA
+for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
@@ -48,7 +48,7 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-options.doplots = 1; %0 = no plot , 1 = plot
+options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 else 
     
