@@ -5,7 +5,7 @@ load('toettcher_statenames.mat');
 %% 1) User inputs --------------------------------------------------------%
 disp('User inputs --------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[~,tF,lb,N,ic,snaps,sig]=userinteraction;
+[filename,tF,lb,N,ic,snaps,sig]=userinteraction;
 
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
@@ -90,21 +90,21 @@ load_options
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 results=cell(1,size(ic,1));%Preallocation
 Summary=cell(1,size(ic,1));%Preallocation
-combinations = cell(1,size(VChooseK(x,size(ic,1)),1));%Preallocation
-combination = cell(size(VChooseK(x,size(ic,1)),1),1); %Combination names
-comb = cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+combinations = cell(1,size(WChooseK(x,size(ic,1)),1));%Preallocation
+combination = cell(size(WChooseK(x,size(ic,1)),1),1); %Combination names
+comb = cell(size(WChooseK(x,size(ic,1)),1)-1,1);
 all_comb = cell(1,size(ic,1));
-Variance_S = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps); %cell(size(VChooseK(x,size(ic,1)),1)-1,1);
-Variance_A = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
-s_E = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);
-a_E = zeros(size(VChooseK(x,size(ic,1)),1)-1,N*snaps);
-area_S = zeros(size(VChooseK(x,size(ic,1)),1)-1,1);
-area_A = zeros(size(VChooseK(x,size(ic,1)),1)-1,1);
+Variance_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps); %cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+Variance_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+s_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
+a_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
+area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
+area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 zero_value = find(not(errordata(:,1)));
 tic
-for j = 1:2%:size(ic,1) %j = Number of columns = Number of outputs
+for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
     tic
-for i=1:5%size(VChooseK(1:size(ic,1),j),1)%without DNA
+for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
@@ -182,13 +182,14 @@ result_areaS = cat(1,Summary{1,j}.area_S(:,1));
 result_areaA = cat(1,Summary{1,j}.area_A(:,1));
 result_combn = cat(1,Summary{1,j}.combn);
 end
-result_combn = categorical(result_combn);
-% barh(result_combn,result_areaA)
+%result_combn = categorical(result_combn);
+%barh(result_combn,result_areaA)
 toc
 %% Save workspace
 cd('~/methods2models/datasets/output/');
 save([filename '.mat'],'result_combn','result_areaS','result_areaA', '-v7.3');
 cd('~/methods2models/')
 disp('End')
+profile viewer
 end
 

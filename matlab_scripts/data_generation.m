@@ -1,15 +1,14 @@
-function [ic,mydata,errordata,y_0,t_period] = data_generation
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-profile on
+function [ic,mydata,errordata,y_0,t_period,N,snaps] = data_generation
+%profile on
 addpath(genpath('~/methods2models'));
 load('toettcher_statenames.mat');
-
 %% 1) User inputs --------------------------------------------------------%
+disp('User inputs --------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [~,tF,lb,N,ic,snaps,sig]=userinteraction;
 
 %% 2) Original statevalues -----------------------------------------------%
+disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %original_data = model_toettcher2008MEX(tF,ic);
 tic
@@ -21,12 +20,14 @@ y_0(end+1)=2; % DNA = 2N at Cellcycle start
 % --> No loop detected!
 toc
 %% 3) Randomize IC -------------------------------------------------------%
+disp('Randomize IC -------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 toc
 %--> Loop detected! (Results stored in a CELL!)
 %% 4) Data generation-----------------------------------------------------%
+disp('Data generation-----------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
@@ -40,6 +41,7 @@ end
 toc
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
+disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 tic
 [start, samples,t_period] = timepoints_template(random_statevalues,lb,N,snaps);
@@ -47,6 +49,7 @@ toc
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%
+disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
 %m = size(samples,2);         %
@@ -73,6 +76,7 @@ toc
 mydata = cell2mat(measurement);
 
 %% 7) Error model (add noise to dataset) ---------------------------------%
+disp('Error model (add noise to dataset) ---------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
 tic

@@ -1,9 +1,9 @@
-function [] = m2m(tmax,tF,lb,N,sig,snapshots)
+function [result_areaS,result_areaA,result_combn] = m2m
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
 %% Datageneration ---------------------------------------------------------
-[ic,~,errordata,y_0,t_period] = data_generation(tmax,tF,lb,N,sig,snapshots);
+[ic,~,errordata,y_0,t_period,N,snaps] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
 
 %% Wanderlust analysis ----------------------------------------------------
-wanderlust_analysis(errordata,ic,y_0,t_period)
+[result_areaS,result_areaA,result_combn]=wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps);
