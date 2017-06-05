@@ -3,7 +3,7 @@ function [result_areaS,result_areaA,result_combn] = m2m
 %   Detailed explanation goes here
 
 %% Datageneration ---------------------------------------------------------
-[ic,~,errordata,y_0,t_period,N,snaps] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
+[ic,mydata,errordata,y_0,t_period,N,snaps] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
 
 %% Wanderlust analysis ----------------------------------------------------
 [result_areaS,result_areaA,result_combn]=wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps);
