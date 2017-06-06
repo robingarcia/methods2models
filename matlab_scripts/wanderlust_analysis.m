@@ -21,9 +21,9 @@ area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 zero_value = find(not(errordata(:,1)));
 tic
-for j = 1%:size(ic,1) %j = Number of columns = Number of outputs
+for j = 31%:size(ic,1) %j = Number of columns = Number of outputs
     tic
-for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
+for i=1%size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained

@@ -1,5 +1,5 @@
 %% Scatter disp
 for i = 1:31
     figure(i)
-    scatter(errordata(i,:), errordata(32,:))
+    scatter(y_data(i,:), y_data(32,:))
 end

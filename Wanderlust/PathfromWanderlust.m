@@ -74,11 +74,13 @@ end
 if (params.normalize)
 	y_data = y_data-repmat(prctile(y_data, 1, 1), size(y_data,1),1);
 	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
+    find_nan=find(isnan(y_data(1,:))); %Find all columns with NaN
+    y_data(:,[find_nan])=0;
 end
 
 % weight the data
 y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
-
+y_data(:,[find_nan])=[];
 % compute trajectory
 G = wanderlust(y_data,params);
 
