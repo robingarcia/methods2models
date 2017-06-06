@@ -19,15 +19,15 @@ s_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
 a_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
 area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
-zero_value = find(not(errordata(:,1)));
+%zero_value = find(not(errordata(:,1)));
 tic
-for j = 31%:size(ic,1) %j = Number of columns = Number of outputs
+for j = 9%:size(ic,1) %j = Number of columns = Number of outputs
     tic
 for i=1%size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
-ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
-if ismem == 0 %No zero columns/rows contained
+%ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
+%if ismem == 0 %No zero columns/rows contained
 cmatrix = cmatrix';
 %c_matrix{j,i}=cmatrix;
 disp_var = ['Wanderlust --------------------:',num2str(options.PathIndex)];
@@ -36,12 +36,12 @@ disp(disp_var)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
 %% 9.1) PathfromWanderlust -------------------------------------------------
-[G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
+[G,y_data,~,find_nan] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
 %options.path_weights = ones(size(y_data,2),1)*10;
 options.path_weights = ones(1,length(options.PathIndex))*10;
-PathDensity = sbistFACS2PathDensity(y_data,path,options);
+PathDensity = sbistFACS2PathDensity(y_data,path,options,find_nan); %error because zero column??
 %% 9.3) FACSDensityTrafo ---------------------------------------------------
 gamma = log(2)/mean(t_period(1,:));% growthrate
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
@@ -50,9 +50,9 @@ newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
-else 
+%else 
     
-end
+%end
 
 combinations{i} = NewPathDensity;
 combination{i,1} = options.PathIndex;

@@ -1,4 +1,4 @@
-function G = getMeanWanderlustPath(G,data,opts)
+function G = getMeanWanderlustPath(G,data,opts,zero_val)
 
 
 %% Function to get the mean wanderlust path
@@ -23,6 +23,7 @@ function G = getMeanWanderlustPath(G,data,opts)
 %%%
 
 % check inputs
+
 y = data;
 [n,d] = size(y);
 
@@ -53,14 +54,18 @@ ywant = moving_average(x,y',xwant,binsize);
 if doplots
 % subplot layout
 % possible combinations of dimensions in 2d
-C = nchoosek(1:d,2);
+C = nchoosek(1:d,2); %WChooseK ? 
 a = floor(size(C,1)^(1/2));
 b = ceil(size(C,1)/a);
+[I,~]=find(C==zero_val);%Position of zero column
+I = sort(I);
 
 rect = [20 20 800 600];
 G.fh = figure('Color','w','Position',rect);
+
 for i = 1:size(C,1)
-	subplot(a,b,i)
+	if i ~= I
+    subplot(a,b,i)
 	[~,dens,X,Y] = kde2d(data(:,C(i,:)));
 	pcolor(X,Y,dens); shading interp							% density
 	hold on
@@ -69,6 +74,8 @@ for i = 1:size(C,1)
 	plot(ywant(C(i,1),:),ywant(C(i,2),:),'r','LineWidth',3)		% path
 	xlabel(dimension_names{C(i,1)})
 	ylabel(dimension_names{C(i,2)})
+    else
+    end
 end
 end
 

@@ -1,4 +1,4 @@
-function [G,y_data,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
+function [G,y_data,inball,find_nan] = PathfromWanderlust(wdata,opts,start,cmatrix)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:
@@ -41,8 +41,9 @@ end
 % dialog to set startpoint manually
 % --- Preparation -----------
 alpha = 0.001;
-x_data = data; % (nxN) ---------- all data
-y_data = cmatrix' * x_data'; % (mxN) -------- measured data
+x_data = data'; % (nxN) ---------- all data
+%y_data = x_data;
+y_data = cmatrix' * x_data; % (mxN) -------- measured data
 y_data = y_data'; % (mxN) -> (Nxm) 
 x_coords = start; % Initial conditions from Toettcher model
 y_coords = cmatrix' * x_coords; % IC for measured outputs
@@ -53,7 +54,7 @@ ballsize = range(y_data,1)*alpha; % (mx?)
 
 Y_Cor = bsxfun(@minus, y_data, y_coords);
 
-y_inball = bsxfun(@lt, (Y_Cor).^2, ballsize);
+y_inball = bsxfun(@le, (Y_Cor).^2, ballsize);% lt -> le to jump over 0 column
 inball = all(y_inball,2); % 1 = within the ball, 0=not within ball
 
 %-----------------------------
@@ -80,12 +81,12 @@ end
 
 % weight the data
 y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
-y_data(:,[find_nan])=[];
+%zero_val = find(y_data(1,:) == 0);
 % compute trajectory
 G = wanderlust(y_data,params);
 
 %% Visualize the result
 % get mean wanderlust path
-G = getMeanWanderlustPath(G,y_data,opts);
+G = getMeanWanderlustPath(G,y_data,opts,find_nan);
 end
 
