@@ -20,7 +20,9 @@ colorbar
 xlabel('E(a)')
 ylabel('Var(a)')
 set(gca,'YLim',[0,prctile(ERA.a_single_cell_Variance,95)*1.2])
-suptitle('Variance in age of single cells')
+combination=num2str(opts.PathIndex);
+title = ['Variance in a of single cells', combination];
+suptitle(title)
 
 	% s variance
 rect = [20 20 800 600];
@@ -39,6 +41,8 @@ colorbar
 xlabel('E(s)')
 ylabel('Var(s)')
 set(gca,'YLim',[0,prctile(ERA.s_single_cell_Variance,95)*1.2])
-suptitle('Variance in s of single cells')
+combination=num2str(opts.PathIndex);
+title = ['Variance in s of single cells', combination];
+suptitle(title)
 end
 end

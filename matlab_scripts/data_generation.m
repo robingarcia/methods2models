@@ -1,7 +1,7 @@
 function [ic,mydata,errordata,y_0,t_period,N,snaps] = data_generation
 %profile on
 addpath(genpath('~/methods2models'));
-load('toettcher_statenames.mat');
+%load('toettcher_statenames.mat');
 %% 1) User inputs --------------------------------------------------------%
 disp('User inputs --------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -82,5 +82,7 @@ disp('Error model (add noise to dataset) ---------------------------------')
 tic
 errordata = error_model(mydata,sig);
 toc
+
+%% 8) Write data to output struct (later)
 end
 

@@ -50,13 +50,22 @@ if isfield(opts,'path_bandwidths')
 else
 	% find rigth bandwidths in the different dimensions and take the mean
 	bws = zeros(d,d);
-    
+    %I = find_nan;
+    %J = find_nan;
 	for i=1:d
-		for j=1:d            
-			bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
-			bws(i,j) = bandwidth(1);                    
-		end
-	end
+        %if i ~= I
+            for j=1:d
+                
+                    %if j ~= J
+                    bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
+                    bws(i,j) = bandwidth(1);
+                    %else
+                    %end
+           
+            end
+        %else
+        %end
+      end
 	gaussbandwidth = mean(bws,2);
 end
 
@@ -170,20 +179,30 @@ calculatedVariance = @(x,p,mu) trapz(x,p.*(x-mu).^2);
 s_single_cell_Expectation = cellfun(@(p) calculateExpectation(Sout,p),s_single_cell,'UniformOutput',0);
 s_single_cell_Variance = cellfun(@(p,mu) calculatedVariance(Sout,p,mu),s_single_cell,s_single_cell_Expectation);
 
-if doplots
-	rect = [20 20 800 600];
-	fh = figure('Color','w','Position',rect);
-	scatter(data(opts.PathIndex(1),:),data(opts.PathIndex(2),:),8,[s_single_cell_Expectation{:}])
-	colormap('bone')
-	hold on
-	[bandwidth,density,X,Y] = kde2d(data(opts.PathIndex(1:2),:)');
-	pcolor(X,Y,density)
-	colormap('parula')
-	shading interp
-	xlabel(opts.Ynames{opts.PathIndex(1)})
-	ylabel(opts.Ynames{opts.PathIndex(2)})
-	title('Data with position')
-end
+% if doplots
+% %subplot layout
+%  C = nchoosek(1:d,2); %WChooseK ? 
+%  a = floor(size(C,1)^(1/2));
+%  b = ceil(size(C,1)/a);
+% length_PathIndex=length(opts.PathIndex);
+% 	rect = [20 20 800 600];
+% 	fh = figure('Color','w','Position',rect);
+%     for i = 1:length_PathIndex-1%opts.PathIndex(end-1)
+%          subplot(a,b,i)
+%          hold on
+% 	f(i)=scatter(data(:,i),data(:,length_PathIndex(end)),8,[s_single_cell_Expectation{:}]);
+% 	colormap('bone')
+% 	hold on
+% 	%[bandwidth,density,X,Y] = kde2d(data(:,opts.PathIndex(1:2))');
+%     [bandwidth,density,X,Y] = kde2d(data(:,C(i,:)));%opts.PathIndex(1:2),:)');
+% 	pcolor(X,Y,density)
+% 	colormap('parula')
+% 	shading interp
+% 	xlabel(opts.Ynames{opts.PathIndex(i)})
+% 	ylabel(opts.Ynames{opts.PathIndex(end)})
+% 	title('Data with position')
+%     end
+% end
 
 %% Write the data to the output struct
 

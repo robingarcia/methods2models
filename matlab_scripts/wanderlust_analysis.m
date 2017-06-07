@@ -1,11 +1,13 @@
-function [result_areaS,result_areaA,result_combn] = wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps)
+function [result_areaS,result_areaA,result_combn] = wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
-load('toettcher_statenames.mat');
+%load('toettcher_statenames.mat');
+load_options
+options.Ynames		= statenames;
 %% 8) Measurement (Calculate C-Matrix) -----------------------------------%
 disp('Measurement (Calculate C-Matrix) -----------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-load_options
+%load_options
 x = 1:size(ic,1)+1;%32; Include DNA as 32th
 results=cell(1,size(ic,1));%Preallocation
 Summary=cell(1,size(ic,1));%Preallocation
@@ -21,9 +23,9 @@ area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 %zero_value = find(not(errordata(:,1)));
 tic
-for j = 9%:size(ic,1) %j = Number of columns = Number of outputs
+for j = 1:size(ic,1) %j = Number of columns = Number of outputs
     tic
-for i=1%size(WChooseK(1:size(ic,1),j),1)%without DNA
+for i=1%:size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 %ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
@@ -36,19 +38,24 @@ disp(disp_var)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data = errordata';
 %% 9.1) PathfromWanderlust -------------------------------------------------
-[G,y_data,~,find_nan] = PathfromWanderlust(data,options,y_0,cmatrix);
+
+[G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
 path = G.y; % Check these values first !!!
+
+
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
 %options.path_weights = ones(size(y_data,2),1)*10;
 options.path_weights = ones(1,length(options.PathIndex))*10;
-PathDensity = sbistFACS2PathDensity(y_data,path,options,find_nan); %error because zero column??
+PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
+
+
 %% 9.3) FACSDensityTrafo ---------------------------------------------------
 gamma = log(2)/mean(t_period(1,:));% growthrate
 newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-options.doplots = 0; %0 = no plot , 1 = plot
+options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 %else 
     
@@ -100,9 +107,10 @@ results{j} = combinations;
 result_areaS = cat(1,Summary{1,j}.area_S(:,1));
 result_areaA = cat(1,Summary{1,j}.area_A(:,1));
 result_combn = cat(1,Summary{1,j}.combn);
+toc
 end
 %result_combn = categorical(result_combn);
 %barh(result_combn,result_areaA)
-toc
+
 end
 

@@ -1,4 +1,4 @@
-function [G,y_data,inball,find_nan] = PathfromWanderlust(wdata,opts,start,cmatrix)
+function [G,y_data,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:
@@ -40,7 +40,7 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.001;
+alpha = 0.009;
 x_data = data'; % (nxN) ---------- all data
 %y_data = x_data;
 y_data = cmatrix' * x_data; % (mxN) -------- measured data
@@ -75,8 +75,12 @@ end
 if (params.normalize)
 	y_data = y_data-repmat(prctile(y_data, 1, 1), size(y_data,1),1);
 	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
-    find_nan=find(isnan(y_data(1,:))); %Find all columns with NaN
-    y_data(:,[find_nan])=0;
+    %find_nan=find(isnan(y_data(1,:))); %Find all columns with NaN
+    %y_data(:,find_nan)=0;
+    %if isempty(find_nan)
+    %    find_nan = 0;
+    %else
+    %end
 end
 
 % weight the data
@@ -87,6 +91,6 @@ G = wanderlust(y_data,params);
 
 %% Visualize the result
 % get mean wanderlust path
-G = getMeanWanderlustPath(G,y_data,opts,find_nan);
+G = getMeanWanderlustPath(G,y_data,opts);
 end
 
