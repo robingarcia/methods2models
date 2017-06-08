@@ -1,4 +1,4 @@
-function [G,y_data,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
+function [G,y_data,params,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:

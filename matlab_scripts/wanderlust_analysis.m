@@ -1,4 +1,4 @@
-function [result_areaS,result_areaA,result_combn] = wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames)
+function [result_areaS,result_areaA,result_combn,results] = wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 %load('toettcher_statenames.mat');
@@ -21,26 +21,44 @@ s_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
 a_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
 area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
 area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
+a_A = 0;
 %zero_value = find(not(errordata(:,1)));
+
+%% Calculate Wanderlust for all states ------------------------------------
 tic
-for j = 1:size(ic,1) %j = Number of columns = Number of outputs
-    tic
-for i=1%:size(WChooseK(1:size(ic,1),j),1)%without DNA
+j = size(ic,1);
+i = size(WChooseK(1:size(ic,1),j),1);
+[~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
+cmatrix = cmatrix';
+data = errordata';
+[G,w_data,~,~] = PathfromWanderlust(data,options,y_0,cmatrix);
+% G = wanderlust(y_data,params);
+w_path = G.y; % Check these values first !!!
+toc
+%--------------------------------------------------------------------------
+tic
+for j = 1:26%size(ic,1) %j = Number of columns = Number of outputs
+toc
+tic
+for i=1:2%size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 %ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
 %if ismem == 0 %No zero columns/rows contained
-cmatrix = cmatrix';
+%cmatrix = cmatrix';
+y_data = cmatrix * w_data';
+y_data = y_data';
+path = cmatrix * w_path;
 %c_matrix{j,i}=cmatrix;
-disp_var = ['Wanderlust --------------------:',num2str(options.PathIndex)];
+disp_var = ['Wanderlust --------:',num2str(options.PathIndex)];
 %% 9) Wanderlust ---------------------------------------------------------%
 disp(disp_var)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-data = errordata';
+% data = errordata';
 %% 9.1) PathfromWanderlust -------------------------------------------------
 
-[G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
-path = G.y; % Check these values first !!!
+% [G,y_data,~] = PathfromWanderlust(data,options,y_0,cmatrix);
+% path = G.y; % Check these values first !!!
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
@@ -55,7 +73,7 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
-options.doplots = 1; %0 = no plot , 1 = plot
+options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 %else 
     
@@ -72,7 +90,10 @@ area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
 [a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);
 Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);
 area_A(i)= trapz(a_E(i,:), Variance_A(i,:));
+%a_A = cat(1,a_A,area_A); Concatenate all results of this vector
 end
+%a_A(end) = area_A;
+a_A = [area_A];
 toc
 summary =([]);
 
@@ -104,11 +125,14 @@ results{j} = combinations;
 
 %bar(all_comb{1,j}{i,:},summary.area_A(i))
 %bar(combi(i,:),summary.area_A(i))
-result_areaS = cat(1,Summary{1,j}.area_S(:,1));
-result_areaA = cat(1,Summary{1,j}.area_A(:,1));
+result_areaS = cat(1,Summary{1,j}.area_S);
+result_areaA = cat(1,Summary{1,j}.area_A);
+%result_areaS = cat(1,Summary{1,j}.area_S(:,1));
+%result_areaA = cat(1,Summary{1,j}.area_A(:,1));
 result_combn = cat(1,Summary{1,j}.combn);
-toc
+
 end
+toc
 %result_combn = categorical(result_combn);
 %barh(result_combn,result_areaA)
 

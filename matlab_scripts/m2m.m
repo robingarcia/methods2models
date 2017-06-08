@@ -1,4 +1,4 @@
-function [result_areaS,result_areaA,result_combn] = m2m
+function [result_areaS,result_areaA,result_combn,results] = m2m
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 load('toettcher_statenames.mat');
@@ -11,4 +11,8 @@ load('toettcher_statenames.mat');
 [y_0, ~] = M2M_purge(y_0);
 statenames = statenames(nzero);
 %% Wanderlust analysis ----------------------------------------------------
-[result_areaS,result_areaA,result_combn]=wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames);
+[result_areaS,result_areaA,result_combn,results]=wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames);
+
+%% Plots
+bar(result_areaA)
+set(gca,'XTickLabel',result_combn)
