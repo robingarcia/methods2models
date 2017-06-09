@@ -1,4 +1,4 @@
-function [result_areaS,result_areaA,result_combn,results] = wanderlust_analysis(errordata,ic,y_0,t_period,N,snaps,statenames)
+function [sum_results] = wanderlust_analysis(errordata,ic,y_0,t_period,statenames)
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 %load('toettcher_statenames.mat');
@@ -8,25 +8,49 @@ options.Ynames		= statenames;
 disp('Measurement (Calculate C-Matrix) -----------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %load_options
-x = 1:size(ic,1)+1;%32; Include DNA as 32th
-results=cell(1,size(ic,1));%Preallocation
-Summary=cell(1,size(ic,1));%Preallocation
-combinations = cell(1,size(WChooseK(x,size(ic,1)),1));%Preallocation
-combination = cell(size(WChooseK(x,size(ic,1)),1),1); %Combination names
-comb = cell(size(WChooseK(x,size(ic,1)),1)-1,1);
-all_comb = cell(1,size(ic,1));
-Variance_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps); %cell(size(VChooseK(x,size(ic,1)),1)-1,1);
-Variance_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
-s_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
-a_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
-area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
-area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
-a_A = 0;
-%zero_value = find(not(errordata(:,1)));
+% Build all cells and arrays as big as possible
+% Determine the max size---------------------------------------------------
+number = zeros(size(ic,1),1);
+for i = 1:size(ic,1)
+    number(i,1)=size(WChooseK(1:size(ic,1),i),1);
+end
+max_combination = max(number); %We need this value to create our cells
+%--------------------------------------------------------------------------
 
+%% Preallocation area =====================================================
+% x = 1:size(ic,1)+1;%32; Include DNA as 32th
+Summary=cell(1,size(ic,1));%Preallocation
+
+
+% combinations = cell(1,size(WChooseK(x,size(ic,1)),1));%Preallocation
+% combination = cell(size(WChooseK(x,size(ic,1)),1),1); %Combination names
+% comb = cell(size(WChooseK(x,size(ic,1)),1)-1,1);
+% Variance_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+% Variance_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+% s_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
+% a_E = zeros(size(WChooseK(x,size(ic,1)),1)-1,N*snaps);
+% area_S = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
+% area_A = zeros(size(WChooseK(x,size(ic,1)),1)-1,1);
+combinations = cell(1,max_combination);%Preallocation
+combination = cell(max_combination,1); %Combination names
+comb = cell(max_combination-1,1);
+% Variance_S = zeros(max_combination-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+% Variance_A = zeros(max_combination-1,N*snaps);%cell(size(VChooseK(x,size(ic,1)),1)-1,1);
+% s_E = zeros(max_combination-1,N*snaps);
+% a_E = zeros(max_combination-1,N*snaps);
+% area_S = zeros(max_combination-1,1);
+% area_A = zeros(max_combination-1,1);
+
+%a_A = cell(1,size(ic,1));
+%zero_value = find(not(errordata(:,1)));
+%all_comb = cell(1,size(ic,1));
+
+% MAYBE PREALLOCATION PROBLEM --> reason for low speed???
+%==========================================================================
+%==========================================================================
 %% Calculate Wanderlust for all states ------------------------------------
 tic
-j = size(ic,1);
+j = size(ic,1); %Measure all species simultaneously
 i = size(WChooseK(1:size(ic,1),j),1);
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 cmatrix = cmatrix';
@@ -37,10 +61,19 @@ w_path = G.y; % Check these values first !!!
 toc
 %--------------------------------------------------------------------------
 tic
-for j = 1:26%size(ic,1) %j = Number of columns = Number of outputs
+for j = 1:size(ic,1) %j = Number of columns = Number of outputs
 toc
+
+% Preallocation for i-Loop-------------------------------------------------
+% Variance_S = zeros(size(WChooseK(x,j),1)-1,1);
+% Variance_A = zeros(size(WChooseK(x,j),1)-1,1);
+% s_E = zeros(size(WChooseK(x,j),1)-1,1);
+% a_E = zeros(size(WChooseK(x,j),1)-1,1);
+% area_S = zeros(size(WChooseK(x,j),1)-1,1);
+% area_A = zeros(size(WChooseK(x,j),1)-1,1);
+%--------------------------------------------------------------------------
 tic
-for i=1:2%size(WChooseK(1:size(ic,1),j),1)%without DNA
+for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
     tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 %ismem = ismember(zero_value,options.PathIndex);%Check if number iscontained
@@ -81,35 +114,38 @@ PlotERAVariance(data,NewPathDensity,options);
 
 combinations{i} = NewPathDensity;
 combination{i,1} = options.PathIndex;
-all_comb{1,j} = combination;
+%all_comb{1,j} = combination;
 comb{i,1} = strjoin(options.Ynames(combination{i}));
-[s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);
-Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);
-area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
-
-[a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);
-Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);
-area_A(i)= trapz(a_E(i,:), Variance_A(i,:));
-%a_A = cat(1,a_A,area_A); Concatenate all results of this vector
+%==========================================================================
+%==========================================================================
+% [s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);%!!!
+% Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);%!!!
+% area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
+% 
+% [a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);%!!!
+% Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
+% area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
+%==========================================================================
+%==========================================================================
 end
-%a_A(end) = area_A;
-a_A = [area_A];
 toc
+% area_A = bsxfun(@trapz,sort(cell2mat(summary.combinations{1,:}.a_single_cell_Expectation),2),summary.combinations{1,:}.a_single_cell_Variance(z));
+% Create a struct for storage
 summary =([]);
-
-summary.s_E = s_E;
-summary.a_E = a_E;
-summary.Variance_S = Variance_S;
-summary.Variance_A = Variance_A;
-summary.area_S = area_S;
-summary.area_A = area_A;
+% summary.s_E = s_E;
+% summary.a_E = a_E;
+% summary.Variance_S = Variance_S;
+% summary.Variance_A = Variance_A;
+% summary.area_S = area_S;
+% summary.area_A = area_A;
 summary.comb = combination;
 summary.combn = comb;
-%struct2table(summary)
+summary.combinations = combinations;
 
+% Store every struct in its own cell
 Summary{j} = summary;
 %struct2table(Summary{j});
-results{j} = combinations;
+
 
 % %c(:,j) = categorical({summary.comb{i,j}});
 % var_a = summary.Variance_A;
@@ -125,16 +161,15 @@ results{j} = combinations;
 
 %bar(all_comb{1,j}{i,:},summary.area_A(i))
 %bar(combi(i,:),summary.area_A(i))
-result_areaS = cat(1,Summary{1,j}.area_S);
-result_areaA = cat(1,Summary{1,j}.area_A);
-%result_areaS = cat(1,Summary{1,j}.area_S(:,1));
-%result_areaA = cat(1,Summary{1,j}.area_A(:,1));
-result_combn = cat(1,Summary{1,j}.combn);
+
 
 end
 toc
+sum_results = cat(1,Summary{:});
+%result_all = cat(1,sum_A(:).area_A); <-- I DID IT !!! \o/
+%name_all = cat(1,sum_A(:).combn); < -- IT WORKS !!!
 %result_combn = categorical(result_combn);
 %barh(result_combn,result_areaA)
-
+toc
 end
 
