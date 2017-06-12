@@ -21,11 +21,11 @@ for i = 1:size(results,1)
 %     results(i).a_E = M2M_purge(results(i).a_E);
 %     results(i).Variance_S = M2M_purge(results(i).Variance_S);
 %     results(i).Variance_A = M2M_purge(results(i).Variance_A);
-%     results(i).area_S = M2M_purge(results(i).area_S);
-%     results(i).area_A = M2M_purge(results(i).area_A);
+    results(i).area_S = M2M_purge(results(i).area_S);
+    results(i).area_A = M2M_purge(results(i).area_A);
     results(i).comb = results(i).comb(~cellfun('isempty',results(i).comb));
     results(i).combn = results(i).combn(~cellfun('isempty',results(i).combn));
-    results(i).combinations = results(i).combinations(~cellfun('isempty',results(i).combinations));
+%     results(i).combinations = results(i).combinations(~cellfun('isempty',results(i).combinations));
 end
 toc
 

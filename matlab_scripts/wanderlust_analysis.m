@@ -61,7 +61,7 @@ w_path = G.y; % Check these values first !!!
 toc
 %--------------------------------------------------------------------------
 tic
-for j = 1:size(ic,1) %j = Number of columns = Number of outputs
+for j = 1:2%size(ic,1) %j = Number of columns = Number of outputs
 toc
 
 % Preallocation for i-Loop-------------------------------------------------
@@ -118,13 +118,13 @@ combination{i,1} = options.PathIndex;
 comb{i,1} = strjoin(options.Ynames(combination{i}));
 %==========================================================================
 %==========================================================================
-% [s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);%!!!
-% Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);%!!!
-% area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
-% 
-% [a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);%!!!
-% Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
-% area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
+[s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);%!!!
+Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);%!!!
+area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
+
+[a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);%!!!
+Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
+area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
 %==========================================================================
 %==========================================================================
 end
@@ -136,11 +136,11 @@ summary =([]);
 % summary.a_E = a_E;
 % summary.Variance_S = Variance_S;
 % summary.Variance_A = Variance_A;
-% summary.area_S = area_S;
-% summary.area_A = area_A;
+summary.area_S = area_S;
+summary.area_A = area_A;
 summary.comb = combination;
 summary.combn = comb;
-summary.combinations = combinations;
+% summary.combinations = combinations;
 
 % Store every struct in its own cell
 Summary{j} = summary;
