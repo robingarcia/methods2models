@@ -107,7 +107,7 @@ newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 options.doplots = 0; %0 = no plot , 1 = plot
-PlotERAVariance(data,NewPathDensity,options);
+PlotERAVariance(data,NewPathDensity,options);%Data or w_data??
 %else 
     
 %end
