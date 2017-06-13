@@ -17,7 +17,7 @@ statenames = statenames(nzero);
 
 %% Combinations -----------------------------------------------------------
 Summary=cell(1,size(ic,1));%Preallocation
-for j = 1:2
+for j = [1,27]%1%:2
 %     for i=1:size(WChooseK(1:size(ic,1),j),1)
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 Summary{j} = summary;
