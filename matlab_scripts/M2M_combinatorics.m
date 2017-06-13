@@ -32,6 +32,7 @@ area_A = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
     
     
 for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
+    tic
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
 y_data = cmatrix * w_data';
 y_data = y_data';
@@ -47,6 +48,7 @@ disp(disp_var)
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
 options.path_weights = ones(1,length(options.PathIndex))*10;
+% options.path_weights = ones(1,size(wdata,2))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
 
 
@@ -73,6 +75,7 @@ Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
 area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
 %==========================================================================
 %==========================================================================
+toc
 end
 summary =([]);
 summary.area_S = area_S;

@@ -1,6 +1,7 @@
 function [results] = m2m
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
+profile on
 addpath(genpath('~/methods2models'));
 load('~/methods2models/datasets/toettcher_statenames.mat');
 %% Datageneration ---------------------------------------------------------
@@ -17,11 +18,13 @@ statenames = statenames(nzero);
 
 %% Combinations -----------------------------------------------------------
 Summary=cell(1,size(ic,1));%Preallocation
-for j = [1,27]%1%:2
+for j = [2,3,4,27]%size(ic,1)%[2,27]%1%:2
+    tic
 %     for i=1:size(WChooseK(1:size(ic,1),j),1)
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 Summary{j} = summary;
 %     end
+toc
 end
 results = cat(1,Summary{:});
 
@@ -49,3 +52,5 @@ toc
 %barh(result_combn,result_areaA)
 % bar(result_areaA)
 % set(gca,'XTickLabel',result_combn)
+profile viewer
+end

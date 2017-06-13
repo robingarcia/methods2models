@@ -1,4 +1,4 @@
-function [G,y_data,params,inball] = PathfromWanderlust(wdata,opts,start,cmatrix)
+function [G,y_data,params,inball] = PathfromWanderlust(wdata,opts,start)
 
 %% function to construct a set of trajectories that can be used in ERA or other further analysis methods
 % The algorithme uses the wanderlust algorithm described in:
@@ -25,8 +25,8 @@ else
 end
 
 if isfield(params,'wanderlust_weights') 
-	params.wanderlust_weights = ones(1,length(opts.PathIndex))*10;
-    %params.wanderlust_weights = ones(1,size(wdata,2))*10;
+	%params.wanderlust_weights = ones(1,length(opts.PathIndex))*10;
+    params.wanderlust_weights = ones(1,size(wdata,2))*10;
 end
 
 % prepare data for wanderlust  (nxd)
@@ -43,10 +43,10 @@ end
 alpha = 0.009;
 x_data = data'; % (nxN) ---------- all data
 %y_data = x_data;
-y_data = cmatrix' * x_data; % (mxN) -------- measured data
+y_data = x_data; %cmatrix' * x_data; % (mxN) -------- measured data
 y_data = y_data'; % (mxN) -> (Nxm) 
 x_coords = start; % Initial conditions from Toettcher model
-y_coords = cmatrix' * x_coords; % IC for measured outputs
+y_coords = x_coords; %cmatrix' * x_coords; % IC for measured outputs
 y_coords = y_coords'; %
 ballsize = range(y_data,1)*alpha; % (mx?)
 %ballsize(end)=ballsize(end)*alpha;
