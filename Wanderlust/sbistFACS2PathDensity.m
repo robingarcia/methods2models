@@ -123,9 +123,13 @@ fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x
 % remove doublicates in the path coordinates
 path_coordinates(:,all(path_coordinates(:,(1:end-1)')==path_coordinates(:,(2:end)'))) = [];
 
-path_cell = num2cell(path_coordinates,2);
-[len,seglen] = arclength(path_cell{:});
-Sin = [0; cumsum(seglen)] / len;
+if size(path_coordinates,1)<2
+    Sin  = (path_coordinates'-min(path_coordinates) )./range(path_coordinates);
+else
+    path_cell = num2cell(path_coordinates,2);
+    [len,seglen] = arclength(path_cell{:});
+    Sin = [0; cumsum(seglen)] / len;
+end
 
 % linear interpolation with my function
 % [Xout] = mySpaceCurveInterpolation(path_coordinates,Sin,Sout);
@@ -139,8 +143,15 @@ fh_coords = @(s) ppval(pp,s);
 % for fast parfor computation
 s_coords  = num2cell(fh_coords(Sout),1);
 test = cell(n_path_points,1);
-parfor i = 1:n_path_points
-    test{i} = fk(s_coords{i})';
+
+if size(path_coordinates,1)<2
+    parfor i = 1:n_path_points
+        test{i} = fk(s_coords{1}(i))';
+    end
+else
+    parfor i = 1:n_path_points
+        test{i} = fk(s_coords{i})';
+    end
 end
 testmat = [test{:}]';
 
@@ -158,18 +169,18 @@ pdfpoints = sum(testmatnormed,2);
 
 % function handles to the pdf, cdf and derivative of pdf
 spdf = pdfpoints ./ trapz(Sout,pdfpoints);
-fh_spdf = @(s) interp1(Sout,spdf,s,'linear',eps);
+fh_spdf = @(s) interp1(Sout,spdf,s,'linear',eps);%Linear?
 
 scdf = arrayfun(@(s) integral(fh_spdf,0,s),Sout);
 scdf([1,end]) = [0,1]; %Probability
 fh_scdf = @(s) interp1(Sout,scdf,s);
 
 sdpdf = gradient(spdf,diff(Sout(1:2)));
-fh_sdpdf = @(s) intfh_coordserp1(Sout,sdpdf,s,'linear','extrap');
+fh_sdpdf = @(s) intfh_coordserp1(Sout,sdpdf,s,'linear','extrap');% linear?
 
 %
 
-fh_scdf_inv = @(x) interp1(scdf,Sout,x,'linear','extrap');
+fh_scdf_inv = @(x) interp1(scdf,Sout,x,'linear','extrap');%Linear?
 
 %% Variance in a of my datapoints
 

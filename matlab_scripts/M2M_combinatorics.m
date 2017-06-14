@@ -47,7 +47,7 @@ disp(disp_var)
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
-options.path_weights = ones(1,length(options.PathIndex))*10;
+options.path_weights = ones(1,length(options.PathIndex))*20;
 % options.path_weights = ones(1,size(wdata,2))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
 
@@ -78,6 +78,10 @@ area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
 toc
 end
 summary =([]);
+summary.s_Est = s_E;
+summary.a_Est = a_E;
+summary.Var_s = Variance_S;
+summary.Var_a = Variance_A;
 summary.area_S = area_S;
 summary.area_A = area_A;
 summary.comb = combination;
