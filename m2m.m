@@ -59,6 +59,22 @@ results = cat(1,Summary{:});
 % %     hold on
 %     end
 % end
+%--------------------------------------------------------------------------
+%==========================================================================
+%--------------------------------------------------------------------------
+
+for i = 1:size(results(2).comb,1)
+    results(2).comb{i,1};
+    f(i) = bsxfun(@min,(results(1).Var_a(results(2).comb{i,1}(1))),(results(1).Var_a(results(2).comb{i,1}(2))));
+end
+
+% for j = 2:size(ic,1)
+%     for i = 1:size(WChooseK(1:size(ic,1),j),1)
+%        tic
+%        [~,deed,~] = Cmatrix(i,j,size(errordata,1),errordata)
+%        toc
+%     end
+% end
 %% Plots
 %result_all = cat(1,sum_A(:).area_A); <-- I DID IT !!! \o/
 %name_all = cat(1,results(:).combn); < -- IT WORKS !!!
