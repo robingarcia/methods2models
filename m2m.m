@@ -19,7 +19,7 @@ statenames = statenames(nzero);
 
 %% Pre computation --------------------------------------------------------
 Summary=cell(1,size(ic,1));%Preallocation
-for j = 1:2%size(ic,1)%[2,27]%1%:2
+for j = [1 2 27]%size(ic,1)%[2,27]%1%:2
     tic
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 Summary{j} = summary;
@@ -34,7 +34,7 @@ results = cat(1,Summary{:});
 % end
 
 
-% %% Pure the results
+% %% Purge the results
 % tic
 % for i = 1:size(results,1)
 % %     results(i).s_E = M2M_purge(results(i).s_E);
@@ -61,50 +61,87 @@ results = cat(1,Summary{:});
 % end
 %--------------------------------------------------------------------------
 %==========================================================================
-% --------------------------------------------------------------------------
-% f = cell(1,size(ic,1));
-% for i = 1:27
-%    x = results(1).a_Est(i,:);
-%    y = results(1).Var_a(i,:);
-% %    x_I = 0:t_period(1,1);
-% %    f{i} = interp1(x,y,x_I);
-%    f{i} = griddedInterpolant(x,y,'spline');%Linear?
-%    %figure(i)
-%    %plot(x,y,'o');
+% % --------------------------------------------------------------------------
+f = cell(1,size(ic,1));
+
+binsize =0.2;
+for i = 1:27 %27
+   xwant = linspace(0,1,size(results(1).a_Est(i,:),2));
+   x = normdata(results(1).a_Est(i,:));
+   y = results(1).Var_a(i,:);
+   ywant = moving_average(x,y,xwant,binsize);
+   f{i} = griddedInterpolant(xwant,ywant,'cubic');%Linear?
+%    figure(i)
+%    scatter(x,y)
+%    hold on
+%    plot(xwant,ywant,'x');
 %    %legend(statenames(i));
-% %    hold on
-% %    plot(f{1,i}.GridVectors{1,1},f{1,i}.Values);
-% %    hold on
-% %    legend(statenames([1:27]));
-% %    xlabel('E(age)')        % x-axis label
-% %    ylabel('Variance(age)') % y-axis label
-% end
-
-for i = 1:27
-    x_p = (-400:4000);
-    y_p = f{i}(x_p);
-    %figure(i)
-    plot(x_p,y_p)
-%     plot(results(2).a_all_cells(i,:))
-    hold on
+%    hold on
+%    plot((linspace(0,1,size(results(1).a_Est(i,:),2))),f{i}((linspace(0,1,size(results(1).a_Est(i,:),2)))),'g');
+%    hold on
+%    %legend(statenames([1:27]));
+%    xlabel('E(age)')        % x-axis label
+%    ylabel('Variance(age)') % y-axis label
 end
-% for i = 2;%i = size(results,1)
-%     results(i).comb{1,:}
-% end
+%% New datapoints
+x = linspace(0,1,size(errordata,2));
+y = zeros(size(ic,1),size(errordata,2));
+Q = zeros(1,size(ic,1));
+for i = 1:size(ic,1) 
+    y(i,:) = f{i}(x);
+%     Q(1,i) = trapz(x,y(i,:));
+    Q(1,i) = trapz(y(i,:));
+%     figure(i)
+%     plot(x,y(i,:))
+%     hold on
+end
+%% ---- New calculated data points
+x = 1:size(ic,1);
+x_linspace = linspace(0,1,size(errordata,2));
 
+for x = x
+    datapoint_set(x,:) = f{x}(x_linspace);
+end
+%% --tr5
+x = 1:size(ic,1);
+for i = 2%:2%size(ic,1)
+    C = WChooseK(x,i);
+    trap_area = zeros(1,size(C,1));
+    for j = 1:size(C,1)
+        combination = C(j,:);
+        %y_1 = f{C(j,1)}(x_linspace);
+        %y_2 = f{C(j,2)}(x_linspace);
+        y_1 = y(C(j,1),:);
+        y_2 = y(C(j,2),:);
+        y_3 = bsxfun(@min, y_1,y_2);
+        %area_1 = trapz(y_1);
+        %area_2 = trapz(y_2);
+        trap_area(1,j) = trapz(y_3);
+    end
+end
+[h,T] = min(trap_area);
+best = C(T,:)
 
-% for i = 1:size(results(2).comb,1)
-%     results(2).comb{i,1};
-%     f(i) = bsxfun(@min,(results(1).Var_a(results(2).comb{i,1}(1))),(results(1).Var_a(results(2).comb{i,1}(2))));
-% end
-
-% for j = 2:size(ic,1)
-%     for i = 1:size(WChooseK(1:size(ic,1),j),1)
-%        tic
-%        [~,deed,~] = Cmatrix(i,j,size(errordata,1),errordata)
-%        toc
+% %% Second round
+% [row,col]=find(C(:) == [best])
+% 
+% for i = 3:size(ic,1)
+%     C = WChooseK(x,i);
+%     trap_area = zeros(1,size(C,1));
+%     for j = 1:size(C,1)
+%         combination = C(j,:);
+%         %y_1 = f{C(j,1)}(x_linspace);
+%         %y_2 = f{C(j,2)}(x_linspace);
+%         y_1 = y(C(j,1),:);
+%         y_2 = y(C(j,2),:);
+%         y_3 = bsxfun(@min, y_1,y_2);
+%         %area_1 = trapz(y_1);
+%         %area_2 = trapz(y_2);
+%         trap_area(1,j) = trapz(y_3);
 %     end
 % end
+% [h,T] = min(trap_area);
+% best = C(T,:)
 %% Plots
 b_area = zeros(1,size(ic,1));
 B_area = cell(1,size(results,1));

@@ -58,7 +58,6 @@ else
                 
                     %if j ~= J
                     bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
-%                     bandwidth = kde([data(:,i),data(:,j)]);
                     bws(i,j) = bandwidth(1);
                     %else
                     %end

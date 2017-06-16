@@ -26,9 +26,8 @@ Variance_S = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
 Variance_A = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
 s_E = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
 a_E = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
-area_S = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
-area_A = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
-a_all_cells = zeros(1,200); %Not really preallocated!
+%area_S = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
+%area_A = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
 %--------------------------------------------------------------------------
     
     
@@ -48,7 +47,7 @@ disp(disp_var)
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
-options.path_weights = ones(1,length(options.PathIndex))*20;
+options.path_weights = ones(1,length(options.PathIndex))*10;%20;
 % options.path_weights = ones(1,size(wdata,2))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
 
@@ -64,31 +63,35 @@ PlotERAVariance(data,NewPathDensity,options);
 %Var_E_plot(data,NewPathDensity,options);
 %combinations{i} = NewPathDensity;
 combination{i,1} = options.PathIndex;% Necessary?
-a_all_cells(i,:) = NewPathDensity.a_all_cells'; %Plz preallocate!
+s_E(i,:) = cell2mat(NewPathDensity.s_single_cell_Expectation);
+a_E(i,:) = cell2mat(NewPathDensity.a_single_cell_Expectation);
+Variance_S(i,:) = NewPathDensity.s_single_cell_Variance;
+Variance_A(i,:) = NewPathDensity.a_single_cell_Variance;
+
 %comb{i,1} = strjoin(options.Ynames(combination{i}));%Necessary?
 %==========================================================================
 %==========================================================================
-[s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);%!!!
-Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);%!!!
-area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
-
-[a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);%!!!
-Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
-area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
+% [s_E(i,:),z]=sort(cell2mat(NewPathDensity.s_single_cell_Expectation),2);%!!!
+% Variance_S(i,:) = NewPathDensity.s_single_cell_Variance(z);%!!!
+% area_S(i) = trapz(s_E(i,:),Variance_S(i,:));
+% 
+% [a_E(i,:),z]=sort(cell2mat(NewPathDensity.a_single_cell_Expectation),2);%!!!
+% Variance_A(i,:) = NewPathDensity.a_single_cell_Variance(z);%!!!
+% area_A(i)= trapz(a_E(i,:), Variance_A(i,:));%!!!
 %==========================================================================
 %==========================================================================
 toc
 end
 summary =([]);
+summary.new = NewPathDensity;
 summary.s_Est = s_E;
 summary.a_Est = a_E;
 summary.Var_s = Variance_S;
 summary.Var_a = Variance_A;
-summary.area_S = area_S;
-summary.area_A = area_A;
+%summary.area_S = area_S;
+%summary.area_A = area_A;
 summary.comb = combination;
-summary.new = NewPathDensity;
-summary.a_all_cells = a_all_cells;
+
 
 % Store every struct in its own cell
 % Summary{j} = summary;

@@ -46,7 +46,7 @@ myPrefactors = prefactor(Aout);
 f_apdf_single = @(a) bsxfun(@times,f_spdf_single(tau_inv(a))',prefactor(a))';
 
 a_single_cell = cellfun(@(x) x.*myPrefactors,s_single_cell,'UniformOutput',0);
-a_all_cells = sum(cat(3,a_single_cell{:}),3).*1/N;
+a_all_cells = sum(cat(3,a_single_cell{:}),3).*1/N; %Area under curve
 
 
 
