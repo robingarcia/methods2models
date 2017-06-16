@@ -28,6 +28,7 @@ s_E = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
 a_E = zeros(1,size(errordata,2));%zeros(size(WChooseK(x,j),1)-1,1);
 area_S = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
 area_A = zeros(1,number(j,1));%zeros(size(WChooseK(x,j),1)-1,1);
+a_all_cells = zeros(1,200); %Not really preallocated!
 %--------------------------------------------------------------------------
     
     
@@ -60,9 +61,10 @@ newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
-
+%Var_E_plot(data,NewPathDensity,options);
 %combinations{i} = NewPathDensity;
 combination{i,1} = options.PathIndex;% Necessary?
+a_all_cells(i,:) = NewPathDensity.a_all_cells'; %Plz preallocate!
 %comb{i,1} = strjoin(options.Ynames(combination{i}));%Necessary?
 %==========================================================================
 %==========================================================================
@@ -85,7 +87,8 @@ summary.Var_a = Variance_A;
 summary.area_S = area_S;
 summary.area_A = area_A;
 summary.comb = combination;
-%summary.combn = comb;
+summary.new = NewPathDensity;
+summary.a_all_cells = a_all_cells;
 
 % Store every struct in its own cell
 % Summary{j} = summary;

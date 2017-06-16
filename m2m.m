@@ -51,7 +51,7 @@ results = cat(1,Summary{:});
 
 %% Combinations -----------------------------------------------------------
 % for i = 1:27
-%     figure(i)
+%     %figure(i)
 %     for    j = 1:2
 %     scatter(normdata(results(j).a_Est(i,:)),results(j).Var_a(i,:));
 %     hold on
@@ -61,12 +61,42 @@ results = cat(1,Summary{:});
 % end
 %--------------------------------------------------------------------------
 %==========================================================================
-%--------------------------------------------------------------------------
+% --------------------------------------------------------------------------
+% f = cell(1,size(ic,1));
+% for i = 1:27
+%    x = results(1).a_Est(i,:);
+%    y = results(1).Var_a(i,:);
+% %    x_I = 0:t_period(1,1);
+% %    f{i} = interp1(x,y,x_I);
+%    f{i} = griddedInterpolant(x,y,'spline');%Linear?
+%    %figure(i)
+%    %plot(x,y,'o');
+%    %legend(statenames(i));
+% %    hold on
+% %    plot(f{1,i}.GridVectors{1,1},f{1,i}.Values);
+% %    hold on
+% %    legend(statenames([1:27]));
+% %    xlabel('E(age)')        % x-axis label
+% %    ylabel('Variance(age)') % y-axis label
+% end
 
-for i = 1:size(results(2).comb,1)
-    results(2).comb{i,1};
-    f(i) = bsxfun(@min,(results(1).Var_a(results(2).comb{i,1}(1))),(results(1).Var_a(results(2).comb{i,1}(2))));
+for i = 1:27
+    x_p = (-400:4000);
+    y_p = f{i}(x_p);
+    %figure(i)
+    plot(x_p,y_p)
+%     plot(results(2).a_all_cells(i,:))
+    hold on
 end
+% for i = 2;%i = size(results,1)
+%     results(i).comb{1,:}
+% end
+
+
+% for i = 1:size(results(2).comb,1)
+%     results(2).comb{i,1};
+%     f(i) = bsxfun(@min,(results(1).Var_a(results(2).comb{i,1}(1))),(results(1).Var_a(results(2).comb{i,1}(2))));
+% end
 
 % for j = 2:size(ic,1)
 %     for i = 1:size(WChooseK(1:size(ic,1),j),1)
@@ -76,6 +106,8 @@ end
 %     end
 % end
 %% Plots
+b_area = zeros(1,size(ic,1));
+B_area = cell(1,size(results,1));
 %result_all = cat(1,sum_A(:).area_A); <-- I DID IT !!! \o/
 %name_all = cat(1,results(:).combn); < -- IT WORKS !!!
 %result_combn = categorical(result_combn);
@@ -83,4 +115,25 @@ end
 % bar(result_areaA)
 % set(gca,'XTickLabel',result_combn)
 %profile viewer
+for j = 1:size(results,1)
+for i = 1:size(results(j).a_all_cells(:,1),1)
+    b_area(1,i) = (sum(results(j).a_all_cells(i,:)));
+   %Var_E_plot(results,i);
+%    scatter([results.a_Est(i,:)],results.Var_a(i,:),8,results.a_Est(i,:))
+%    hold on
+% set(gca,'CLim',[0,prctile(results.a_Est(i,:),95)*1.2])
+% colorbar
+% xlabel('E(a)')
+% ylabel('Var(a)')
+%set(gca,'YLim',[0,prctile(results.Var_a(i,:),95)*1.2])
+end
+B_area{j} = b_area;
+end
+b_all = horzcat(B_area{1,1},B_area{1,2});
+bar(b_all);
+[min_area,z]=min(b_all)
+
+% for z
+%     
+% end
 end
