@@ -65,7 +65,7 @@ results = cat(1,Summary{:});
 f = cell(1,size(ic,1));
 
 binsize =0.2;
-for i = 1:27 %27
+for i = 1:size(ic,1) % For all 27 species
    xwant = linspace(0,1,size(results(1).a_Est(i,:),2));
    x = normdata(results(1).a_Est(i,:));
    y = results(1).Var_a(i,:);
@@ -119,29 +119,44 @@ for i = 2%:2%size(ic,1)
         trap_area(1,j) = trapz(y_3);
     end
 end
-[h,T] = min(trap_area);
-best = C(T,:)
+[h,Track] = min(trap_area);
+best = C(Track,:);
 
-% %% Second round
-% [row,col]=find(C(:) == [best])
+%% %% Second round
+ %row=find(C(:) == [best]);
 % 
-% for i = 3:size(ic,1)
-%     C = WChooseK(x,i);
-%     trap_area = zeros(1,size(C,1));
-%     for j = 1:size(C,1)
-%         combination = C(j,:);
-%         %y_1 = f{C(j,1)}(x_linspace);
-%         %y_2 = f{C(j,2)}(x_linspace);
-%         y_1 = y(C(j,1),:);
-%         y_2 = y(C(j,2),:);
-%         y_3 = bsxfun(@min, y_1,y_2);
-%         %area_1 = trapz(y_1);
-%         %area_2 = trapz(y_2);
-%         trap_area(1,j) = trapz(y_3);
-%     end
-% end
-% [h,T] = min(trap_area);
-% best = C(T,:)
+for i = 3%:size(ic,1)
+    C = WChooseK(x,i);
+    row=find(C(:) == [best]);
+    trap_area = zeros(1,size(C,1));
+    for j = 1:size(C,1)
+        combination = C(j,:); %Select only the best combinations!
+        %y_1 = f{C(j,1)}(x_linspace);
+        %y_2 = f{C(j,2)}(x_linspace);
+        y_1 = y(C(j,1),:);
+        y_2 = y(C(j,2),:);
+        y_3 = bsxfun(@min, y_1,y_2);
+        %area_1 = trapz(y_1);
+        %area_2 = trapz(y_2);
+        trap_area(1,j) = trapz(y_3);
+    end
+end
+%[h,T] = min(trap_area);
+%best = C(T,:)
+
+%==========================================================================
+% MATLAB FORUM!
+A = [1 5 6; 5 4 3; 9 4 2];
+want = [4 5];
+
+szA = size(A,1);
+idx = false(szA,1);
+
+for ii = 1:szA
+  idx(ii) = all(ismember(want,A(ii,:)));
+end
+find(idx)
+%==========================================================================
 %% Plots
 b_area = zeros(1,size(ic,1));
 B_area = cell(1,size(results,1));
