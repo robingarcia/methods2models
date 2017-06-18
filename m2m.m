@@ -27,12 +27,6 @@ toc
 end
 results = cat(1,Summary{:});
 
-% [var_age,z] = sort(summary.area_A);
-% for j = 2:size(ic,1)
-%     
-%     
-% end
-
 
 % %% Purge the results
 % tic
@@ -85,78 +79,83 @@ for i = 1:size(ic,1) % For all 27 species
 end
 %% New datapoints
 x = linspace(0,1,size(errordata,2));
-y = zeros(size(ic,1),size(errordata,2));
-Q = zeros(1,size(ic,1));
+y = zeros(size(ic,1),size(errordata,2));% Functions of all species
+Q = zeros(1,size(ic,1)); %Area under the curve? 
 for i = 1:size(ic,1) 
-    y(i,:) = f{i}(x);
+    y(i,:) = f{i}(x);%Calculate the function
 %     Q(1,i) = trapz(x,y(i,:));
-    Q(1,i) = trapz(y(i,:));
+    Q(1,i) = trapz(y(i,:));%Calculate the area
 %     figure(i)
 %     plot(x,y(i,:))
 %     hold on
 end
-%% ---- New calculated data points
-x = 1:size(ic,1);
-x_linspace = linspace(0,1,size(errordata,2));
-
-for x = x
-    datapoint_set(x,:) = f{x}(x_linspace);
-end
-%% --tr5
+% %% ---- New calculated data points
+% x = 1:size(ic,1);
+% x_linspace = linspace(0,1,size(errordata,2));
+% 
+% for x = x
+%     datapoint_set(x,:) = f{x}(x_linspace);
+% end
+%% -- 2 combinations
+results_save = cell(4,27);
 x = 1:size(ic,1);
 for i = 2%:2%size(ic,1)
+    results_save{1,i} = i; % Number of simultaneous measurements
     C = WChooseK(x,i);
     trap_area = zeros(1,size(C,1));
     for j = 1:size(C,1)
-        combination = C(j,:);
+        %combination = C(j,:);
         %y_1 = f{C(j,1)}(x_linspace);
         %y_2 = f{C(j,2)}(x_linspace);
         y_1 = y(C(j,1),:);
         y_2 = y(C(j,2),:);
-        y_3 = bsxfun(@min, y_1,y_2);
+        y_previous = bsxfun(@min, y_1,y_2);
         %area_1 = trapz(y_1);
         %area_2 = trapz(y_2);
-        trap_area(1,j) = trapz(y_3);
+        trap_area(1,j) = trapz(y_previous);
     end
 end
 [h,Track] = min(trap_area);
 best = C(Track,:);
-
-%% %% Second round
+results_save{2,i} = best;
+results_save{3,i} = h;
+results_save{4,i} = y_previous;
+%% %% Second round with 2+n combinations
  %row=find(C(:) == [best]);
 % 
-for i = 3%:size(ic,1)
-    C = WChooseK(x,i);
-    row=find(C(:) == [best]);
-    trap_area = zeros(1,size(C,1));
-    for j = 1:size(C,1)
-        combination = C(j,:); %Select only the best combinations!
-        %y_1 = f{C(j,1)}(x_linspace);
-        %y_2 = f{C(j,2)}(x_linspace);
-        y_1 = y(C(j,1),:);
-        y_2 = y(C(j,2),:);
-        y_3 = bsxfun(@min, y_1,y_2);
+for i = 3%:5%size(ic,1)
+    results_save{1,i} = i; % Number of simultaneous measurements
+    C = WChooseK(x,i); %Calculate new combinations
+    szC = size(C,1);
+    idx = false(szC,1);
+    for ii = 1:szC
+        idx(ii) = all(ismember(results_save{2,i-1},C(ii,:)));
+    end
+    find_rows = find(idx);%Which combinations contain the previous combination?
+    %trap_area = zeros(1,size(C,1));
+    for j = 1:size(find_rows,1)
+        %combination = C(j,:); %Select only the best combinations!
+        old_combination = results_save{2,i-1};
+        new_combination = C(find_rows(j,1),:);
+        use_combination = setdiff(new_combination,old_combination);
+        for use_combination = use_combination
+        y_actual = f{use_combination}(x_linspace);
+        y_previous = results_save{4,i-1};
+        %y_actual = y(C(find_rows(j,:),:);% What do we need here? 
+        y_new = bsxfun(@min, y_actual,y_previous);
         %area_1 = trapz(y_1);
         %area_2 = trapz(y_2);
-        trap_area(1,j) = trapz(y_3);
+        trap_area(1,j) = trapz(y_new);
+        end
     end
+[h,T] = min(trap_area);%Error because he use 0 as minimum :-/
+best = C(T,:);%also extract previous numbers here
+best_prev = results_save{2,i-1};
+best = horzcat(best,best_prev);% n best (but here n+n best)!!!
+results_save{2,i} = best;
+results_save{3,i} = h;
+results_save{4,i} = y_previous;
 end
-%[h,T] = min(trap_area);
-%best = C(T,:)
-
-%==========================================================================
-% MATLAB FORUM!
-A = [1 5 6; 5 4 3; 9 4 2];
-want = [4 5];
-
-szA = size(A,1);
-idx = false(szA,1);
-
-for ii = 1:szA
-  idx(ii) = all(ismember(want,A(ii,:)));
-end
-find(idx)
-%==========================================================================
 %% Plots
 b_area = zeros(1,size(ic,1));
 B_area = cell(1,size(results,1));
@@ -183,7 +182,7 @@ B_area{j} = b_area;
 end
 b_all = horzcat(B_area{1,1},B_area{1,2});
 bar(b_all);
-[min_area,z]=min(b_all)
+[min_area,z]=min(b_all);
 
 % for z
 %     
