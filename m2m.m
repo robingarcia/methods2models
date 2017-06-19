@@ -97,10 +97,12 @@ end
 %     datapoint_set(x,:) = f{x}(x_linspace);
 % end
 %% -- 2 combinations
-results_save = cell(4,27);
+%results_save = cell(4,27);
+results_save = ([]);
 x = 1:size(ic,1);
 for i = 2%:2%size(ic,1)
-    results_save{1,i} = i; % Number of simultaneous measurements
+    %results_save{1,i} = i; % Number of simultaneous measurements
+    results_save.i = i;
     C = WChooseK(x,i);
     trap_area = zeros(1,size(C,1));
     for j = 1:size(C,1)
@@ -117,46 +119,90 @@ for i = 2%:2%size(ic,1)
 end
 [h,Track] = min(trap_area);
 best = C(Track,:);
-results_save{2,i} = best;
-results_save{3,i} = h;
-results_save{4,i} = y_previous;
+for j = Track
+    y_1 = y(C(j,1),:);
+    y_2 = y(C(j,2),:);
+    y_previous = bsxfun(@min, y_1,y_2); 
+end
+% results_save{2,i} = best;
+% results_save{3,i} = h;
+% results_save{4,i} = y_previous;
+results_save.best = best;
+results_save.h = h;
+results_save.y_previous = y_previous;
+Results_save{i} = results_save;
 %% %% Second round with 2+n combinations
  %row=find(C(:) == [best]);
-% 
-for i = 3%:5%size(ic,1)
-    results_save{1,i} = i; % Number of simultaneous measurements
+x_linspace = linspace(0,1,size(errordata,2));
+trap_area = 0;
+for i = 3:size(ic,1)
+    tic
+    disp(i)
+    %results_save{1,i} = i;% Number of simultaneous measurements
+    results_save.i = i;
     C = WChooseK(x,i); %Calculate new combinations
-    szC = size(C,1);
-    idx = false(szC,1);
-    for ii = 1:szC
-        idx(ii) = all(ismember(results_save{2,i-1},C(ii,:)));
-    end
-    find_rows = find(idx);%Which combinations contain the previous combination?
+%     szC = size(C,1);
+%     idx = false(szC,1);
+%     for ii = 1:szC
+%         idx(ii) = all(ismember(results_save{2,i-1},C(ii,:)));
+%     end
+%     find_rows = find(idx);%Which combinations contain the previous combination?
     %trap_area = zeros(1,size(C,1));
-    for j = 1:size(find_rows,1)
+%     for j = 1:size(find_rows,1)
         %combination = C(j,:); %Select only the best combinations!
-        old_combination = results_save{2,i-1};
-        new_combination = C(find_rows(j,1),:);
+        old_combination = Results_save{1,i-1}.best;%results_save{2,i-1};
+        new_combination = 1:size(ic,1); %C(find_rows(j,1),:);
         use_combination = setdiff(new_combination,old_combination);
+        trap_area = zeros(1,size(use_combination,2));
+        y_new = zeros(size(use_combination,2),size(x_linspace,2));%??
+        y_previous = Results_save{1,i-1}.y_previous; %results_save{4,i-1};
         for use_combination = use_combination
         y_actual = f{use_combination}(x_linspace);
-        y_previous = results_save{4,i-1};
+        %y_previous = results_save{4,i-1};
         %y_actual = y(C(find_rows(j,:),:);% What do we need here? 
-        y_new = bsxfun(@min, y_actual,y_previous);
+        y_new(use_combination,:) = bsxfun(@min, y_actual,y_previous);
         %area_1 = trapz(y_1);
         %area_2 = trapz(y_2);
-        trap_area(1,j) = trapz(y_new);
+        trap_area(1,use_combination) = trapz(y_new(use_combination,:));
         end
-    end
-[h,T] = min(trap_area);%Error because he use 0 as minimum :-/
-best = C(T,:);%also extract previous numbers here
-best_prev = results_save{2,i-1};
-best = horzcat(best,best_prev);% n best (but here n+n best)!!!
-results_save{2,i} = best;
-results_save{3,i} = h;
-results_save{4,i} = y_previous;
+%     end
+trap_area(trap_area == 0) = NaN;
+[h,T] = min(trap_area);%min has a bug!!!?
+%best = C(T,:);%also extract previous numbers here (LATER!!)
+best_prev = Results_save{1,i-1}.best;%results_save{2,i-1};
+best = sort(horzcat(best_prev,T));% n best (but here n+n best)!!!
+
+%     szC = size(C,1);
+%     idx = false(szC,1);
+%     for ii = 1:szC
+%         idx(ii) = all(ismember(best,C(ii,:)));
+%     end
+%     find_rows = find(idx);%Which combinations contain the previous combination?
+
+% results_save{2,i} = best;
+% results_save{3,i} = h;
+% results_save{4,i} = y_new(T,:);
+y_new(T,:) = y_previous;
+results_save.best = best;
+results_save.h = h;
+% results_save.y_new = y_new(T,:);
+results_save.y_previous = y_previous;%(T,:);
+Results_save{i} = results_save;
+toc
+if Results_save{i-1}.h <= Results_save{i}.h %results_save{3,i-1} <= results_save{3,i}
+
+    break
+    
 end
-%% Plots
+end
+Result_all = cat(1,Results_save{:});
+
+for i = 1:size(Result_all,1)
+    H(1,i) = Result_all(i).h;
+    
+end
+bar(H);
+%% 2 Plots
 b_area = zeros(1,size(ic,1));
 B_area = cell(1,size(results,1));
 %result_all = cat(1,sum_A(:).area_A); <-- I DID IT !!! \o/
