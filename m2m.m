@@ -19,7 +19,7 @@ statenames = statenames(nzero);
 
 %% Pre computation --------------------------------------------------------
 Summary=cell(1,size(ic,1));%Preallocation
-for j = [1 2 27]%size(ic,1)%[2,27]%1%:2
+for j = 1%[1 2 27]%size(ic,1)%[2,27]%1%:2
     tic
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 Summary{j} = summary;
@@ -65,17 +65,17 @@ for i = 1:size(ic,1) % For all 27 species
    y = results(1).Var_a(i,:);
    ywant = moving_average(x,y,xwant,binsize);
    f{i} = griddedInterpolant(xwant,ywant,'cubic');%Linear?
-%    figure(i)
-%    scatter(x,y)
-%    hold on
-%    plot(xwant,ywant,'x');
-%    %legend(statenames(i));
-%    hold on
-%    plot((linspace(0,1,size(results(1).a_Est(i,:),2))),f{i}((linspace(0,1,size(results(1).a_Est(i,:),2)))),'g');
-%    hold on
-%    %legend(statenames([1:27]));
-%    xlabel('E(age)')        % x-axis label
-%    ylabel('Variance(age)') % y-axis label
+   figure(i)
+   scatter(x,y)
+   hold on
+   plot(xwant,ywant,'x');
+   %legend(statenames(i));
+   hold on
+   plot((linspace(0,1,size(results(1).a_Est(i,:),2))),f{i}((linspace(0,1,size(results(1).a_Est(i,:),2)))),'g');
+   hold on
+   %legend(statenames([1:27]));
+   xlabel('E(age)')        % x-axis label
+   ylabel('Variance(age)') % y-axis label
 end
 %% New datapoints
 x = linspace(0,1,size(errordata,2));
