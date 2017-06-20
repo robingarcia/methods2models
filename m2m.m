@@ -19,7 +19,7 @@ statenames = statenames(nzero);
 
 %% Pre computation --------------------------------------------------------
 Summary=cell(1,size(ic,1));%Preallocation
-for j = 1%[1 2 27]%size(ic,1)%[2,27]%1%:2
+for j = [1 2 27]%size(ic,1)%[2,27]%1%:2
     tic
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 Summary{j} = summary;
@@ -58,33 +58,35 @@ results = cat(1,Summary{:});
 % % --------------------------------------------------------------------------
 f = cell(1,size(ic,1));
 
-binsize =0.2;
+binsize =0.1;
 for i = 1:size(ic,1) % For all 27 species
    xwant = linspace(0,1,size(results(1).a_Est(i,:),2));
    x = normdata(results(1).a_Est(i,:));
    y = results(1).Var_a(i,:);
    ywant = moving_average(x,y,xwant,binsize);
+   
+%    Q(1,i) = trapz(xwant,ywant);%Calculate the area
    f{i} = griddedInterpolant(xwant,ywant,'cubic');%Linear?
-   figure(i)
-   scatter(x,y)
-   hold on
-   plot(xwant,ywant,'x');
-   %legend(statenames(i));
-   hold on
-   plot((linspace(0,1,size(results(1).a_Est(i,:),2))),f{i}((linspace(0,1,size(results(1).a_Est(i,:),2)))),'g');
-   hold on
-   %legend(statenames([1:27]));
-   xlabel('E(age)')        % x-axis label
-   ylabel('Variance(age)') % y-axis label
+%    figure(i)
+%    scatter(x,y)
+%    hold on
+%    plot(xwant,ywant,'x');
+%    %legend(statenames(i));
+%    hold on
+%    plot(xwant,f{i}(xwant),'g');
+%    hold on
+%    %legend(statenames([1:27]));
+%    xlabel('E(age)')        % x-axis label
+%    ylabel('Variance(age)') % y-axis label
 end
 %% New datapoints
 x = linspace(0,1,size(errordata,2));
 y = zeros(size(ic,1),size(errordata,2));% Functions of all species
-Q = zeros(1,size(ic,1)); %Area under the curve? 
+% Q = zeros(1,size(ic,1)); %Area under the curve? 
 for i = 1:size(ic,1) 
     y(i,:) = f{i}(x);%Calculate the function
 %     Q(1,i) = trapz(x,y(i,:));
-    Q(1,i) = trapz(y(i,:));%Calculate the area
+%     Q(1,i) = trapz(x,y(i,:));%Calculate the area
 %     figure(i)
 %     plot(x,y(i,:))
 %     hold on
@@ -98,12 +100,13 @@ end
 % end
 %% -- 2 combinations
 %results_save = cell(4,27);
+x = normdata(linspace(0,1,size(errordata,2)));
 results_save = ([]);
-x = 1:size(ic,1);
+z = 1:size(ic,1);
 for i = 2%:2%size(ic,1)
     %results_save{1,i} = i; % Number of simultaneous measurements
     results_save.i = i;
-    C = WChooseK(x,i);
+    C = WChooseK(z,i);
     trap_area = zeros(1,size(C,1));
     for j = 1:size(C,1)
         %combination = C(j,:);
@@ -111,10 +114,10 @@ for i = 2%:2%size(ic,1)
         %y_2 = f{C(j,2)}(x_linspace);
         y_1 = y(C(j,1),:);
         y_2 = y(C(j,2),:);
-        y_previous = bsxfun(@min, y_1,y_2);
+        y_previous = min(y_1,y_2);%bsxfun(@min, y_1,y_2); %min instead of bsxfun!!!
         %area_1 = trapz(y_1);
         %area_2 = trapz(y_2);
-        trap_area(1,j) = trapz(y_previous);
+        trap_area(1,j) = trapz(x,y_previous);
     end
 end
 [h,Track] = min(trap_area);
@@ -122,7 +125,7 @@ best = C(Track,:);
 for j = Track
     y_1 = y(C(j,1),:);
     y_2 = y(C(j,2),:);
-    y_previous = bsxfun(@min, y_1,y_2); 
+    y_previous = min(y_1,y_2);%bsxfun(@min, y_1,y_2); %min instead of bsxfun!!!
 end
 % results_save{2,i} = best;
 % results_save{3,i} = h;
@@ -131,16 +134,68 @@ results_save.best = best;
 results_save.h = h;
 results_save.y_previous = y_previous;
 Results_save{i} = results_save;
+
+%% -- New approach ========================================================
+k=1;
+binsize =0.1;
+% f_star = cell(1,1);
+bestcomb = cell(size(ic,1),2);
+bestcombo = results_save.best;
+f_combo = results_save.y_previous;
+number_species = size(ic,1);
+while k < number_species
+    if k == 1 %initial run  
+    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
+    xwant = linspace(0,1,size(combo.a_E(1,:),2));
+    x = normdata(combo.a_E(1,:));
+    y = combo.Variance_A(1,:);
+    ywant = moving_average(x,y,xwant,binsize);
+    f_star = griddedInterpolant(xwant,ywant,'cubic');
+    
+    for i = 1:size(ic,1)
+    best_additional(i,:) = trapz(x,bsxfun(@min,f_combo,f_star(x)));%Error!
+    end
+    [best_additional,T] = min(best_additional,1);
+%     if k == 1 %initial run
+%     for i = 1:size(combo,2)
+%         for j = 1:size(bestcombo,2)
+%             y_combination(j,:) = f{bestcombo(1,j)}(x);            
+%         end
+%         for j = 1:size(y_combination,1)
+%             y_min(i,:) = min(); 
+%         end
+%         best_additional = min(trapz(x,f_combo-f_star));
+%     end 
+    else
+    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
+    xwant = linspace(0,1,size(combo.a_E(1,:),2));
+    x = normdata(combo.a_E(1,:));
+    y = combo.Variance_A(1,:);
+    ywant = moving_average(x,y,xwant,binsize);
+    f_star = griddedInterpolant(xwant,ywant,'cubic');    
+    end
+    
+    for i = 1:size(ic,1)
+    best_additional(i,:) = trapz(x,f_combo-f_star(x));
+    end
+    [best_additional,T] = min(best_additional,1);
+    best_comb{k,1} = bestcombo;
+    best_comb{k,2} = T;%
+    k = k+1;
+    f_combo = best_additional(T,:);
+    bestcombo = sort(horzcat(best_comb{k-1,1},best_comb{k-1,2}));
+end
 %% %% Second round with 2+n combinations
  %row=find(C(:) == [best]);
 x_linspace = linspace(0,1,size(errordata,2));
+z = 1:size(ic,1);
 trap_area = 0;
 for i = 3:size(ic,1)
     tic
     disp(i)
     %results_save{1,i} = i;% Number of simultaneous measurements
     results_save.i = i;
-    C = WChooseK(x,i); %Calculate new combinations
+    C = WChooseK(z,i); %Calculate new combinations
 %     szC = size(C,1);
 %     idx = false(szC,1);
 %     for ii = 1:szC
@@ -160,10 +215,10 @@ for i = 3:size(ic,1)
         y_actual = f{use_combination}(x_linspace);
         %y_previous = results_save{4,i-1};
         %y_actual = y(C(find_rows(j,:),:);% What do we need here? 
-        y_new(use_combination,:) = bsxfun(@min, y_actual,y_previous);
+        y_new(use_combination,:) = min(y_actual,y_previous);% bsxfun(@min, y_actual,y_previous);
         %area_1 = trapz(y_1);
         %area_2 = trapz(y_2);
-        trap_area(1,use_combination) = trapz(y_new(use_combination,:));
+        trap_area(1,use_combination) = trapz(x_linspace,y_new(use_combination,:));
         end
 %     end
 trap_area(trap_area == 0) = NaN;
@@ -189,11 +244,11 @@ results_save.h = h;
 results_save.y_previous = y_previous;%(T,:);
 Results_save{i} = results_save;
 toc
-if Results_save{i-1}.h <= Results_save{i}.h %results_save{3,i-1} <= results_save{3,i}
-
-    break
-    
-end
+% if Results_save{i-1}.h <= Results_save{i}.h %results_save{3,i-1} <= results_save{3,i}
+% 
+%     break
+%     
+% end
 end
 Result_all = cat(1,Results_save{:});
 

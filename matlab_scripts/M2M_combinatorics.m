@@ -47,7 +47,7 @@ disp(disp_var)
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
-options.path_weights = ones(1,length(options.PathIndex))*10;%20;
+options.path_weights = ones(1,length(options.PathIndex))*100;%10;%20;
 % options.path_weights = ones(1,size(wdata,2))*10;
 PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
 

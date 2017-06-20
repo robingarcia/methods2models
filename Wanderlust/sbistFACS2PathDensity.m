@@ -157,14 +157,14 @@ testmat = [test{:}]';
 end
 % weights for each datapoint test is the contribution of each single datapoint
 % as density on s 
-weights = trapz(Sout,testmat);
+weights = trapz(Sout,testmat);%w;
 testmatnormed = testmat * diag(1./weights);
 
 s_single_cell = mat2cell(testmatnormed,length(Sout),ones(n,1));
 
 fh_spdf_single = @(s) interp1(Sout,testmatnormed,s,'linear',eps);
 
-pdfpoints = sum(testmatnormed,2);
+pdfpoints = sum(testmatnormed,2);%Sometimes NaN. But why?
 
 % function handles to the pdf, cdf and derivative of pdf
 spdf = pdfpoints ./ trapz(Sout,pdfpoints);
