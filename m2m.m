@@ -6,7 +6,7 @@ addpath(genpath('~/methods2models'));
 load('~/methods2models/datasets/toettcher_statenames.mat');
 
 %% Datageneration ---------------------------------------------------------
-[ic,~,errordata,y_0,t_period,~,~] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
+[ic,~,errordata,y_0,t_period,~,~,tspan] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
 
 %% Purge datasets
 [errordata,~,nzero] = M2M_purge(errordata);

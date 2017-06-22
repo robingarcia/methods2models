@@ -1,4 +1,4 @@
-function [ic,mydata,errordata,y_0,t_period,N,snaps] = data_generation
+function [ic,mydata,errordata,y_0,t_period,N,snaps,tspan] = data_generation
 %profile on
 addpath(genpath('~/methods2models'));
 %load('toettcher_statenames.mat');
