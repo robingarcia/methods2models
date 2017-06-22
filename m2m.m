@@ -141,64 +141,104 @@ disp(k)
 binsize =0.1;
 % f_star = cell(1,1);
 best_comb = cell(size(ic,1),3);
+best_additional = zeros(1,27);
 bestcombo = results_save.best;
-f_combo = results_save.y_previous;
 number_species = size(ic,1);
 area = results_save.h; %Area under curve
+f_combo = results_save.y_previous;
 % best_additional = zeros(size(ic,1),size(y_previous,2));
 while k < number_species
-    if k == 1 %initial run  
-    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
-    xwant = linspace(0,1,size(combo.a_E(1,:),2));
-    x = normdata(combo.a_E(1,:));
-    %y = combo.Variance_A(1,:);
-    ywant = moving_average(x,y,xwant,binsize);
+%     if k == 1 %initial run
+%         bestcombo = results_save.best;
+%     combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
+%     xwant = linspace(0,1,size(combo.a_E(1,:),2));
+%     x = normdata(combo.a_E(1,:));
+%     %y = combo.Variance_A(1,:);
+%     ywant = moving_average(x,y,xwant,binsize);
+%     f_star = griddedInterpolant(xwant,f_combo,'cubic');
+    
+
+%     else
+%     combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
+%     xwant = linspace(0,1,size(combo.a_E(1,:),2));
+    xwant = linspace(0,1,size(y_previous,2));
+
+%     x = normdata(combo.a_E(1,:));
+%     y = combo.Variance_A(1,:);
+%     ywant = moving_average(x,y,xwant,binsize);
     f_star = griddedInterpolant(xwant,f_combo,'cubic');
+%     f_star = griddedInterpolant(xwant,ywant,'cubic');
     
-%     for i = 1:size(ic,1)
-%     %best_additional(i,:) = trapz(xwant,bsxfun(@min,f{i}(xwant),f_star(xwant)));%Error!
-%     best_additional(i) = min(trapz(xwant,f{i}(xwant)-f_star(xwant)));%Error!
+
 %     end
-%     [best_additional,T] = min(best_additional);
-%     best_additional = f{T}(xwant)-f_star(xwant);
-    else
-    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
-    xwant = linspace(0,1,size(combo.a_E(1,:),2));
-    x = normdata(combo.a_E(1,:));
-    y = combo.Variance_A(1,:);
-    ywant = moving_average(x,y,xwant,binsize);
-    f_star = griddedInterpolant(xwant,f_combo,'cubic');
     
+j = 1:size(ic,1);
+j=j(~ismember(j,bestcombo));%Exclude numbers that were already used
     
-    
-    for i = 1:size(ic,1)
-    best_additional(i) = trapz(xwant,bsxfun(@minus,f{i}(xwant),f_star(xwant)));%Error!
+    for i=j% = 1:size(ic,1)
+        no_1 = trapz(xwant,f_star(xwant));
+        no_2 = trapz(xwant,f{i}(xwant));
+        no_3 = no_2-no_1;
+%     best_additional(1,i) = trapz(xwant,bsxfun(@minus,f{i}(xwant),f_star(xwant)));%Error!
 %     best_additional(i) = min(trapz(xwant,f{i}(xwant)-f_star(xwant)));%Error!
+best_additional(1,i) = no_3; %trapz(xwant,no_2 - no_1);%Error
     end
-    [best_additional,T] = min(best_additional);%It is nonsens to extract T!!!
-    area = best_additional;
-    best_additional = f{T}(xwant)-f_star(xwant);
-    end
+    best_additional(best_additional == 0) = NaN;%Exclude 0 as minimal value
+    [area,T] = min(best_additional);%It is nonsens to extract T!!!
+    disp(T);
+    %best_additional = f{T}(xwant)-f_star(xwant);%Check T (matrix dimension)
+    %end
     
-%     for i = 1:size(ic,1)
-%     %best_additional(i,:) = trapz(xwant,bsxfun(@min,f{i}(xwant),f_star(xwant)));%Error!
-%     best_additional(i) = min(trapz(xwant,f{i}(xwant)-f_star(xwant)));%Error!
-%     end
-%     [best_additional,T] = min(best_additional);
-%     best_additional = f{T}(xwant)-f_star(xwant);
-%     for i = 1:size(ic,1)
-%     best_additional(i,:) = trapz(x,f_combo-f_star(x));
-%     end
-%     [best_additional,T] = min(best_additional);
     %----------------------------------------------------------------------
     best_comb{k,1} = bestcombo;
     best_comb{k,2} = T;%
     best_comb{k,3} = area; 
-%     k = k+1;
-    f_combo = best_additional;%(T,:);
+%   k = k+1;
+    %f_combo = best_additional;%(T,:);
     bestcombo = sort(horzcat(best_comb{k,1},best_comb{k,2}));
     k = k+1;
     disp(k)
+end
+%==========================================================================
+
+%% New approach 2 (it works without any error so far)
+k=1;
+binsize = 0.1;
+number_species = size(ic,1);
+best_comb = cell(size(ic,1)-2,3);
+f_combo = results_save.y_previous;
+bestcombo = results_save.best;
+x = linspace(0,1,size(f_combo,2));
+while k < 27
+j = 1:size(ic,1);
+j = setdiff(j,bestcombo);%Exclude numbers that were already used
+best_additional = zeros(1,size(j,2));
+if k == 1
+for i = j
+   best_additional(1,i) = trapz(x,minus(f{i}(x),f_combo));
+end
+
+else
+    % Wanderlust recalculate
+    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);
+    x_wand = normdata(combo.a_E);
+    y_wand = combo.Variance_A;
+    ywant = moving_average(x_wand, y_wand, x, binsize);
+    f_star = griddedInterpolant(x,ywant,'cubic');
+    for i = j
+   best_additional(1,i) = trapz(x,minus(f{i}(x),f_star(x)));
+    end
+end
+
+
+best_additional(best_additional == 0) = NaN;
+[area,T] = min(best_additional);
+best_comb{k,1} = bestcombo;
+best_comb{k,2} = T;%
+best_comb{k,3} = area;
+bestcombo = sort(horzcat(best_comb{k,1},best_comb{k,2}));
+k = k+1;
+disp(k)
 end
 %==========================================================================
 %% %% Second round with 2+n combinations
