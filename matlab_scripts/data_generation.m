@@ -1,4 +1,4 @@
-function [ic,mydata,errordata,y_0,t_period,N,snaps,tspan] = data_generation
+function [ic,mydata,errordata,y_0,t_period,N,snaps,time] = data_generation
 %profile on
 addpath(genpath('~/methods2models'));
 %load('toettcher_statenames.mat');
@@ -55,12 +55,12 @@ disp('Simulate the model--------------------------------------------------')
 %m = size(samples,2);         %
 rndm_measurement = cell(1,N);%
 measurement = cell(1,N);     %
-%TSPAN = zeros(N,m+2);        %
+TSPAN = zeros(N,snaps+2);        %
 %----------------------------%
 tic
 for i = 1:N 
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
-    %TSPAN(i,:) = tspan;
+    TSPAN(i,:) = tspan;
     simulationIC = start(i,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
 %--------------------------------------------------------------------------
 % NEW SIMULATION (SNAPSHOTS)
@@ -74,7 +74,7 @@ measurement{i} = measurement{i}(:,2:end-1);
 end
 toc
 mydata = cell2mat(measurement);
-
+time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
 %% 7) Error model (add noise to dataset) ---------------------------------%
 disp('Error model (add noise to dataset) ---------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

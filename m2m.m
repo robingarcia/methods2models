@@ -6,7 +6,7 @@ addpath(genpath('~/methods2models'));
 load('~/methods2models/datasets/toettcher_statenames.mat');
 
 %% Datageneration ---------------------------------------------------------
-[ic,~,errordata,y_0,t_period,~,~,tspan] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
+[ic,~,errordata,y_0,t_period,~,~,time] = data_generation;%(tmax,tF,lb,N,sig,snapshots);
 
 %% Purge datasets
 [errordata,~,nzero] = M2M_purge(errordata);
@@ -140,7 +140,7 @@ k=1;
 disp(k)
 binsize =0.1;
 % f_star = cell(1,1);
-best_comb = cell(size(ic,1),3);
+best_comb = ([]);%cell(size(ic,1),3);
 best_additional = zeros(1,27);
 bestcombo = results_save.best;
 number_species = size(ic,1);
@@ -190,9 +190,9 @@ best_additional(1,i) = no_3; %trapz(xwant,no_2 - no_1);%Error
     %end
     
     %----------------------------------------------------------------------
-    best_comb{k,1} = bestcombo;
-    best_comb{k,2} = T;%
-    best_comb{k,3} = area; 
+    best_comb.bestcombo = bestcombo;%{k,1} = bestcombo;
+    best_comb.T = T;%{k,2} = T;%
+    best_comb.area = area;%{k,3} = area; 
 %   k = k+1;
     %f_combo = best_additional;%(T,:);
     bestcombo = sort(horzcat(best_comb{k,1},best_comb{k,2}));
@@ -204,15 +204,16 @@ end
 %% New approach 2 (it works without any error so far)
 k=1;
 binsize = 0.1;
-number_species = size(ic,1);
+
 best_comb = cell(size(ic,1)-2,3);
 f_combo = results_save.y_previous;
 bestcombo = results_save.best;
+number_species = minus(size(ic,1),size(bestcombo,2));
 x = linspace(0,1,size(f_combo,2));
-while k < 27
+while k < number_species
 j = 1:size(ic,1);
 j = setdiff(j,bestcombo);%Exclude numbers that were already used
-best_additional = zeros(1,size(j,2));
+best_additional = zeros(1,size(ic,2));
 if k == 1
 for i = j
    best_additional(1,i) = trapz(x,minus(f{i}(x),f_combo));
@@ -226,7 +227,8 @@ else
     ywant = moving_average(x_wand, y_wand, x, binsize);
     f_star = griddedInterpolant(x,ywant,'cubic');
     for i = j
-   best_additional(1,i) = trapz(x,minus(f{i}(x),f_star(x)));
+   best_additional(1,i) = trapz(x,minus(f{i}(x),ywant));%f_star(x)));
+%    best_additional(1,i) = trapz(x,minus(f{T}(x),f{i}(x)));
     end
 end
 
@@ -236,7 +238,7 @@ best_additional(best_additional == 0) = NaN;
 best_comb{k,1} = bestcombo;
 best_comb{k,2} = T;%
 best_comb{k,3} = area;
-bestcombo = sort(horzcat(best_comb{k,1},best_comb{k,2}));
+bestcombo = horzcat(best_comb{k,1},best_comb{k,2});%remove sort
 k = k+1;
 disp(k)
 end
