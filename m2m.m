@@ -205,7 +205,7 @@ end
 k=1;
 binsize = 0.1;
 
-best_comb = cell(size(ic,1)-2,3);
+best_comb = cell(size(ic,1)-2,4);
 f_combo = results_save.y_previous;
 bestcombo = results_save.best;
 number_species = minus(size(ic,1),size(bestcombo,2));
@@ -238,9 +238,39 @@ best_additional(best_additional == 0) = NaN;
 best_comb{k,1} = bestcombo;
 best_comb{k,2} = T;%
 best_comb{k,3} = area;
+best_comb{k,4} = best_additional;
 bestcombo = horzcat(best_comb{k,1},best_comb{k,2});%remove sort
 k = k+1;
 disp(k)
+end
+
+for i = 1:24
+    B(i,1) = best_comb{i,3};
+    D(i,1) = best_comb{i,2};
+end
+
+for i = 1:24
+    figure(i)
+    hold on
+    plot(y_previous,'LineWidth',5)
+    hold on
+    plot(f{D(i,1)}(x));
+    hold on
+    plot(f{D(i+1,1)}(x));
+    lgd = legend('7,12',num2str(D(i,1)),num2str(D(i+1,1)));
+    title(lgd,'Combination')
+    xlabel('E(age)')        % x-axis label
+    ylabel('Variance(age)') % y-axis label
+end
+
+for i = 1:24
+   figure(i)
+   hold on
+   for j = best_comb{i,1}
+   plot(f{j}(x));
+   hold on
+   end
+   plot(f{D(i,1)}(x));
 end
 %==========================================================================
 %% %% Second round with 2+n combinations
