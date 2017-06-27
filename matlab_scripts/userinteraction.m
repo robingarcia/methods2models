@@ -1,4 +1,4 @@
-function [filename,tF,lb,n,ic,snaps,sig] = userinteraction
+function [filename,tF,lb,n,snaps,sig] = userinteraction
 % This function submits parameters like simulation time, cell number etc. 
 % 
 % 
@@ -19,8 +19,6 @@ function [filename,tF,lb,n,ic,snaps,sig] = userinteraction
 % tF:             number: see above
 % lb:             number: see above
 % n:              number: see above
-% ic:             number: The initial conditions which were imported from your *.csv file
-
 
 addpath(genpath('~/methods2models'));
 filename = datestr(now,30); %Timestamp
@@ -31,12 +29,6 @@ lb = input('Start timepoint t_1? (e.g: [2800]):');
 n = input('How many cells? (e.g: [20]):');% n new datasets
 snaps = input('How many snapshots? (e.g: [2]):');% n new datasets
 sig = input('Choose your sigma (e.g: [0.05]):');% Sigma for errordata
-%mout = input('Number of simultaneously used markers (e.g: [1]):');% Simultaneous measurement outputs
-cd('~/methods2models/datasets/input/');
-ls -l
-inputfile = input('Which *.csv file?:','s');% choose file
-ic = csvread(inputfile);
 cd('~/methods2models/');
-
 end
 

@@ -2,7 +2,7 @@ function [combo] = combo_wanderlust(errordata,t_period,y_0,statenames)
 %UNTITLED Summary of this function goes here
 %   Calculate datapoints for new combination
 options.Ynames = statenames;
-load_options;
+load_options; %import t_period
 data = errordata';
 %% Wanderlust
 [G,w_data,~,~] = PathfromWanderlust(data,options,y_0);

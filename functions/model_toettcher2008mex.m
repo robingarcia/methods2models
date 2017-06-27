@@ -1,4 +1,4 @@
-function [results_mex] = model_toettcher2008mex(time_vector, IC)
+function [results_mex,IC] = model_toettcher2008mex(time_vector,IC)
 %%This is an MEX-model implementation of the IQM-model 
 %This function creates a MEX-Model (C-Code) from a IQM-Model
 % To run this function some prerequisites are required:
@@ -23,7 +23,10 @@ function [results_mex] = model_toettcher2008mex(time_vector, IC)
 % toettcher2008 = IQMmodel('~/methods2models/IQM-Projektordner/models/model_toettcher2008.txt'); % Load the model
 % IQMmakeMEXmodel(toettcher2008,'model_toettcher2008MEX'); % Create a MEX simulation function
 % cd '~/methods2models/';
-    
+if isempty(IC)
+IC = model_toettcher2008MEX;
+else 
+end
 results_mex = model_toettcher2008MEX(time_vector,IC); % Simulation of MEX-model
 
 

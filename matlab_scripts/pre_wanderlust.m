@@ -1,20 +1,28 @@
-function [w_data,w_path] = pre_wanderlust(errordata,ic,y_0,statenames,t_period)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+function [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
+% This function applies Wanderlust to all states of your model 
+% 
+% 
+% [Syntax]
+% [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
+% 
+% [INPUT]
+% errordata:          number: Your simulated data
+% y_0:                number: Concentration of species at t=0
+% statenames:         cell: Names of the species
+% t_period:           number: Cell cycle period of every cell
+% 
+% [OUTPUT]
+% w_data:         number:?
+% w_path:         number:Calculated trajectory
+% [EXAMPLE]
+% Pending
 load_options
 options.Ynames		= statenames;
+options.gamma		= log(2)/mean(t_period(1,:));
 %% Calculate Wanderlust for all states ------------------------------------
 disp('Calculate Wanderlust for all states -------------------------------')
-tic
-% j = size(ic,1); %Measure all species simultaneously
-% i = size(WChooseK(1:size(ic,1),j),1);
-% [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
-% cmatrix = cmatrix';
 data = errordata';
 [G,w_data,~,~] = PathfromWanderlust(data,options,y_0);
-% G = wanderlust(y_data,params);
 w_path = G.y; % Check these values first !!!
-toc
-%--------------------------------------------------------------------------
 end
 

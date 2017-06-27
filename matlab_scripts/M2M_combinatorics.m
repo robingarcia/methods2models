@@ -1,6 +1,24 @@
-function [summary] = M2M_combinatorics(w_data,w_path, t_period,ic,errordata,statenames,j)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+function [summary] = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j)
+% This function calculates the variance and the expectation for every state
+% 
+% 
+% [Syntax]
+% [summary] = M2M_combinatorics(w_data,w_path, t_period,ic,errordata,statenames,j)
+% 
+% [INPUT]
+% w_data:           number: Data from Wanderlust
+% w_path:           number: Trajectory calculated by Wanderlust
+% t_period:         number: Cell cycle period
+% ic:               number: Initial conditions
+% errordata:        number: Data with noise
+% statenames:       cell:   Names of the species
+% j:                number: Number of simultaneously measured outputs
+% 
+% [OUTPUT]
+% summary:          struct: Stores the results of this function
+% 
+% [EXAMPLE]
+% Pending
 load_options
 options.Ynames		= statenames;
 
@@ -37,7 +55,7 @@ for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
 y_data = cmatrix * w_data';
 y_data = y_data';
 path = cmatrix * w_path;
-disp_var = ['Wanderlust --------:',num2str(options.PathIndex)];
+disp_var = ['Combination --->>:',num2str(options.PathIndex)];
 %% 9) Wanderlust ---------------------------------------------------------%
 disp(disp_var)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
