@@ -1,4 +1,4 @@
-function [results] = m2m()
+function [results] = m2m(tF,lb,N,snaps,sig,mexmodelname)
 % This function calculates the best measurement combination 
 % 
 % 
@@ -18,9 +18,12 @@ addpath(genpath('~/methods2models'));
 statenames = cell(1,32);
 load('~/methods2models/datasets/toettcher_statenames.mat');
 
+% kk
+mexmodel = eval(sprintf('@%s',mexmodelname)) %!!!
+
 
 %% Datageneration ---------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = data_generation;
+[ic,data,errordata,y_0,t_period,N,snaps,time] = data_generation(tF,lb,N,snaps,sig);
 
 
 %% Purge datasets ---------------------------------------------------------

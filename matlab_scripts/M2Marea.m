@@ -1,3 +1,4 @@
+
 function [best_comb] = M2Marea(results_save,errordata,y,f,ic,y_0,t_period,statenames)
 % This function calculates the area unter the curve 
 % 
@@ -46,7 +47,7 @@ else
     y_wand = combo.Variance_A;
     ywant = moving_average(x_wand, y_wand, x, binsize);
 
-B(k) = trapz(x,ywant);
+B = trapz(x,ywant);
     for i = j
         
     best_additional(1,i) = trapz(x,y(i,:)-ywant);

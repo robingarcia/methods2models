@@ -1,4 +1,4 @@
-function [filename,tF,lb,n,snaps,sig] = userinteraction
+function [filename,tF,lb,N,snaps,sig] = userinteraction
 % This function submits parameters like simulation time, cell number etc. 
 % 
 % 
@@ -26,7 +26,7 @@ load('toettcher_statenames.mat');
 tmax = input('Input simulation time (e.g: [100]):');
 tF = 0:tmax; % Simulation Time
 lb = input('Start timepoint t_1? (e.g: [2800]):');
-n = input('How many cells? (e.g: [20]):');% n new datasets
+N = input('How many cells? (e.g: [20]):');% n new datasets
 snaps = input('How many snapshots? (e.g: [2]):');% n new datasets
 sig = input('Choose your sigma (e.g: [0.05]):');% Sigma for errordata
 cd('~/methods2models/');

@@ -63,6 +63,6 @@ start = zeros(N,size(random_statevalues{1,1},2));
     startpoint = Tstart(1,i); %Choose 3-4 periods (But only one period is required here!)
     %start{1,i} = startpoint-1; % Startpoints of the cellcycle
     A = statevalues_cut{1,i};
-    start(i,:) = A(startpoint-1,:); %New IC from simulated dataset
+    start(i,:) = A(startpoint,:); %New IC from simulated dataset
     end
 end
