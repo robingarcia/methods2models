@@ -1,4 +1,4 @@
-function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = data_generation(tF,lb,N,snaps,sig)
+function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,lb,N,snaps,sig)
 % This function generates data/errordata for your model
 %
 %

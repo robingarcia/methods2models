@@ -1,4 +1,5 @@
 # methods2models
+![m2m logo](~/methods2models/fig/m2m_logo_320.jpg)
 ## Installation
 
  ### Required 3rd party toolboxes
