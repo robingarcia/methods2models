@@ -1,7 +1,7 @@
-model2008 = IQMmodel('model_toettcher2008.txt')
+model2008 = IQMmodel('model_toettcher2008.txt');
 
 % simulate
-tspan = [0,120];
+tspan = [0,2000];
 
 sim_out = IQMsimulate(model2008,tspan);
 
@@ -23,7 +23,8 @@ for i=1:length(statenames)
     end
    % state_ind = strcmp(sim_out.states, statenames(i)); %Positionsermittlung mit logischem Output
    plot_values = sum(sim_out.statevalues(:,state_ind),2);
-   plot(sim_out.time,plot_values)
+   plot(sim_out.time,plot_values,'LineWidth',3)
    hold on
+   grid on
 end
 legend(statenames)
