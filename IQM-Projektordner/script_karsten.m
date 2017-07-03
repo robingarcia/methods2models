@@ -2,16 +2,20 @@ model2008 = IQMmodel('model_toettcher2008.txt');
 
 % simulate
 tspan = [0,2000];
-
-sim_out = IQMsimulate(model2008,tspan);
+rndm = rndmic(:,2);
+% sim_out = IQMsimulate(model2008,tspan);
+sim_out = IQMsimulate(model2008,'ode15s',tspan,rndm);
 
 % states to plot
-statenames = {'CycET','Cdc20A','CycA'};
+statenames = {'CycET','Cdc20A','CycE','CycBT','pB'};
 
 % output bla
 state_out{1} = {'CycE','TriE','TriE21'};
 state_out{2} = {'Cdc20A'};
-state_out{3} = {'CycA'};
+state_out{3} = {'CycE'};
+state_out{4} = {'CycB','pB','BCKI','pBCKI'};
+state_out{5} = {'pB'};
+
 
 
 % plot

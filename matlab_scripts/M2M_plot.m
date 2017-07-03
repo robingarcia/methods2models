@@ -66,10 +66,15 @@ for i=1:length(statenames)
 end
 legend(statenames)
 %% Random statevalues
-for j = 1:31
+for j = 1%:31
     figure(j)
-for i = 1:N
-    plot(random_statevalues{1,i}(:,j))
+for i = 1%:5%N
+    plot(random_statevalues{1,i}(:,j),'r','LineWidth',2)
     hold on
+    plot(original_statevalues(1,:),'b','LineWidth',2)
+    hold on
+    scatter(0,ic(j,1),'b','filled')
+    hold on
+    scatter(0,rndmic(1,1),'r','filled')
 end
 end
