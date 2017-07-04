@@ -1,4 +1,4 @@
-function [results] = m2m(tF,lb,N,snaps,sig,mexmodelname)
+function [results] = m2m(timeF,lb,N,snaps,sig,mexmodelname)
 % This function calculates the best measurement combination 
 % 
 % 
@@ -20,15 +20,59 @@ load('~/methods2models/datasets/toettcher_statenames.mat');
 
 % kk
 % mexmodel = eval(sprintf('@%s',mexmodelname)) %!!!
+%Check inputs
+
+if exist('timeF','var')
+    input.tF = timeF;
+else
+    timeF = 0:1000;
+    input.tF = timeF;
+end
+
+if exist('lb','var')
+    input.lb = lb;
+else
+    lb = 900;
+    input.lb = lb;
+end
+
+if exist('N','var')
+    input.N = N;
+else
+    N = 500;
+    input.N = N;
+end
+
+if exist('snaps','var')
+    input.snaps = snaps;
+else 
+    snaps = 2;
+    input.snaps = snaps;
+end
+
+if exist('sig','var')
+    input.sig = sig;
+else 
+    sig = 0.05;
+    input.sig = sig;
+end
+
+if exist('mexmodelname','var')
+    input.mexmodelname = mexmodelname;
+else
+    mexmodelname = mexmodelname;
+    input.mexmodelname = [];
+end
+
 input = ([]);
-input.tF = tF;
+input.tF = timeF;
 input.lb = lb;
 input.N = N;
 input.snaps = snaps;
 input.sig = sig;
-input.mexmodelname = mexmodelname;
+input.mexmodelname = [];
 %% Datageneration ---------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = data_generation(tF,lb,N,snaps,sig);
+[ic,data,errordata,y_0,t_period,N,snaps,time] = data_generation(timeF,lb,N,snaps,sig);
 
 %% Purge datasets ---------------------------------------------------------
 [errordata,~,nzero] = M2M_purge(errordata);
@@ -57,7 +101,7 @@ for i = 1:24
     B(i,1)=best_comb{i,5};
 end
 %% Plots ------------------------------------------------------------------
-M2M_plot
+% M2M_plot
 %% Save area --------------------------------------------------------------
 results = ([]);
 results.names = statenames;
