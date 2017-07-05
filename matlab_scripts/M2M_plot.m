@@ -147,4 +147,8 @@ end
 dna = mydata(32,:);
 dna = sort(dna);
 dna = normdata(dna);
-plot(dna,'LineWidth',3);
+plot_dna = plot(dna,'k','LineWidth',5);
+
+%% Mydata + errordata 3D plot
+
+scatter3(time,errordata(1,:),errordata(32,:))

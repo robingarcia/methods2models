@@ -72,7 +72,7 @@ input.snaps = snaps;
 input.sig = sig;
 input.mexmodelname = [];
 %% Datageneration ---------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = data_generation(timeF,lb,N,snaps,sig);
+[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,lb,N,snaps,sig);
 
 %% Purge datasets ---------------------------------------------------------
 [errordata,~,nzero] = M2M_purge(errordata);
