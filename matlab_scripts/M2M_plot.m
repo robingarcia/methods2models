@@ -152,3 +152,10 @@ plot_dna = plot(dna,'k','LineWidth',5);
 %% Mydata + errordata 3D plot
 
 scatter3(time,errordata(1,:),errordata(32,:))
+
+%% Mydata + errordata scatter
+scatter(data(7,:),data(32,:))
+hold on
+scatter(errordata(7,:),errordata(32,:))
+
+%% Best subplot

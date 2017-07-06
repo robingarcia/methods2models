@@ -85,7 +85,7 @@ time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 
 % disp('Error model (add noise to dataset) ---------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
-errordata = error_model(mydata,sig);
+errordata = M2M_error_model(mydata,sig);
 %% 8) Write data to output struct (later)
 end
 

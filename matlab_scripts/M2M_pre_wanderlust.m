@@ -1,4 +1,4 @@
-function [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
+function [w_data,w_path] = M2M_pre_wanderlust(errordata,y_0,statenames,t_period)
 % This function applies Wanderlust to all states of your model 
 % 
 % 
@@ -16,11 +16,9 @@ function [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
 % w_path:         number:Calculated trajectory
 % [EXAMPLE]
 % Pending
-load_options        % Load options for Wanderlust
+load_options
 options.Ynames		= statenames;
 options.gamma		= log(2)/mean(t_period(1,:));
-options.doplots     = 0;
-options.PathIndex   = 1:size(errordata,1);
 %% Calculate Wanderlust for all states ------------------------------------
 disp('Calculate Wanderlust for all states -------------------------------')
 data = errordata';
