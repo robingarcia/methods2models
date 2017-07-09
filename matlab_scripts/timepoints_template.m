@@ -52,12 +52,14 @@ for i = 1:N        % i = Number of cells
 end
 %% Inverse method alorithm
 samples = zeros(N,snaps);%N=cells and snaps = # timepoints
+P_value = zeros(N,snaps);% Delete this?
 start = zeros(N,size(random_statevalues{1,1},2));
     for i = 1:N
         gammma = log(2)/T(1,i); % G{2,i}; % G{2,i} is the period!
         P = rand(1,snaps);% Number of cells (=n) or time (=m)?
         x=@(P,gammma)((log(-2./(P-2))/gammma));
         samples(i,:) = x(P,gammma); %ceil or round
+        P_value(i,:) = P;
     %end   
 %% New simulated IC (extracted from a simulation = cellcycle start)
     startpoint = Tstart(1,i); %Choose 3-4 periods (But only one period is required here!)

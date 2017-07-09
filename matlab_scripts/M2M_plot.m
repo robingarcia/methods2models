@@ -159,3 +159,11 @@ hold on
 scatter(errordata(7,:),errordata(32,:))
 
 %% Best subplot
+
+%% Timepoints plots
+plot(statevalues{1,1}(:,1))
+hold on
+time_cut = lb:m;
+plot(time_cut,statevalues_cut{1,1}(:,1))
+% 4 = CycE, 5 = pB, 6 = APC
+findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);

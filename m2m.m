@@ -32,7 +32,7 @@ end
 if exist('lb','var')
     input.lb = lb;
 else
-    lb = 9000;
+    lb = 9900;
     input.lb = lb;
 end
 

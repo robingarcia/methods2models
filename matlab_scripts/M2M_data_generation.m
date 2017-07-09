@@ -77,7 +77,7 @@ for i = 1:N
     y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
     %--------------------------------------------------------------------------
     measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
-    measurement{i} = measurement{i}(:,2:end-1);
+    measurement{i} = measurement{i}(:,2:end-1);%Remove the first and the last values
 end
 mydata = cell2mat(measurement);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
