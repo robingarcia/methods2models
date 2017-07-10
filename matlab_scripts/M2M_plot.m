@@ -167,3 +167,21 @@ time_cut = lb:m;
 plot(time_cut,statevalues_cut{1,1}(:,1))
 % 4 = CycE, 5 = pB, 6 = APC
 findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
+
+%% Cell cycle phase duration
+for i = 1%:N
+    barh(t_period(1,i),'r')
+    hold on
+    barh(t_period(3,i),'b')
+    hold on
+    barh(t_period(2,i),'g')
+end
+
+%% Phase distribution
+histogram(t_period(:,1))
+close all
+histogram(t_period(1,:))
+hold on
+histogram(t_period(2,:))
+hold on
+histogram(t_period(3,:))

@@ -64,6 +64,7 @@ end
 rndm_measurement = cell(1,N);%
 measurement = cell(1,N);     %
 TSPAN = zeros(N,snaps+2);    %
+DNA = zeros(snaps+2,N);      %
 %----------------------------%
 for i = 1:N
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
@@ -74,7 +75,8 @@ for i = 1:N
     rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     %--------------------DNA Simulation----------------------------------------
-    y_DNA = DNAcontent(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
+    y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
+    DNA(:,i) = y_DNA;
     %--------------------------------------------------------------------------
     measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
     measurement{i} = measurement{i}(:,2:end-1);%Remove the first and the last values
