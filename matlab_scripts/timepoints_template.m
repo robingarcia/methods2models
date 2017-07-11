@@ -31,7 +31,7 @@ F = zeros(1,j(end));
 T = zeros(3,N);
 Tstart = zeros(1,N);
 for i = 1:N        % i = Number of cells
-    for k = 7 %6=APC
+    for k = 6 %6=APC
         [~,locs2]=findpeaks(statevalues{1,i}((lb:m),k));
         %Calculate the period of APC
         T(1,i)=locs2(end)-locs2(end-1); %APC Period (=Cellcycle period)

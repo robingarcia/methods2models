@@ -178,10 +178,8 @@ for i = 1%:N
 end
 
 %% Phase distribution
-histogram(t_period(:,1))
-close all
-histogram(t_period(1,:))
+histogram(t_period(1,:),100)
 hold on
-histogram(t_period(2,:))
+histogram(t_period(2,:),100)
 hold on
-histogram(t_period(3,:))
+histogram(t_period(3,:),100)

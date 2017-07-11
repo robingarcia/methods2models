@@ -25,14 +25,14 @@ load('~/methods2models/datasets/toettcher_statenames.mat');
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = 0:3000;
+    timeF = linspace(0,3000,10*3000);%0:3000;
     input.tF = timeF;
 end
 
 if exist('lb','var')
     input.lb = lb;
 else
-    lb = 2900;
+    lb = 10*2900;
     input.lb = lb;
 end
 
