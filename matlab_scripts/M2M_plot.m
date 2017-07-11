@@ -2,35 +2,35 @@
 ic_default = model_toettcher2008MEX;
 % ic_default= M2M_purge(ic_default);
 ic_rand = M2M_lognrnd_ic(N,ic_default);
-%% Initial conditions
-for i =[1 2 3 5 6 7]%1:27%size(ic,1)
-    figure(i)
-    axis([0 size(ic_rand,2) 0 2])
-    plot_x = linspace(0,size(ic_rand,2),N);%   zeros(size(ic,2));
-    plot_default = zeros(1,size(ic_rand,2));
-    plot_start = zeros(1,size(ic_rand,2));
-    plot_default(:)=ic_default(i);
-    plot_start(:)=y_0(i);
-    hold on
-    bar(sort(ic_rand(i,:),2,'descend'),'DisplayName','Random IC');
-    axis([0 size(ic_rand,2) 0 2])
-    hold on
-    def = plot(plot_x,plot_default(1,:),'LineWidth',3,'DisplayName','Default IC');
-tmp = abs(sort(ic_rand(i,:),2,'descend')-ic_default(i)); %Find closest value
-[~, idx] = min(tmp);%Find closest value
-bar(idx,ic_default(i),'g'); %Find closest value
-    def.Color = [0 1 0];
-    axis([0 size(ic_rand,2) 0 2])
-    hold on
-    pstart = plot(plot_x,plot_start(1,:),'LineWidth',3,'DisplayName','Conc. at start');
-tmp = abs(sort(ic_rand(i,:),2,'descend')-y_0(i));
-[~, idx] = min(tmp);
-bar(idx,y_0(i),'r');
-    axis([0 size(ic_rand,2) 0 2])
-    pstart.Color = [1 0 0];
-    title('Initial conditions')
-end
-title('Initial conditions')
+% %% Initial conditions
+% for i =[1 2 3 5 6 7]%1:27%size(ic,1)
+%     figure(i)
+%     axis([0 size(ic_rand,2) 0 2])
+%     plot_x = linspace(0,size(ic_rand,2),N);%   zeros(size(ic,2));
+%     plot_default = zeros(1,size(ic_rand,2));
+%     plot_start = zeros(1,size(ic_rand,2));
+%     plot_default(:)=ic_default(i);
+%     plot_start(:)=y_0(i);
+%     hold on
+%     bar(sort(ic_rand(i,:),2,'descend'),'DisplayName','Random IC');
+%     axis([0 size(ic_rand,2) 0 2])
+%     hold on
+%     def = plot(plot_x,plot_default(1,:),'LineWidth',3,'DisplayName','Default IC');
+% tmp = abs(sort(ic_rand(i,:),2,'descend')-ic_default(i)); %Find closest value
+% [~, idx] = min(tmp);%Find closest value
+% bar(idx,ic_default(i),'g'); %Find closest value
+%     def.Color = [0 1 0];
+%     axis([0 size(ic_rand,2) 0 2])
+%     hold on
+%     pstart = plot(plot_x,plot_start(1,:),'LineWidth',3,'DisplayName','Conc. at start');
+% tmp = abs(sort(ic_rand(i,:),2,'descend')-y_0(i));
+% [~, idx] = min(tmp);
+% bar(idx,y_0(i),'r');
+%     axis([0 size(ic_rand,2) 0 2])
+%     pstart.Color = [1 0 0];
+%     title('Initial conditions')
+% end
+% title('Initial conditions')
 %% IC baseline
 size(ic,1);
 for i = 1:size(ic,1)
@@ -44,8 +44,8 @@ end
 %% Histogram
 for i = [1 2 3 5 6 7]
 figure(i)
-% IC_hist=histogram(ic_rand(7,:),'BinWidth',0.1);
-IC_histfit=histfit(ic_rand(7,:),round(N/8),'lognormal');
+IC_hist=histogram(lognfit(ic_rand(7,:)),'BinWidth',0.1);
+% IC_histfit=histfit(ic_rand(i,:),round(N/8),'lognormal');
 IC_histfit(1).FaceColor = [0.8 0.8 1];
 ic_xdata = IC_histfit(1).XData;
 ic_ydata = IC_histfit(1).YData;
@@ -57,7 +57,7 @@ ylabel('Frequency')
 title('Distribution of the randomized initial conditions')
 hold on
 % bar(ic_default(7),40,'r','BarWidth',IC_hist.BinWidth);
-bar(ic_default(i),ic_ydata_default,'g','BarWidth',IC_histfit(1).BarWidth/10);
+% bar(ic_default(i),ic_ydata_default,'g','BarWidth',IC_histfit(1).BarWidth/10);
 end
 %% Statevalues
 for i = 1:20%N
@@ -114,7 +114,7 @@ legend(statenames)
 %% Random statevalues and limit cycle
 for j = 1:31
     figure(j)
-for i = 1:N
+for i = 1%:N
     plot(random_statevalues{1,i}(:,j),'r','LineWidth',2)
     hold on
     plot(original_statevalues(j,:),'b','LineWidth',2)
@@ -169,17 +169,17 @@ plot(time_cut,statevalues_cut{1,1}(:,1))
 findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
 
 %% Cell cycle phase duration
-for i = 1%:N
+for i = 1:N
     barh(t_period(1,i),'r')
     hold on
-    barh(t_period(3,i),'b')
+    barh(t_period(2,i),'b')
     hold on
-    barh(t_period(2,i),'g')
+    barh(t_period(3,i),'g')
 end
 
 %% Phase distribution
-histogram(t_period(1,:),100)
+histogram(t_period(1,:))
 hold on
-histogram(t_period(2,:),100)
+histogram(t_period(2,:))
 hold on
-histogram(t_period(3,:),100)
+histogram(t_period(3,:))

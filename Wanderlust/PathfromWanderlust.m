@@ -40,7 +40,7 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.009;
+alpha = 0.1; %old value 0.009
 x_data = data'; % (nxN) ---------- all data
 %y_data = x_data;
 y_data = x_data; %cmatrix' * x_data; % (mxN) -------- measured data
