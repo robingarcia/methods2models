@@ -183,3 +183,20 @@ hold on
 histogram(t_period(2,:))
 hold on
 histogram(t_period(3,:))
+hold on
+histogram(t_period(4,:))
+
+%% Plot cell cycle simulation
+plot(random_statevalues{1,1}(:,[2 3 4 5 6 7 12]))
+hold on
+plot(original_statevalues([2 3 4 5 6 7 12],:),':')
+
+%% Plot cell cycle simulation (for loop)
+for i = [2,3,5,7]
+   subplot(1,2,1) 
+   plot(random_statevalues{1,1}(:,i))
+   hold on
+   subplot(1,2,2)
+   plot(original_statevalues(i,:))
+   hold on 
+end
