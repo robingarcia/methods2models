@@ -25,7 +25,7 @@ load('~/methods2models/datasets/toettcher_statenames.mat');
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = 0:1000;%linspace(0,1000,1*1000);%0:3000;
+    timeF = 0:900;%linspace(0,1000,1*1000);%0:3000;
     input.tF = timeF;
 end
 
@@ -39,7 +39,7 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 1000;
+    N = 5000;
     input.N = N;
 end
 
@@ -73,6 +73,10 @@ input.sig = sig;
 input.mexmodelname = [];
 %% Datageneration ---------------------------------------------------------
 [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,lb,N,snaps,sig);
+minmax(t_period(1,:))
+minmax(t_period(2,:))
+minmax(t_period(3,:))
+minmax(t_period(4,:))
 
 %% Purge datasets ---------------------------------------------------------
 [errordata,~,nzero] = M2M_purge(errordata);
