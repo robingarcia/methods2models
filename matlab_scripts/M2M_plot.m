@@ -200,3 +200,14 @@ for i = [2,3,5,7]
    plot(original_statevalues(i,:))
    hold on 
 end
+%% QQ-Plot to check distribution
+
+%% Plot KDE
+for i = 14%20:31
+    data(:,1) = errordata(:,i);
+    data(:,2) = errordata(:,end);
+    [bandwidth,density,X,Y]=kde2d(data);
+    figure(i)
+    contour3(X,Y,density,50), hold on
+    plot(data(:,1),data(:,2),'r.','MarkerSize',5)
+end
