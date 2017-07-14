@@ -1,4 +1,4 @@
-function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,lb,N,snaps,sig)
+function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,N,snaps,sig)
 % This function generates data/errordata for your model
 %
 %
@@ -28,7 +28,7 @@ addpath(genpath('~/methods2models'));
 %% 2) Original statevalues -----------------------------------------------%
 % disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[original_data,ic] = model_toettcher2008mex(tF,[]);
+[original_data,ic] = model_toettcher2008mex(tF,[]); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
@@ -53,7 +53,7 @@ end
 %% 5) Measurement---------------------------------------------------------%
 % disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[start, samples,t_period] = timepoints_template(random_statevalues,lb,N,snaps);
+[start, samples,t_period] = timepoints_template(random_statevalues,N,snaps);
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%

@@ -1,4 +1,4 @@
-function [results] = m2m(timeF,lb,N,snaps,sig,mexmodelname)
+function [results] = m2m(timeF,N,snaps,sig,mexmodelname,doplots)
 % This function calculates the best measurement combination 
 % 
 % 
@@ -25,15 +25,8 @@ load('~/methods2models/datasets/toettcher_statenames.mat');
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = 0:900;%linspace(0,1000,1*1000);%0:3000;
+    timeF = 0:1000;%linspace(0,1000,1*1000);%0:3000;
     input.tF = timeF;
-end
-
-if exist('lb','var')
-    input.lb = lb;
-else
-    lb = 0;%10*2900;
-    input.lb = lb;
 end
 
 if exist('N','var')
@@ -60,19 +53,29 @@ end
 if exist('mexmodelname','var')
     input.mexmodelname = mexmodelname;
 else
-    mexmodelname = mexmodelname;
+    %mexmodelname = mexmodelname;
     input.mexmodelname = [];
+end
+
+if exist('doplots','var')
+    input.doplots = doplots;
+else
+    doplots = 0;
+    input.doplots = doplots;
 end
 
 input = ([]);
 input.tF = timeF;
-input.lb = lb;
 input.N = N;
 input.snaps = snaps;
 input.sig = sig;
-input.mexmodelname = [];
-%% Datageneration ---------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,lb,N,snaps,sig);
+input.mexmodelname = mexmodelname;
+input.doplots = doplots;
+
+%% Model generation -------------------------------------------------------
+M2M_mexmodel(input);
+%% Data generation --------------------------------------------------------
+[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig);%,model);
 minmax(t_period(1,:))
 minmax(t_period(2,:))
 minmax(t_period(3,:))
@@ -101,6 +104,7 @@ end
 
 %% New approach -----------------------------------------------------------
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
+B = zeros(24,1);
 for i = 1:24
     B(i,1)=best_comb{i,5};
 end
@@ -119,4 +123,5 @@ results.y_0 = y_0;
 results.t_period = t_period;
 results.f = f;
 results.best_comb = best_comb;
+results.B = B;
 end

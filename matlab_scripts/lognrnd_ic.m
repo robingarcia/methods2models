@@ -18,7 +18,7 @@ function [rndmic] = lognrnd_ic(N,ic)
 
 % Change the IC value log normally distributed
 ic_not_zero = (ic ~=0); %31-27
-sigma = 1;
+sigma = 0.7;%1
 M = ic(ic_not_zero);
 V = sigma .* M;
 MU = log(M.^2 ./ sqrt(V+M.^2));

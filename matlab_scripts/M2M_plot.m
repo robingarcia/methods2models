@@ -166,7 +166,7 @@ hold on
 time_cut = lb:m;
 plot(time_cut,statevalues_cut{1,1}(:,1))
 % 4 = CycE, 5 = pB, 6 = APC
-findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
+% findpeaks(statevalues_cut{1,i}((locs22(end-1):locs22(end)),j),'MinPeakHeight',0.05);
 
 %% Cell cycle phase duration
 for i = 1:N
@@ -203,11 +203,12 @@ end
 %% QQ-Plot to check distribution
 
 %% Plot KDE
-for i = 14%20:31
+for i = 1:28%14%20:31
     data(:,1) = errordata(:,i);
     data(:,2) = errordata(:,end);
     [bandwidth,density,X,Y]=kde2d(data);
-    figure(i)
+%     figure(i)
     contour3(X,Y,density,50), hold on
     plot(data(:,1),data(:,2),'r.','MarkerSize',5)
+    hold on
 end

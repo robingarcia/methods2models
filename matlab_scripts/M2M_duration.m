@@ -4,60 +4,21 @@ function [T,Tstart] = M2M_duration(statevalues)
 %% Determine the peaks of your Cyclines and APC during cellcycle
 T = zeros(4,1);
 Tstart = zeros(1,1);
-%     for k = 12 %6=APC 7=APCP 12=Cdc20a
-%         [~,locs2]=findpeaks(statevalues{1,i}((lb:m),k),'MinPeakHeight',0.1);
-        [~,locs12]=findpeaks(statevalues(:,12),'MinPeakDistance',20,'MinPeakHeight',0.1);
-        T(1) = locs12(end-4) - locs12(end-5);
-        [~,locs5]=findpeaks(statevalues(locs12(end-5):locs12(end-4),5),'MinPeakDistance',20,'MinPeakHeight',0.07);
-        [~,locs4]=findpeaks(statevalues(locs12(end-5):locs12(end-4),4),'MinPeakDistance',20,'MinPeakHeight',0.3);
-%         [~,locs5]=findpeaks(statevalues(:,5),'MinPeakDistance',20,'MinPeakHeight',0.07);
-%         [~,locs4]=findpeaks(statevalues(:,4),'MinPeakDistance',20,'MinPeakHeight',0.3);
-        
-%         findpeaks(statevalues(:,12),'MinPeakDistance',20,'MinPeakHeight',0.1);
-%         hold on
-%         findpeaks(statevalues(:,5),'MinPeakDistance',20,'MinPeakHeight',0.07);
-%         hold on
-%         findpeaks(statevalues(:,4),'MinPeakDistance',20,'MinPeakHeight',0.3);
-%         hold on
-        
-        
 
+        [~,locs12]=findpeaks(statevalues(:,12),'MinPeakDistance',20,'MinPeakHeight',0.1);
+        T(1) = locs12(end-1) - locs12(end-2);
+        [~,locs5]=findpeaks(statevalues(locs12(end-2):locs12(end-1),5),'MinPeakDistance',20,'MinPeakHeight',0.07);
+        [~,locs4]=findpeaks(statevalues(locs12(end-2):locs12(end-1),4),'MinPeakDistance',20,'MinPeakHeight',0.3);
         g1_s = locs5;%(end)-locs12(end-1);
         s_g2 = locs4;%(end)-locs12(end-1);
-        s = s_g2 - g1_s;
-%         cc_period = locs12(end)-locs12(end-1);
+        s = s_g2 - g1_s;        
         g1_phase = g1_s;
-        s_phase = s;
-%         g2_phase = locs12(end)-locs4(end);%s_g2;
-        g2_phase = T(1)-locs4;%s_g2;
-%         T(1) = cc_period;
+        s_phase = s;         
+        g2_phase = T(1)-locs4;%s_g2;        
         T(2) = g1_phase;
         T(3) = s_phase;
-        T(4) = g2_phase;
-%         Tstart(1) = locs12(end);
-        Tstart(1) = locs12(end-5);
-        close all
-%         %Calculate the period of APC
-%         T(1)=locs2(end)-locs2(end-1); %APC Period (=Cellcycle period)
-% %         T(1,i)=locs2(end-1)-locs2(end-2); %APC Period (=Cellcycle period)
-%         Tstart(1) = locs2(end-1); %Tstart marks the begin of the period
-%         
-%         
-% %         for j = 4:5 %[4,5]    % j = States (5=CycE, 4=pB)
-% %             [~,locs]=findpeaks(statevalues_cut{1,i}((locs2(end-1):locs2(end)),j),'MinPeakHeight',0.05);
-%             [~,locs5]=findpeaks(statevalues((locs2(end-1):locs2(end)),5),'MinPeakHeight',0.05);
-%             [~,locs4]=findpeaks(statevalues((locs2(end-1):locs2(end)),4),'MinPeakHeight',0.05);
-% %             F(j) = locs;
-%             % Duration G1-Phase
-% %             CycETransEnd = locs5;%F(5);%-1;
-%             T(2) = locs5;%CycETransEnd;
-%             %Duration G1+S-Phase (= S/G2 transition)
-% %             pBTransEnd = locs4 - locs5;% F(4)-F(5);%-1;
-%             T(3) = locs4-locs5;%pBTransEnd;
-%             %Duration G2-Phase
-%             T(4) = T(1)-locs4;
-% %         end
-%     end
+        T(4) = g2_phase;         
+        Tstart(1) = locs12(end-2);  
 end
 
 
