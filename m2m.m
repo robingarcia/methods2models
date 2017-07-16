@@ -73,7 +73,7 @@ input.mexmodelname = mexmodelname;
 input.doplots = doplots;
 
 %% Model generation -------------------------------------------------------
-M2M_mexmodel(input);
+%M2M_mexmodel(input);
 %% Data generation --------------------------------------------------------
 [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig);%,model);
 minmax(t_period(1,:))
