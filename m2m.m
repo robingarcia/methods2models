@@ -19,7 +19,7 @@ statenames = cell(1,32);
 load('~/methods2models/datasets/toettcher_statenames.mat');
 
 % kk
-% mexmodel = eval(sprintf('@%s',mexmodelname)) %!!!
+mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
 %Check inputs
 
 if exist('timeF','var')
@@ -50,8 +50,8 @@ else
     input.sig = sig;
 end
 
-if exist('mexmodelname','var')
-    input.mexmodelname = mexmodelname;
+if exist('mexmodel','var')
+    input.mexmodel = mexmodel;
 else
     %mexmodelname = mexmodelname;
     input.mexmodelname = [];
@@ -69,13 +69,13 @@ input.tF = timeF;
 input.N = N;
 input.snaps = snaps;
 input.sig = sig;
-input.mexmodelname = mexmodelname;
+input.mexmodel = mexmodel;
 input.doplots = doplots;
 
 %% Model generation -------------------------------------------------------
 %M2M_mexmodel(input);
 %% Data generation --------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig);%,model);
+[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel);
 minmax(t_period(1,:))
 minmax(t_period(2,:))
 minmax(t_period(3,:))
@@ -124,4 +124,5 @@ results.t_period = t_period;
 results.f = f;
 results.best_comb = best_comb;
 results.B = B;
+results.input = input;
 end

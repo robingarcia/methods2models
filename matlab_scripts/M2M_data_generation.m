@@ -1,4 +1,4 @@
-function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,N,snaps,sig)
+function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,N,snaps,sig,mexmodel)
 % This function generates data/errordata for your model
 %
 %
@@ -28,7 +28,8 @@ addpath(genpath('~/methods2models'));
 %% 2) Original statevalues -----------------------------------------------%
 % disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[original_data,ic] = model_toettcher2008mex(tF,[]); %New M2M_mexmodel function here
+%[original_data,ic] = model_toettcher2008mex(tF,[]); %New M2M_mexmodel function here
+[original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
@@ -46,14 +47,15 @@ simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
 %------------------------------%
 for i = 1:N
-    simdata{i} = model_toettcher2008mex(tF,rndmic(:,i)); %C-Model (MEX-File)
+%     simdata{i} = model_toettcher2008mex(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
+    simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
 % disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[start, samples,t_period] = timepoints_template(random_statevalues,N,snaps);
+[start, samples,t_period] = M2M_timepoints(random_statevalues,N,snaps);
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%
@@ -72,7 +74,8 @@ for i = 1:N
     simulationIC = start(i,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
-    rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
+%     rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
+    rndm_measurement{i} = M2M_mexmodel(tspan,simulationIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     %--------------------DNA Simulation----------------------------------------
     y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
