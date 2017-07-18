@@ -28,7 +28,8 @@ addpath(genpath('~/methods2models'));
 %% 2) Original statevalues -----------------------------------------------%
 % disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%[original_data,ic] = model_toettcher2008mex(tF,[]); %New M2M_mexmodel function here
+
+
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
 [~,locs_apc] = findpeaks(original_statevalues(6,:));

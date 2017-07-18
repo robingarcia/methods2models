@@ -1,4 +1,4 @@
-function [results] = m2m(timeF,N,snaps,sig,mexmodelname,doplots)
+function [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % This function calculates the best measurement combination 
 % 
 % 
@@ -19,9 +19,8 @@ statenames = cell(1,32);
 load('~/methods2models/datasets/toettcher_statenames.mat');
 
 % kk
-mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
+% mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
 %Check inputs
-
 if exist('timeF','var')
     input.tF = timeF;
 else
@@ -32,14 +31,14 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 5000;
+    N = 100;
     input.N = N;
 end
 
 if exist('snaps','var')
     input.snaps = snaps;
 else 
-    snaps = 2;
+    snaps = 20;
     input.snaps = snaps;
 end
 
@@ -51,10 +50,11 @@ else
 end
 
 if exist('mexmodel','var')
+    mexmodel = eval(sprintf('@%s',mexmodel)); %!!!
     input.mexmodel = mexmodel;
 else
-    %mexmodelname = mexmodelname;
-    input.mexmodelname = [];
+    mexmodel = eval(sprintf('@%s','model_toettcher2008MEX'));
+    input.mexmodel = mexmodel;
 end
 
 if exist('doplots','var')
@@ -64,13 +64,14 @@ else
     input.doplots = doplots;
 end
 
+% mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
 input = ([]);
 input.tF = timeF;
 input.N = N;
 input.snaps = snaps;
 input.sig = sig;
 input.mexmodel = mexmodel;
-input.doplots = doplots;
+%input.doplots = doplots;
 
 %% Model generation -------------------------------------------------------
 %M2M_mexmodel(input);

@@ -3,7 +3,7 @@ function [start, samples,T] = M2M_timepoints(random_statevalues,N,snaps)
 % This function generates the snapshots
 % 
 % [SYNTAX]
-% [START, samples,T,G,GAMMMA] = timepoints_template(random_statevalues,t_iqm,o)
+% [START, samples,T] = M2M_timepoints(random_statevalues,t_iqm,o)
 % 
 % [INPUTS]
 % random_statevalues
