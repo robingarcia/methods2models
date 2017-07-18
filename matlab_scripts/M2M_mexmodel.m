@@ -1,4 +1,4 @@
-function  [results_mex, IC]=M2M_mexmodel(time_vector, IC,mexmodel)
+function  [results_mex,IC]=M2M_mexmodel(time_vector, IC,mexmodel)
 %%This is an MEX-model implementation of the IQM-model 
 %This function creates a MEX-Model (C-Code) from a IQM-Model
 % To run this function some prerequisites are required:
@@ -20,6 +20,6 @@ if isempty(IC)
 IC = mexmodel();
 else 
 end
-results_mex = mexmodel(time_vector); % Simulation of MEX-model
+results_mex = mexmodel(time_vector,IC); % Simulation of MEX-model
 end
 
