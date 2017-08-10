@@ -13,6 +13,23 @@ function [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %
 % [EXAMPLE]
 % Pending
+%==========================================================================
+%     methods2models
+%     Copyright (C) 2017  Robin Garcia Victoria
+% 
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU General Public License for more details.
+% 
+%     You should have received a copy of the GNU General Public License
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%==========================================================================
 profile on
 addpath(genpath('~/methods2models'));
 statenames = cell(1,32);
@@ -72,9 +89,6 @@ input.snaps = snaps;
 input.sig = sig;
 input.mexmodel = mexmodel;
 %input.doplots = doplots;
-
-%% Model generation -------------------------------------------------------
-%M2M_mexmodel(input);
 %% Data generation --------------------------------------------------------
 [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel);
 minmax(t_period(1,:))
