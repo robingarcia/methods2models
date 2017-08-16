@@ -12,7 +12,7 @@ function [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % results:            struct: Results
 %
 % [EXAMPLE]
-% Pending
+% results = m2m(0:1000,10000,10,0.01,'model_toettcher2008MEX',0)
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria
