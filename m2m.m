@@ -80,17 +80,29 @@ else
     doplots = 0;
     input.doplots = doplots;
 end
-
+disp('This is your input:')
+disp('-------------------')
+disp(input)
+% disp('Legend:')
+% disp('----------------')
+% disp('tF = time frame')
+% disp('N = number of cells')
+% disp('snaps = snapshots')
+% disp('sig = sigma used for error model')
+% disp('mexmodel = Selected model')
+% disp('doplots: 0 = no, 1 = yes')
 % mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
-input = ([]);
-input.tF = timeF;
-input.N = N;
-input.snaps = snaps;
-input.sig = sig;
-input.mexmodel = mexmodel;
-%input.doplots = doplots;
+% input = ([]);
+% input.tF = timeF;
+% input.N = N;
+% input.snaps = snaps;
+% input.sig = sig;
+% input.mexmodel = mexmodel;
+% input.doplots = doplots;
 %% Data generation --------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel);
+disp('Data generation ---------------------------------------------------')
+% [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
+[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input);
 minmax(t_period(1,:))
 minmax(t_period(2,:))
 minmax(t_period(3,:))

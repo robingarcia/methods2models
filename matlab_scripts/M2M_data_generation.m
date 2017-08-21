@@ -1,4 +1,4 @@
-function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(tF,N,snaps,sig,mexmodel)
+function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
 % This function generates data/errordata for your model
 %
 %
@@ -37,13 +37,18 @@ function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generati
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 addpath(genpath('~/methods2models'));
+tF = input.tF;
+N = input.N;
+snaps = input.snaps;
+sig = input.sig;
+mexmodel = input.mexmodel;
 %load('toettcher_statenames.mat');
 %% 1) User inputs --------------------------------------------------------%
-% disp('User inputs --------------------------------------------------------')
+%disp('User inputs --------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % [~,tF,lb,N,snaps,sig]=userinteraction;
 %% 2) Original statevalues -----------------------------------------------%
-% disp('Original statevalues -----------------------------------------------')
+disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -53,12 +58,12 @@ original_statevalues = original_data.statevalues';
 y_0 = original_statevalues(:,locs_apc(end));
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 %% 3) Randomize IC -------------------------------------------------------%
-% disp('Randomize IC -------------------------------------------------------')
+disp('Randomize IC -------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 
 %% 4) Data generation-----------------------------------------------------%
-% disp('Data generation-----------------------------------------------------')
+disp('Data generation-----------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
@@ -71,13 +76,13 @@ for i = 1:N
 end
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
-% disp('Measurement---------------------------------------------------------')
+disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [start, samples,t_period] = M2M_timepoints(random_statevalues,N,snaps);
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
 %% 6) Simulate the model--------------------------------------------------%
-% disp('Simulate the model--------------------------------------------------')
+disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
 %m = size(samples,2);        %
@@ -105,7 +110,7 @@ end
 mydata = cell2mat(measurement);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
 %% 7) Error model (add noise to dataset) ---------------------------------%
-% disp('Error model (add noise to dataset) ---------------------------------')
+disp('Error model (add noise to dataset) ---------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This is necessary to gain realistic results
 errordata = M2M_error_model(mydata,sig);
