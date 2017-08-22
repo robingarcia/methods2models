@@ -50,11 +50,11 @@ mexmodel = input.mexmodel;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% --> Check, if this code is correct!
+
 
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
-[~,locs_apc] = findpeaks(original_statevalues(6,:));%Not APC???
+[~,locs_apc] = findpeaks(original_statevalues(6,:));
 y_0 = original_statevalues(:,locs_apc(end));
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 %% 3) Randomize IC -------------------------------------------------------%

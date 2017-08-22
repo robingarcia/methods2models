@@ -48,14 +48,14 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 100;
+    N = 2000;
     input.N = N;
 end
 
 if exist('snaps','var')
     input.snaps = snaps;
 else 
-    snaps = 20;
+    snaps = 2;
     input.snaps = snaps;
 end
 
@@ -83,22 +83,6 @@ end
 disp('This is your input:')
 disp('-------------------')
 disp(input)
-% disp('Legend:')
-% disp('----------------')
-% disp('tF = time frame')
-% disp('N = number of cells')
-% disp('snaps = snapshots')
-% disp('sig = sigma used for error model')
-% disp('mexmodel = Selected model')
-% disp('doplots: 0 = no, 1 = yes')
-% mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
-% input = ([]);
-% input.tF = timeF;
-% input.N = N;
-% input.snaps = snaps;
-% input.sig = sig;
-% input.mexmodel = mexmodel;
-% input.doplots = doplots;
 %% Data generation --------------------------------------------------------
 disp('Data generation ---------------------------------------------------')
 % [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
