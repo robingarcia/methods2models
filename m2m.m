@@ -48,7 +48,7 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 2000;
+    N = 1000;
     input.N = N;
 end
 
