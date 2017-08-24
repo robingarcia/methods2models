@@ -18,11 +18,11 @@ function [T,Tstart] = M2M_duration(statevalues)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
-%% Determine the peaks of your Cyclines and APC during cellcycle
+%% Determine the peaks of your Cyclines and Cdc20A during cellcycle
 T = zeros(4,1);
 Tstart = zeros(1,1);
 
-        [~,locs12]=findpeaks(statevalues(:,12),'MinPeakDistance',20,'MinPeakHeight',0.1);
+        [~,locs12]=findpeaks(statevalues(:,12),'MinPeakDistance',20,'MinPeakHeight',0.1);%Cdc20A
         T(1) = locs12(end-1) - locs12(end-2);
         [~,locs5]=findpeaks(statevalues(locs12(end-2):locs12(end-1),5),'MinPeakDistance',20,'MinPeakHeight',0.07);
         [~,locs4]=findpeaks(statevalues(locs12(end-2):locs12(end-1),4),'MinPeakDistance',20,'MinPeakHeight',0.3);
