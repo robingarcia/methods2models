@@ -94,11 +94,11 @@ DNA = zeros(snaps+2,N);      %
 for i = 1:N
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     TSPAN(i,:) = tspan;
-    simulationIC = start(i,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
+    simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
 %     rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
-    rndm_measurement{i} = M2M_mexmodel(tspan,simulationIC,mexmodel);
+    rndm_measurement{i} = M2M_mexmodel(tspan,simIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     %--------------------DNA Simulation----------------------------------------
     y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';

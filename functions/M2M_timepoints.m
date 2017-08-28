@@ -11,11 +11,12 @@ function [start, samples,T] = M2M_timepoints(random_statevalues,N,snaps)
 % o
 % 
 % [OUTPUTS]
-% START
+% START        New IC's 
 % samples
 % T
 % G
 % GAMMMA
+
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria
