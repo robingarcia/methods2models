@@ -59,7 +59,7 @@ inball = all(y_inball,2); % 1 = within the ball, 0=not within ball
 
 %-----------------------------
 if ~isfield(params,'s') || emptys
-    params.s = find(inball);% index to the set of start points
+    params.s = find(inball);% index to the set of start points (param.s = empty?)
 end
 % 	rect = [20 20 800 600];
 % 	fh= figure('Color','w','Position',rect);

@@ -50,11 +50,11 @@ mexmodel = input.mexmodel;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% --> Check, if this code is correct!
 
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
-[~,locs_apc] = findpeaks(original_statevalues(6,:));
+[~,locs_apc] = findpeaks(original_statevalues(12,:));%12 = Cdc20A
 y_0 = original_statevalues(:,locs_apc(end));
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 %% 3) Randomize IC -------------------------------------------------------%
@@ -70,7 +70,6 @@ simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
 %------------------------------%
 for i = 1:N
-%     simdata{i} = model_toettcher2008mex(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
@@ -78,9 +77,22 @@ end
 %% 5) Measurement---------------------------------------------------------%
 disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[start, samples,t_period] = M2M_timepoints(random_statevalues,N,snaps);
+start=zeros(N,size(ic,1));
+samples=zeros(N,snaps);
+t_period=zeros(6,N);
+for i = 1:N
+    statevalues=random_statevalues{1,i};
+    [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
+    start(i,:)=START;
+    samples(i,:)=SAMPLES;
+    t_period(:,i)=T_PERIOD;
+end
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
+
+%% 6.1) Simulate the DNA separately --------------------------------------%
+
+
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -94,11 +106,11 @@ DNA = zeros(snaps+2,N);      %
 for i = 1:N
     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
     TSPAN(i,:) = tspan;
-    simulationIC = start(i,:); %APC peak = start = IC = t0 (with (1,:) only one period is used here)
+    simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
-%     rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
-    rndm_measurement{i} = M2M_mexmodel(tspan,simulationIC,mexmodel);
+
+    rndm_measurement{i} = M2M_mexmodel(tspan,simIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     %--------------------DNA Simulation----------------------------------------
     y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';

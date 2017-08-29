@@ -48,7 +48,7 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 500;
+    N = 2000;
     input.N = N;
 end
 
@@ -85,7 +85,6 @@ disp('-------------------')
 disp(input)
 %% Data generation --------------------------------------------------------
 disp('Data generation ---------------------------------------------------')
-% [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
 [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input);
 minmax(t_period(1,:))
 minmax(t_period(2,:))
