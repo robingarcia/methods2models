@@ -78,9 +78,23 @@ end
 %% 5) Measurement---------------------------------------------------------%
 disp('Measurement---------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[start, samples,t_period] = M2M_timepoints(random_statevalues,N,snaps);
+% [start, samples,t_period] = M2M_timepoints(random_statevalues,N,snaps);
+start=zeros(N,size(IC,1));
+samples=zeros(N,snaps);
+t_period=zeros(6,N);
+for i = 1:N
+    statevalues=random_statevalues{1,i};
+    [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,N,snaps);
+    start(i,:)=START;
+    samples(i,:)=SAMPLES;
+    t_period(:,i)=T_PERIOD;
+end
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
+
+%% 6.1) Simulate the DNA separately --------------------------------------%
+
+
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,7 +111,7 @@ for i = 1:N
     simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
-%     rndm_measurement{i} = model_toettcher2008mex(tspan,simulationIC);
+
     rndm_measurement{i} = M2M_mexmodel(tspan,simIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     %--------------------DNA Simulation----------------------------------------

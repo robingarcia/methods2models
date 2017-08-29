@@ -21,7 +21,7 @@ function [T,Tstart] = M2M_duration(statevalues)
 %==========================================================================
 
 %% Determine cell cycle start & left corner of your plateau
-T = zeros(4,1);
+T = zeros(6,1);
 Tstart = zeros(1,1);
 % mydesire=statevalues(12,1:90)';
 mydesire=statevalues(1:end,12);
@@ -34,6 +34,8 @@ position2=con(cornerposition);
 T(1) = position2(end)-position2(end-1); %Cell cycle period
 ub = position2(end); %upper bound
 lb = position2(end-1);%lower bound
+T(5)=ub;
+T(6)=lb;
 %% Determine the peaks of your Cyclines and Cdc20A during cellcycle
 
 
