@@ -40,7 +40,7 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.1; %old value 0.009
+alpha = 0.8; %old value 0.009
 x_data = data'; % (nxN) ---------- all data
 %y_data = x_data;
 y_data = x_data; %cmatrix' * x_data; % (mxN) -------- measured data
@@ -73,8 +73,10 @@ end
 
 % normalize data
 if (params.normalize)
+    % y_data produces negative values -> result: empty inball
 	y_data = y_data-repmat(prctile(y_data, 1, 1), size(y_data,1),1);
 	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
+%     y_data = normdata(y_data);
     %find_nan=find(isnan(y_data(1,:))); %Find all columns with NaN
     %y_data(:,find_nan)=0;
     %if isempty(find_nan)

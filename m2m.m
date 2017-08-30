@@ -41,14 +41,14 @@ load('~/methods2models/datasets/toettcher_statenames.mat');
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = 0:1000;%linspace(0,1000,1*1000);%0:3000;
+    timeF = 0:1000;%1000;%linspace(0,1000,1*1000);%0:3000;
     input.tF = timeF;
 end
 
 if exist('N','var')
     input.N = N;
 else
-    N = 2000;
+    N = 1000;
     input.N = N;
 end
 
@@ -90,6 +90,8 @@ minmax(t_period(1,:))
 minmax(t_period(2,:))
 minmax(t_period(3,:))
 minmax(t_period(4,:))
+minmax(t_period(5,:))
+minmax(t_period(6,:))
 
 %% Purge datasets ---------------------------------------------------------
 [errordata,~,nzero] = M2M_purge(errordata);

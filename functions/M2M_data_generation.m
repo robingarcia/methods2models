@@ -19,6 +19,7 @@ function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generati
 %   time:         number: Timepoint of every single cell
 % [EXAMPLE]
 % Pending!
+
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria
@@ -42,11 +43,6 @@ N = input.N;
 snaps = input.snaps;
 sig = input.sig;
 mexmodel = input.mexmodel;
-%load('toettcher_statenames.mat');
-%% 1) User inputs --------------------------------------------------------%
-%disp('User inputs --------------------------------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% [~,tF,lb,N,snaps,sig]=userinteraction;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

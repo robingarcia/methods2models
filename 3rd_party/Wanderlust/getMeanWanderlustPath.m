@@ -49,7 +49,7 @@ x= mean(normGT);
 % generate path coordinates with moving average
 xwant = linspace(0,1,100);
 binsize =0.2;
-ywant = moving_average(x,y',xwant,binsize);
+ywant = moving_average(x,y',xwant,binsize);%NaN are generated!!!!!!!!!!!!!!
 
 if doplots
 % subplot layout
