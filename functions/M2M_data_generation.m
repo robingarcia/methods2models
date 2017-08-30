@@ -85,7 +85,15 @@ for i = 1:N
 end
 % Attention: Use N as input for timepoints!!!
 % --> Many loops detected within timepoints!
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+%% 5.1) Test measurement (TEST IT!!!)
+start=zeros(N,size(ic,1));
+samples=zeros(N,snaps);
+t_period=zeros(6,N);
+[start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6.1) Simulate the DNA separately --------------------------------------%
 
 
