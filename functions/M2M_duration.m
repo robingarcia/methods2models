@@ -24,7 +24,7 @@ function [T,Tstart] = M2M_duration(statevalues)
 T = zeros(6,1);
 Tstart = zeros(1,1);
 % mydesire=statevalues(12,1:90)';
-mydesire=statevalues(1:end,12);
+mydesire=statevalues(1:end,12);%12th column
 find_result = find(mydesire<10^-3); %Find all values smaller than 10e-3
 con=find_result(diff(find_result)==1);
 zeroos=diff(con)==1;
