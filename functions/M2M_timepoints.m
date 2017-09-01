@@ -37,7 +37,6 @@ function [start, samples,T] = M2M_timepoints(statevalues,snaps)
 
 %% Determine the peaks of your Cyclines and APC during cellcycle
 [T,tstart] = M2M_duration(statevalues);
-
 %% Inverse method alorithm (Remove the loop --> 29.08.2017)
 gammma = log(2)/T(1); % T (1,i) is the period of the cell cycle!
 P = rand(1,snaps);% Number of cells (=n) or time (=m)?
@@ -45,11 +44,5 @@ x=@(P,gammma)((log(-2./(P-2))/gammma));
 samples = x(P,gammma); %ceil or round
 %         P_value(i,:) = P;   
 %% New simulated IC (extracted from a simulation = cellcycle start)
-% startpoint = tstart; %Choose 3-4 periods (But only one period is required here!)
-% 
-%         A = statevalues;%{1,i};
-%     start(i,:) = A(startpoint,:); %New IC from simulated dataset
-%     start = A(startpoint,:); %New IC from simulated dataset
-    start = statevalues(tstart,:); %New IC from simulated dataset
-%     end
+start = statevalues(tstart,:); %New IC from simulated dataset
 end

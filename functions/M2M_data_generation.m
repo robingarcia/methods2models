@@ -71,27 +71,26 @@ for i = 1:N
 end
 %Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
-disp('Measurement---------------------------------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-start=zeros(N,size(ic,1));
-samples=zeros(N,snaps);
-t_period=zeros(6,N);
-for i = 1:N
-    statevalues=random_statevalues{1,i};
-    [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
-    start(i,:)=START;
-    samples(i,:)=SAMPLES;
-    t_period(:,i)=T_PERIOD;
-end
-% Attention: Use N as input for timepoints!!!
-% --> Many loops detected within timepoints!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-% %% 5.1) Test measurement (TEST IT!!!)
+% disp('Measurement---------------------------------------------------------')
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % start=zeros(N,size(ic,1));
 % samples=zeros(N,snaps);
 % t_period=zeros(6,N);
-% [start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
+% for i = 1:N
+%     statevalues=random_statevalues{1,i};
+%     [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
+%     start(i,:)=START;
+%     samples(i,:)=SAMPLES;
+%     t_period(:,i)=T_PERIOD;
+% end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+%% 5.1) Test measurement (TEST IT!!!)
+disp('TEST Measurement!!!------------------------------------------------')
+%start=zeros(N,size(ic,1));
+%samples=zeros(N,snaps);
+%t_period=zeros(6,N);
+[start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6.1) Simulate the DNA separately --------------------------------------%

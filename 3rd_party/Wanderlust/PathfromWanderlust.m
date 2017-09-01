@@ -40,7 +40,7 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.1; %old value 0.009
+alpha = 0.3; %old value 0.009
 x_data = data'; % (nxN) ---------- all data
 %y_data = x_data;
 y_data = x_data; %cmatrix' * x_data; % (mxN) -------- measured data
@@ -48,7 +48,7 @@ y_data = y_data'; % (mxN) -> (Nxm)
 x_coords = start; % Initial conditions from Toettcher model
 y_coords = x_coords; %cmatrix' * x_coords; % IC for measured outputs
 y_coords = y_coords'; %
-ballsize = range(y_data,1)*alpha; % (mx?)
+ballsize = range(y_data,1)*alpha; % (mx?) Why range(y_data,1)???
 %ballsize(end)=ballsize(end)*alpha;
 %X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
 
@@ -89,6 +89,7 @@ end
 y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
 %zero_val = find(y_data(1,:) == 0);
 % compute trajectory
+
 G = wanderlust(y_data,params);
 
 %% Visualize the result
