@@ -100,15 +100,19 @@ end
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %--> Preallocation <---------%
-%m = size(samples,2);        %
 rndm_measurement = cell(1,N);%
 measurement = cell(1,N);     %
+MEASUREMENT=cell(1,N);       %
 TSPAN = zeros(N,snaps+2);    %
 DNA = zeros(snaps+2,N);      %
+IDX= zeros(N,snaps);         %
 %----------------------------%
 for i = 1:N
-    tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
-    TSPAN(i,:) = tspan;
+    [sorted_samples,idx]=sort(samples(i,:),2);
+    IDX(i,:)=idx;
+%     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    tspan = horzcat(0,sorted_samples,t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+    TSPAN(i,:) = tspan;%Time vektor (discrete)
     simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
@@ -120,7 +124,10 @@ for i = 1:N
     DNA(:,i) = y_DNA;
     %--------------------------------------------------------------------------
     measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
+%     measurement{i} = vertcat(measurement{i},tspan);
+    MEASUREMENT{i} = measurement{i};
     measurement{i} = measurement{i}(:,2:end-1);%Remove the first and the last values (Necessary?)
+    
 end
 mydata = cell2mat(measurement);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...

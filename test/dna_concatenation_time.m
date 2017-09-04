@@ -52,3 +52,17 @@ for i = 1:2000
 plot(random_statevalues{1,i}(:,12))
 hold on
 end
+%% Plot the DNA
+
+[sort_time,idx]=sort(time);
+sort_dna=mydata(32,:);
+sort_dna=sort_dna(idx);
+scatter(sort_time,sort_dna);
+
+
+
+
+
+
+
+
