@@ -50,9 +50,12 @@ disp('Original statevalues -----------------------------------------------')
 
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
-[~,locs_apc] = findpeaks(original_statevalues(12,:));%12 = Cdc20A
-y_0 = original_statevalues(:,locs_apc(end));
+
+%% x) Calculate start of the cell cycle
+locs = M2M_start(original_statevalues);
+y_0 = original_statevalues(:,locs(6));%6=lb=lower bound
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
+
 %% 3) Randomize IC -------------------------------------------------------%
 disp('Randomize IC -------------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,32 +72,29 @@ for i = 1:N
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
-%Loop detected! (Results stored in a CELL!)
 %% 5) Measurement---------------------------------------------------------%
 % disp('Measurement---------------------------------------------------------')
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% start=zeros(N,size(ic,1));
-% samples=zeros(N,snaps);
-% t_period=zeros(6,N);
-% for i = 1:N
-%     statevalues=random_statevalues{1,i};
-%     [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
-%     start(i,:)=START;
-%     samples(i,:)=SAMPLES;
-%     t_period(:,i)=T_PERIOD;
-% end
+start=zeros(N,size(ic,1));
+samples=zeros(N,snaps);
+t_period=zeros(6,N);
+for i = 1:N
+    statevalues=random_statevalues{1,i};
+    [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
+    start(i,:)=START;
+    samples(i,:)=SAMPLES;
+    t_period(:,i)=T_PERIOD;
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %% 5.1) Test measurement (TEST IT!!!)
-disp('TEST Measurement!!!------------------------------------------------')
-%start=zeros(N,size(ic,1));
-%samples=zeros(N,snaps);
-%t_period=zeros(6,N);
-[start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
+% disp('TEST Measurement!!!------------------------------------------------')
+% [start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
 %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 6.1) Simulate the DNA separately --------------------------------------%
 
+%% 6.2) Calculate cell cycle start
 
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
