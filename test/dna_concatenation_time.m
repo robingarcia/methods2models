@@ -16,19 +16,20 @@ G2 = 4*ones(1,g2);
 fh=@(x)x*m+c;
 S = fh(g1:period-g2);
 
-% y_DNA_temp = horzcat(G1,S);
-% y_DNA_temp = horzcat(y_DNA_temp,G2);
-y_DNA_temp = horzcat(G1,G2);
+y_DNA_temp = horzcat(G1,S);
+y_DNA_temp = horzcat(y_DNA_temp,G2);
+% y_DNA_temp = horzcat(G1,G2);
 
 dna_all = repmat(y_DNA_temp,1,period);
 
 
 figure
-for i = [1,2,3,5,6,12]%[1,2,3,5]
+for i = [6,12];%[1,2,3,5,6,12]%[1,2,3,5]
 grid on
 yyaxis left
-% plot(original_statevalues(i,10:120),'LineWidth',2);
-plot(original_statevalues(i,lb:ub),'LineWidth',2);
+plot(original_statevalues(i,10:120),'LineWidth',2);
+plot(random_statevalues{1,1}(10:120,i),'LineWidth',2);
+% plot(original_statevalues(i,lb:ub),'LineWidth',2);
 
 hold on
 legend(statenames(i))
@@ -36,11 +37,11 @@ title('DNA Duplikation')
 xlabel('Zeit [h]')
 ylabel('Konzentration (a.u.)')
 end
-i=[1,2,3,5,6,12];
+i=[6,12];%[1,2,3,5,6,12];
 legend(statenames(i))
 yyaxis right
-% plot(dna_all(10:120), 'LineWidth',4,'DisplayName','DNA');
-plot(dna_all(lb:ub), 'LineWidth',4,'DisplayName','DNA');
+plot(dna_all(10:120), 'LineWidth',4,'DisplayName','DNA');
+% plot(dna_all(lb:ub), 'LineWidth',4,'DisplayName','DNA');
 
 ylabel('DNA')
 hold on
@@ -52,12 +53,40 @@ for i = 1:2000
 plot(random_statevalues{1,i}(:,12))
 hold on
 end
-%% Plot the DNA
 
-[sort_time,idx]=sort(time);
-sort_dna=mydata(32,:);
-sort_dna=sort_dna(idx);
-scatter(sort_time,sort_dna);
+%% Plot DNA and important cyclines
+ % c - a matrix defining some outputs for plotting
+c = zeros(4, 33);
+c(1,[3 4 9 10 30]) = 1;    % CycBT
+c(2,[2 15 29]) = 1;        % CycAT
+c(3,[5 16 31]) = 1;        % CycET
+c(4,12) = 1;               % Cdc20A  
+
+figure
+for i = [1,2,3,4]%[1,2,3,5,7,12]
+    hold on
+    grid on
+    yyaxis left
+    xx=mydata(33,:);
+    yy1=mydata(1,:);
+    yy2=mydata(2,:);
+    yy3=mydata(3,:);
+    yy5=mydata(5,:);
+    yy6=mydata(6,:);
+    yy12=mydata(12,:);
+    plot(xx,yy1,'r.',xx,yy2,'g.',xx,yy3,'b.',xx,yy5,'y.',xx,yy6,'m.',xx,yy12,'c.')
+% plot(xx, c*mydata,'LineWidth', 2)
+    legend(statenames(i))
+    title('DNA Duplikation')
+    xlabel('Zeit [h]')
+    ylabel('Konzentration (a.u.)')
+end
+i=[1,2,3,5,6,12];
+legend(statenames(i))
+yyaxis right
+scatter(mydata(33,:),mydata(32,:),'*')
+ylabel('DNA')
+% legend(statenames(32))
 
 
 

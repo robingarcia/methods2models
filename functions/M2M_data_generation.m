@@ -123,9 +123,10 @@ for i = 1:N
     y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
     DNA(:,i) = y_DNA;
     %--------------------------------------------------------------------------
-    measurement{i} = horzcat(measurement{i},y_DNA)'; %Save statevalues only
-%     measurement{i} = vertcat(measurement{i},tspan);
-    MEASUREMENT{i} = measurement{i};
+    measurement{i} = horzcat(measurement{i},y_DNA)'; %Add the DNA
+    measurement{i} = vertcat(measurement{i},tspan);% Add the timepoints
+%     MEASUREMENT{i} = measurement{i};
+%     MEASUREMENT{i} = vertcat(MEASUREMENT{i},tspan);
     measurement{i} = measurement{i}(:,2:end-1);%Remove the first and the last values (Necessary?)
     
 end
