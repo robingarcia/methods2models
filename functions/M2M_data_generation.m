@@ -45,25 +45,20 @@ sig = input.sig;
 mexmodel = input.mexmodel;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% --> Check, if this code is correct!
-
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
 original_statevalues = original_data.statevalues';
 
 %% x) Calculate start of the cell cycle
-locs = M2M_start(original_statevalues);
-y_0 = original_statevalues(:,locs(6));%6=lb=lower bound
+[~,lb,~] = M2M_start(original_statevalues);
+y_0 = original_statevalues(:,lb);%6=lb=lower bound
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 
 %% 3) Randomize IC -------------------------------------------------------%
 disp('Randomize IC -------------------------------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-rndmic = lognrnd_ic(N,ic); % Generate gaussian distributed ICs
+rndmic = M2M_lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 
 %% 4) Data generation-----------------------------------------------------%
 disp('Data generation-----------------------------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
@@ -72,30 +67,54 @@ for i = 1:N
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
 end
+
+%% Start for every single cell (START)
+UB=zeros(1,N);
+LB=zeros(1,N);
+PERIOD=zeros(1,N);
+for i=1:N
+    statevalues=random_statevalues{1,i}';
+    [ub,lb,period]=M2M_start(statevalues);
+    UB(:,i)=ub;
+    LB(:,i)=lb;
+    PERIOD(:,i)=period;
+end
+
+%% Cell cycle phases (DURATION)
+G1=zeros(1,N);
+S=zeros(1,N);
+G2=zeros(1,N);
+t_period=zeros(4,N);
+for i=1:N
+        statevalues=random_statevalues{1,i};
+        ub=UB(:,i);
+        lb=LB(:,i);
+        period=PERIOD(:,i);
+        [g1,s,g2] = M2M_duration(statevalues,ub,lb,period);
+        G1(:,i)=g1;
+        S(:,i)=s;
+        G2(:,i)=g2;
+end
+
+t_period(1,:)=PERIOD;
+t_period(2,:)=G1;
+t_period(3,:)=S;
+t_period(4,:)=G2;
+
 %% 5) Measurement---------------------------------------------------------%
-% disp('Measurement---------------------------------------------------------')
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+disp('Measurement---------------------------------------------------------')
 start=zeros(N,size(ic,1));
 samples=zeros(N,snaps);
-t_period=zeros(6,N);
+% t_period=zeros(6,N);
 for i = 1:N
     statevalues=random_statevalues{1,i};
-    [START, SAMPLES,T_PERIOD] = M2M_timepoints(statevalues,snaps);
+    lb=LB(:,i);
+    period=PERIOD(:,i);
+    [START, SAMPLES] = M2M_timepoints(statevalues,snaps,lb,period);
     start(i,:)=START;
     samples(i,:)=SAMPLES;
-    t_period(:,i)=T_PERIOD;
+%     t_period(:,i)=T_PERIOD;
 end
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-%% 5.1) Test measurement (TEST IT!!!)
-% disp('TEST Measurement!!!------------------------------------------------')
-% [start, samples,t_period] = M2M_timepoints_template(random_statevalues,N,snaps);
-%++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 6.1) Simulate the DNA separately --------------------------------------%
-
-%% 6.2) Calculate cell cycle start
-
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -108,35 +127,42 @@ DNA = zeros(snaps+2,N);      %
 IDX= zeros(N,snaps);         %
 %----------------------------%
 for i = 1:N
+    period=PERIOD(:,i);
+    g1=G1(:,i);
+    s=S(:,i);
     [sorted_samples,idx]=sort(samples(i,:),2);
     IDX(i,:)=idx;
-%     tspan = horzcat(0,sort(samples(i,:),2),t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
-    tspan = horzcat(0,sorted_samples,t_period(1,i)); % time vector from 0 to 30 (set t0 = 0)
+
+    tspan = horzcat(0,sorted_samples,period);
     TSPAN(i,:) = tspan;%Time vektor (discrete)
     simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
+    
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
 
     rndm_measurement{i} = M2M_mexmodel(tspan,simIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
+    
     %--------------------DNA Simulation----------------------------------------
-    y_DNA = M2M_DNAsimulation(tspan,t_period(1,i),t_period(2,i), t_period(3,i))';
+
+    y_DNA = M2M_DNAsimulation(tspan,period,g1,s)';
+
     DNA(:,i) = y_DNA;
     %--------------------------------------------------------------------------
     measurement{i} = horzcat(measurement{i},y_DNA)'; %Add the DNA
-    measurement{i} = vertcat(measurement{i},tspan);% Add the timepoints
-%     MEASUREMENT{i} = measurement{i};
-%     MEASUREMENT{i} = vertcat(MEASUREMENT{i},tspan);
+    MEASUREMENT{i} = measurement{i};
+    MEASUREMENT{i} = vertcat(MEASUREMENT{i},tspan);
     measurement{i} = measurement{i}(:,2:end-1);%Remove the first and the last values (Necessary?)
-    
+    MEASUREMENT{i} = MEASUREMENT{i}(:,2:end-1);%Remove the first and the last values (Necessary?)
+
 end
 mydata = cell2mat(measurement);
+% MYDATA = cell2mat(MEASUREMENT);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
 %% 7) Error model (add noise to dataset) ---------------------------------%
 disp('Error model (add noise to dataset) ---------------------------------')
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % This is necessary to gain realistic results
 errordata = M2M_error_model(mydata,sig);
-%% 8) Write data to output struct (later)
 end
 

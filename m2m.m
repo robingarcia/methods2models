@@ -86,12 +86,12 @@ disp(input)
 %% Data generation --------------------------------------------------------
 disp('Data generation ---------------------------------------------------')
 [ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input);
-minmax(t_period(1,:))
-minmax(t_period(2,:))
-minmax(t_period(3,:))
-minmax(t_period(4,:))
-minmax(t_period(5,:))
-minmax(t_period(6,:))
+% minmax(t_period(1,:))
+% minmax(t_period(2,:))
+% minmax(t_period(3,:))
+% minmax(t_period(4,:))
+% minmax(t_period(5,:))
+% minmax(t_period(6,:))
 
 %% Purge datasets ---------------------------------------------------------
 [errordata,~,nzero] = M2M_purge(errordata);

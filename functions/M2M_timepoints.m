@@ -1,4 +1,4 @@
-function [start, samples,T] = M2M_timepoints(statevalues,snaps)
+function [cellcyclestart, samples] = M2M_timepoints(statevalues,snaps,start,period)
 % This is an template for output generation
 % This function generates the snapshots
 % 
@@ -35,14 +35,12 @@ function [start, samples,T] = M2M_timepoints(statevalues,snaps)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 
-%% Determine the peaks of your Cyclines and APC during cellcycle
-[T,tstart] = M2M_duration(statevalues);
 %% Inverse method alorithm (Remove the loop --> 29.08.2017)
-gammma = log(2)/T(1); % T (1,i) is the period of the cell cycle!
-P = rand(1,snaps);% Number of cells (=n) or time (=m)?
-x=@(P,gammma)((log(-2./(P-2))/gammma));
-samples = x(P,gammma); %ceil or round
+omega = log(2)/period; % period = period of the cell cycle
+P = rand(1,snaps);
+x=@(P,omega)((log(-2./(P-2))/omega));
+samples = x(P,omega);
 %         P_value(i,:) = P;   
 %% New simulated IC (extracted from a simulation = cellcycle start)
-start = statevalues(tstart,:); %New IC from simulated dataset
+cellcyclestart = statevalues(start,:); %New IC from simulated dataset
 end

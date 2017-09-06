@@ -67,13 +67,13 @@ for i = [1,2,3,4]%[1,2,3,5,7,12]
     hold on
     grid on
     yyaxis left
-    xx=mydata(33,:);
-    yy1=mydata(1,:);
-    yy2=mydata(2,:);
-    yy3=mydata(3,:);
-    yy5=mydata(5,:);
-    yy6=mydata(6,:);
-    yy12=mydata(12,:);
+    xx=MYDATA(33,:);
+    yy1=MYDATA(1,:);
+    yy2=MYDATA(2,:);
+    yy3=MYDATA(3,:);
+    yy5=MYDATA(5,:);
+    yy6=MYDATA(6,:);
+    yy12=MYDATA(12,:);
     plot(xx,yy1,'r.',xx,yy2,'g.',xx,yy3,'b.',xx,yy5,'y.',xx,yy6,'m.',xx,yy12,'c.')
 % plot(xx, c*mydata,'LineWidth', 2)
     legend(statenames(i))
@@ -84,7 +84,7 @@ end
 i=[1,2,3,5,6,12];
 legend(statenames(i))
 yyaxis right
-scatter(mydata(33,:),mydata(32,:),'*')
+scatter(MYDATA(33,:),MYDATA(32,:),'*')
 ylabel('DNA')
 % legend(statenames(32))
 
