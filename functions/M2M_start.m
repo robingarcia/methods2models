@@ -9,10 +9,8 @@ plateaucorner=find(zeroos == 0);
 cornerposition = plateaucorner+1;
 position2=con(cornerposition);
 
-
 period = position2(end)-position2(end-1); %Cell cycle period
 ub = position2(end); %upper bound
 lb = position2(end-1);%lower bound
-
 end
 

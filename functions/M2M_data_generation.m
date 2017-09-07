@@ -1,4 +1,5 @@
-function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
+function [storage] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
+% function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
 % This function generates data/errordata for your model
 %
 %
@@ -43,6 +44,7 @@ N = input.N;
 snaps = input.snaps;
 sig = input.sig;
 mexmodel = input.mexmodel;
+statenames=input.statenames;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel); %New M2M_mexmodel function here
@@ -157,12 +159,28 @@ for i = 1:N
 
 end
 mydata = cell2mat(measurement);
-% MYDATA = cell2mat(MEASUREMENT);
+MYDATA = cell2mat(MEASUREMENT);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
 %% 7) Error model (add noise to dataset) ---------------------------------%
 disp('Error model (add noise to dataset) ---------------------------------')
 
 % This is necessary to gain realistic results
 errordata = M2M_error_model(mydata,sig);
+
+%% Purge datasets ---------------------------------------------------------
+[errordata,~,nzero] = M2M_purge(errordata);
+[rndmic, ~] = M2M_purge(rndmic);
+[y_0, ~] = M2M_purge(y_0);
+statenames = statenames(nzero);
+%% 8) Store the results in a struct
+storage=([]);
+storage.rndmic=rndmic;
+storage.mydata=mydata;
+storage.errordata=errordata;
+storage.y_0=y_0;
+storage.t_period=t_period;
+storage.MYDATA=MYDATA;
+storage.time=time;
+storage.statenames=statenames;
 end
 
