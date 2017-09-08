@@ -68,6 +68,7 @@ random_statevalues = cell(1,N);%
 for i = 1:N
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
+%     random_statevalues{i} = 
 end
 
 %% Start for every single cell (START)
@@ -89,7 +90,7 @@ G2=zeros(1,N);
 t_period=zeros(4,N);
 for i=1:N
         statevalues=random_statevalues{1,i};
-        ub=UB(:,i);
+        ub=UB(:,i);%tF(UB(:,i));
         lb=LB(:,i);
         period=PERIOD(:,i);
         [g1,s,g2] = M2M_duration(statevalues,ub,lb,period);
@@ -105,17 +106,22 @@ t_period(4,:)=G2;
 
 %% 5) Measurement---------------------------------------------------------%
 disp('Measurement---------------------------------------------------------')
-start=zeros(N,size(ic,1));
+% start=zeros(N,size(ic,1));
 samples=zeros(N,snaps);
 % t_period=zeros(6,N);
-for i = 1:N
-    statevalues=random_statevalues{1,i};
-    lb=LB(:,i);
-    period=PERIOD(:,i);
-    [START, SAMPLES] = M2M_timepoints(statevalues,snaps,lb,period);
-    start(i,:)=START;
+for i = 1:N 
+    period=tF(PERIOD(:,i));
+    [SAMPLES] = M2M_timepoints(snaps,period);
     samples(i,:)=SAMPLES;
-%     t_period(:,i)=T_PERIOD;
+end
+
+%% New IC for every cell 
+start=zeros(N,size(ic,1));
+for i=1:N
+    statevalues=random_statevalues{1,i};
+    lb=LB(:,i);%lb = cellcycle start
+cellcyclestart = statevalues(lb,:); %New IC from simulated dataset
+start(i,:)=cellcyclestart;
 end
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')

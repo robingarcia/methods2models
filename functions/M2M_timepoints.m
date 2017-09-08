@@ -1,4 +1,4 @@
-function [cellcyclestart, samples] = M2M_timepoints(statevalues,snaps,start,period)
+function [samples] = M2M_timepoints(snaps,period)%(statevalues,snaps,start,period)
 % This is an template for output generation
 % This function generates the snapshots
 % 
@@ -42,5 +42,5 @@ x=@(P,omega)((log(-2./(P-2))/omega));
 samples = x(P,omega);
 %         P_value(i,:) = P;   
 %% New simulated IC (extracted from a simulation = cellcycle start)
-cellcyclestart = statevalues(start,:); %New IC from simulated dataset
+% cellcyclestart = statevalues(start,:); %New IC from simulated dataset
 end

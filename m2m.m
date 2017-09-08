@@ -41,7 +41,7 @@ input.statenames=statenames;
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = 0:1000;%1000;%linspace(0,1000,1*1000);%0:3000;
+    timeF = linspace(0,1000,1*1000);%0:3000;
     input.tF = timeF;
 end
 
@@ -96,7 +96,7 @@ disp('Data generation ---------------------------------------------------')
 % [y_0, ~] = M2M_purge(y_0);
 % statenames = statenames(nzero);
 % input.statenames=statenames;
-%-----------------------Analysis-------------------------------------------
+%% -----------------------Analysis-------------------------------------------
 results=M2M_analysis(input,storage);
 
 % %% Wanderlust analysis ----------------------------------------------------
