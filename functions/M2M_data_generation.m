@@ -94,9 +94,10 @@ for i=1:N
         lb=LB(:,i);
         period=PERIOD(:,i);
         [g1,s,g2] = M2M_duration(statevalues,ub,lb,period);
-        G1(:,i)=g1;
-        S(:,i)=s;
-        G2(:,i)=g2;
+        G1(:,i)=tF(g1);
+        S(:,i)=tF(s);
+        G2(:,i)=tF(g2);
+        PERIOD(:,i)=tF(period);
 end
 
 t_period(1,:)=PERIOD;
@@ -110,7 +111,7 @@ disp('Measurement---------------------------------------------------------')
 samples=zeros(N,snaps);
 % t_period=zeros(6,N);
 for i = 1:N 
-    period=tF(PERIOD(:,i));
+    period=PERIOD(:,i);
     [SAMPLES] = M2M_timepoints(snaps,period);
     samples(i,:)=SAMPLES;
 end

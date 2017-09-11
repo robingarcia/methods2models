@@ -41,7 +41,7 @@ input.statenames=statenames;
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = linspace(0,1000,1*1000);%0:3000;
+    timeF = linspace(0,1000,20*1000);%0:3000;
     input.tF = timeF;
 end
 
@@ -55,7 +55,7 @@ end
 if exist('snaps','var')
     input.snaps = snaps;
 else 
-    snaps = 2;
+    snaps = 3;
     input.snaps = snaps;
 end
 

@@ -86,7 +86,7 @@ legend(statenames(i))
 yyaxis right
 scatter(MYDATA(33,:),MYDATA(32,:),'*')
 ylabel('DNA')
-matlab2tikz('dna_broken.tex')
+% matlab2tikz('dna_broken.tex')
 % legend(statenames(32))
 
 
