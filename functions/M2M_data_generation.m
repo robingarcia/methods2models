@@ -109,11 +109,13 @@ t_period(4,:)=G2;
 disp('Measurement---------------------------------------------------------')
 % start=zeros(N,size(ic,1));
 samples=zeros(N,snaps);
+p_value=zeros(N,snaps);
 % t_period=zeros(6,N);
 for i = 1:N 
     period=PERIOD(:,i);
-    [SAMPLES] = M2M_timepoints(snaps,period);
+    [SAMPLES,P] = M2M_timepoints(snaps,period);
     samples(i,:)=SAMPLES;
+    p_value(i,:)=P;
 end
 
 %% New IC for every cell 

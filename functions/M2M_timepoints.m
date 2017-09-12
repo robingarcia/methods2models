@@ -1,4 +1,4 @@
-function [samples] = M2M_timepoints(snaps,period)%(statevalues,snaps,start,period)
+function [samples, P] = M2M_timepoints(snaps,period)%(statevalues,snaps,start,period)
 % This is an template for output generation
 % This function generates the snapshots
 % 
