@@ -19,7 +19,7 @@ function [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
 load_options        % Load options for Wanderlust
 options.Ynames		= statenames;
 options.gamma		= log(2)/mean(t_period(1,:));%Is this ok?
-options.doplots     = 0;
+options.doplots     = 1;
 options.PathIndex   = 1:size(errordata,1);
 %% Calculate Wanderlust for all states ------------------------------------
 disp('Calculate Wanderlust for all states -------------------------------')
