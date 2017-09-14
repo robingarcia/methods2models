@@ -31,17 +31,17 @@ function [y_DNA ] = M2M_DNAsimulation(time,T,G1,S)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
-G1 = G1/T; % Neccessary??
-S = S/T;   % Neccessary??
+% G1 = G1/T; % Neccessary??
+% S = S/T;   % Neccessary??
 
-dS = T*(S-G1);  %Duration of S-Phase
-G1 = T*G1;      % Duration G1-Phase
-slope = 2/dS;   % Slope between 2N -> 4N
+% dS = T*(S-G1);  %Duration of S-Phase
+% G1 = T*G1;      % Duration G1-Phase
+slope = 2/S;   % Slope between 2N -> 4N
 y_DNA = zeros(1,length(time));
 f_3=@(time)(slope.*time+(2-(slope*G1)));
 y_DNA(time < G1) = 2;
-y_DNA(time > S*T) = 4;
-y_DNA(time >= G1 & time <= S*T) = f_3(time(time >= G1 & time <= S*T));
+y_DNA(time > G1+S) = 4;
+y_DNA(time >= G1 & time <= G1+S) = f_3(time(time >= G1 & time <= G1+S));
 end
 
 

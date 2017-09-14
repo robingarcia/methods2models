@@ -150,7 +150,7 @@ for i = 1:N
     
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
-
+% Persiod hier bestimmen?
     rndm_measurement{i} = M2M_mexmodel(tspan,simIC,mexmodel);
     measurement{i} = rndm_measurement{1,i}.statevalues;
     

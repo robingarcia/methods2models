@@ -62,7 +62,8 @@ c(2,[2 15 29]) = 1;        % CycAT
 c(3,[5 16 31]) = 1;        % CycET
 c(4,12) = 1;               % Cdc20A  
 
-figure
+fh = figure('Position',[1 1 8 6]*30,'Units','centimeters');
+fh.Pos
 for i = [1,2,3,4]%[1,2,3,5,7,12]
     hold on
     grid on
