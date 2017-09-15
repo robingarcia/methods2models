@@ -26,7 +26,7 @@ end
 
 if isfield(params,'wanderlust_weights') 
 	%params.wanderlust_weights = ones(1,length(opts.PathIndex))*10;
-    params.wanderlust_weights = ones(1,size(wdata,2))*10;
+    params.wanderlust_weights = ones(1,size(wdata,2))*1;
 end
 
 % prepare data for wanderlust  (nxd)

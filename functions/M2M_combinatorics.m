@@ -49,8 +49,8 @@ combination = cell(number(j,1),1); %Combination names
 data = errordata';
 Variance_S = zeros(1,size(errordata,2));
 Variance_A = zeros(1,size(errordata,2));
-s_E = zeros(1,size(errordata,2));
-a_E = zeros(1,size(errordata,2));
+s_Expectation = zeros(1,size(errordata,2));
+a_Expectation = zeros(1,size(errordata,2));
     
 for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
@@ -73,19 +73,19 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);%Wanderlust
-options.doplots = 0; %0 = no plot , 1 = plot
+options.doplots = 1; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 
 combination{i,1} = options.PathIndex;% Necessary?
-s_E(i,:) = cell2mat(NewPathDensity.s_single_cell_Expectation);
-a_E(i,:) = cell2mat(NewPathDensity.a_single_cell_Expectation);
+s_Expectation(i,:) = cell2mat(NewPathDensity.s_single_cell_Expectation);
+a_Expectation(i,:) = cell2mat(NewPathDensity.a_single_cell_Expectation);
 Variance_S(i,:) = NewPathDensity.s_single_cell_Variance;
 Variance_A(i,:) = NewPathDensity.a_single_cell_Variance;
 end
 summary =([]);
 summary.new = NewPathDensity;
-summary.s_Est = s_E;
-summary.a_Est = a_E;
+summary.s_Est = s_Expectation;
+summary.a_Est = a_Expectation;
 summary.Var_s = Variance_S;
 summary.Var_a = Variance_A;
 summary.comb = combination;
