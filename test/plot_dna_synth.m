@@ -4,7 +4,10 @@ area(DNA(:,1))
 yyaxis right
 plot(random_statevalues{1,1}(:,12))
 
-%%
-plot3k({mydata(1,:),mydata(12,:),mydata(32,:)})
+%% 3D Plot
+plot3k({mydata(7,:),mydata(11,:),mydata(32,:)})
 hold on
-plot3k({errordata(1,:),errordata(12,:),errordata(32,:)})
+plot3k({errordata(7,:),errordata(11,:),errordata(32,:)})
+
+%% 3D subplot
+

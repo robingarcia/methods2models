@@ -21,7 +21,7 @@ statenames=storage.statenames;
 
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
-for j = 1% 1 measurement output
+for j = 27% 1 measurement output
 summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 end
 
