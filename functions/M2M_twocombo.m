@@ -58,6 +58,6 @@ end
 results_save.best = best;%Best combination 2 from 27
 results_save.h = h; %Area under curve
 results_save.y_previous = y_previous;
-
+%scatter([1:size(trap_area,2)],trap_area)
 end
 

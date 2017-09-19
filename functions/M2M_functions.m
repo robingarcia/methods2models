@@ -40,8 +40,8 @@ x = linspace(0,1,N*snaps);
 y = zeros(size(ic,1),N*snaps); % Functions of all species
 for i = 1:size(ic,1)           %For all 27 species
    xwant = linspace(0,1,size(summary.a_Est(i,:),2));
-   x_sum = normdata(summary.a_Est(i,:));
-   y_sum = summary.Var_a(i,:);
+   x_sum = normdata(summary.a_Est(i,:)); %Expectation value (age)
+   y_sum = summary.Var_a(i,:); %Variance (age)
    ywant = moving_average(x_sum,y_sum,xwant,binsize);
    f{i} = griddedInterpolant(xwant,ywant,'cubic');% f = function
    y(i,:) = f{i}(x);%Calculate the function
