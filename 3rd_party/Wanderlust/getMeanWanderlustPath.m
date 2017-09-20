@@ -64,6 +64,7 @@ rect = [20 20 800 600];
 G.fh = figure('Color','w','Position',rect);
 
 for i = 1:size(C,1)
+	
     subplot(a,b,i)
 	[~,dens,X,Y] = kde2d(data(:,C(i,:)));
 	pcolor(X,Y,dens); shading interp							% density

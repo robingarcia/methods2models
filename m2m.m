@@ -41,14 +41,14 @@ input.statenames=statenames;
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = linspace(0,1000,20*1000);%0:3000;
+    timeF = linspace(0,1000,1*1000);%0:3000;
     input.tF = timeF;
 end
 
 if exist('N','var')
     input.N = N;
 else
-    N = 1000;
+    N = 2000;
     input.N = N;
 end
 

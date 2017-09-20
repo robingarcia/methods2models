@@ -65,3 +65,28 @@ figure(5)
 scatterhist(errordata(24,:),errordata(28,:))
 figure(6)
 scatter3(errordata(16,:),errordata(24,:),errordata(28,:))
+
+%% KDE plot after wanderlust
+C = nchoosek(1:d,2); %WChooseK ? 
+a = floor(size(C,1)^(1/2));
+b = ceil(size(C,1)/a);
+
+
+
+rect = [20 20 800 600];
+G.fh = figure('Color','w','Position',rect);
+
+for i = 1:size(C,1)
+	
+    subplot(a,b,i)
+	[~,dens,X,Y] = kde2d(data(:,C(i,:)));
+	pcolor(X,Y,dens); shading interp							% density
+	hold on
+	scatter(data(:,C(i,1)),data(:,C(i,2)),1,'w.')				% all datapoints 
+	scatter(data(G.Opts.s,C(i,1)),data(G.Opts.s,C(i,2)),1,'rx')				% start points
+	plot(ywant(C(i,1),:),ywant(C(i,2),:),'r','LineWidth',3)		% path
+	xlabel(dimension_names{C(i,1)})
+	ylabel(dimension_names{C(i,2)})
+ 
+end
+

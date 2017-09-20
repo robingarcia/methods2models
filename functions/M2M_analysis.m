@@ -16,13 +16,13 @@ statenames=storage.statenames;
 %% Wanderlust analysis ----------------------------------------------------
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
-[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+w_path = pre_wanderlust(errordata,y_0,statenames,t_period);
 
 
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
 for j = 1% 1 measurement output
-summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
+summary = M2M_combinatorics(w_path,t_period,ic,errordata,statenames,j);
 end
 
 %% Functions and new datapoints -------------------------------------------

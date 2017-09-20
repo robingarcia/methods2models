@@ -1,4 +1,4 @@
-function [summary] = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j)
+function [summary] = M2M_combinatorics(w_path,t_period,ic,errordata,statenames,j)
 % This function calculates the variance and the expectation for every state
 % 
 % 
@@ -54,17 +54,19 @@ a_Expectation = zeros(1,size(errordata,2));
     
 for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
-y_data = cmatrix * w_data';
+% y_data = cmatrix * w_data';
+% y_data = cmatrix * w_data;
+y_data = cmatrix * errordata;
 y_data = y_data';
-path = cmatrix * w_path;
+pathh = cmatrix * w_path;
 disp_var = ['Combination --->>:',num2str(options.PathIndex)];
 %% 9) Wanderlust ---------------------------------------------------------%
 disp(disp_var)
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
-options.path_weights = ones(1,length(options.PathIndex))*100;%10;%20;
-PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
+options.path_weights = ones(1,length(options.PathIndex))*1;%100;%10;%20;
+PathDensity = sbistFACS2PathDensity(y_data,pathh,options); %error because zero column??
 
 
 %% 9.3) FACSDensityTrafo ---------------------------------------------------

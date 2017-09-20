@@ -50,21 +50,11 @@ if isfield(opts,'path_bandwidths')
 else
 	% find rigth bandwidths in the different dimensions and take the mean
 	bws = zeros(d,d);
-    %I = find_nan;
-    %J = find_nan;
 	for i=1:d
-        %if i ~= I
             for j=1:d
-                
-                    %if j ~= J
                     bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
                     bws(i,j) = bandwidth(1);
-                    %else
-                    %end
-           
             end
-        %else
-        %end
       end
 	gaussbandwidth = mean(bws,2);
 end
@@ -152,7 +142,7 @@ else
         test{i} = fk(s_coords{i})';
     end
 end
-testmat = [test{:}]';
+testmat = [test{:}]';%Zero? But why??????
 
 end
 % weights for each datapoint test is the contribution of each single datapoint

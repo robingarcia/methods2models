@@ -1,4 +1,3 @@
-
 function NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale)
 
 %% Function for the transformation of pdfs to a desired pdf

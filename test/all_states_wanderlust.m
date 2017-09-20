@@ -6,7 +6,7 @@ hold on
     scatter(normdata(w_path(28,:)),normdata(w_path(i,:)))
 end
 
-%% Plot all
+%% Plot all // getmeanWanderlustpath
 y = data;
 [~,d] = size(y);
 
@@ -46,7 +46,7 @@ ywant = moving_average(x,y',xwant,binsize);%NaN are generated!!!!!!!!!!!!!!
 rect = [20 20 800 600];
 G.fh = figure('Color','w','Position',rect);
 
-for i = [2,3,5,6,10]
+for i = 1:27 %[2,3,5,6,10]
     figure(i)
 %     subplot(a,b,i)
     combi_data=[data(:,i),data(:,28)];
