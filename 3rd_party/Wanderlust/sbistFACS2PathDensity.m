@@ -50,15 +50,6 @@ if isfield(opts,'path_bandwidths')
 else
 	% find rigth bandwidths in the different dimensions and take the mean
 	bws = zeros(d,d);
-<<<<<<< HEAD
-	for i=1:d
-            for j=1:d
-                    bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
-                    bws(i,j) = bandwidth(1);
-            end
-      end
-	gaussbandwidth = mean(bws,2);
-=======
     %I = find_nan;
     %J = find_nan;
     if d==1
@@ -79,7 +70,6 @@ else
         end
         gaussbandwidth = mean(bws,2);
     end
->>>>>>> bugfix_at_3119102
 end
 
 % Number of grid points in path scale and thus also transformed scale

@@ -58,21 +58,17 @@ for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
 % y_data = cmatrix * w_data;
 y_data = cmatrix * errordata;
 y_data = y_data';
-pathh = cmatrix * w_path;
+path = cmatrix * w_path;
 disp_var = ['Combination --->>:',num2str(options.PathIndex)];
 %% 9) Wanderlust ---------------------------------------------------------%
 disp(disp_var)
 
 
 %% 9.2) FACS2Pathdensity ---------------------------------------------------
-<<<<<<< HEAD
-options.path_weights = ones(1,length(options.PathIndex))*1;%100;%10;%20;
-PathDensity = sbistFACS2PathDensity(y_data,pathh,options); %error because zero column??
-=======
 options.path_weights    = ones(1,length(options.PathIndex))*1;%10;%20;
 options.path_bandwidths = ones(1,length(options.PathIndex))*0.02;%10;%20;
 PathDensity = sbistFACS2PathDensity(y_data,path,options); %error because zero column??
->>>>>>> bugfix_at_3119102
+
 
 
 %% 9.3) FACSDensityTrafo ---------------------------------------------------

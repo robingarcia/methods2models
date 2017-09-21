@@ -17,12 +17,10 @@ statenames=storage.statenames;
 %% Wanderlust analysis ----------------------------------------------------
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
-<<<<<<< HEAD
-w_path = pre_wanderlust(errordata,y_0,statenames,t_period);
-=======
 disp('Wanderlust analysis (all states)')
-[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
->>>>>>> bugfix_at_3119102
+% [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+[~,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+
 
 
 
