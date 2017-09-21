@@ -18,34 +18,38 @@ statenames=storage.statenames;
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
 disp('Wanderlust analysis (all states)')
+time_pre=tic;
 % [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
-[~,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
-
-
-
+[w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+toc(time_pre)
 
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
-disp('Pre computation')
+disp('Combinatorics')
+time_combi=tic;
 for j = 1% 1 measurement output
 summary = M2M_combinatorics(w_path,t_period,ic,errordata,statenames,j);
 end
-
+toc(time_combi)
 %% Functions and new datapoints -------------------------------------------
 disp('Functions and new datapoints')
+m2mfun_time=tic;
 y= M2M_functions(summary,ic,N,snaps);
-
+toc(m2mfun_time)
 %% 2 combinations ---------------------------------------------------------
 disp('2 combinations')
+combi_time=tic;
 [results_save] = M2M_twocombo(y,ic,N,snaps);
-
+toc(combi_time)
 %% New approach -----------------------------------------------------------
 disp('New approach')
+np_time=tic;
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
 B = zeros(24,1);
 for i = 1:24
     B(i,1)=best_comb{i,5};
 end
+toc(np_time)
 % %% Save area --------------------------------------------------------------
 results = ([]);
 % results.names = statenames;

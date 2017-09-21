@@ -47,20 +47,25 @@ mexmodel = input.mexmodel;
 statenames=input.statenames;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
+original_time=tic;
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel);
 original_statevalues = original_data.statevalues';
-
+toc(original_time)
 %% x) Calculate start of the cell cycle
+disp('Calculate start of cell cylce -------------------------------------')
+start_time=tic;
 [~,lb,~] = M2M_start(original_statevalues);
 y_0 = original_statevalues(:,lb);%6=lb=lower bound
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
-
+toc(start_time)
 %% 3) Randomize IC -------------------------------------------------------%
 disp('Randomize IC -------------------------------------------------------')
+random_time=tic;
 rndmic = M2M_lognrnd_ic(N,ic); % Generate gaussian distributed ICs
-
+toc(random_time)
 %% 4) Data generation-----------------------------------------------------%
 disp('Data generation-----------------------------------------------------')
+generation_time=tic;
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
@@ -99,7 +104,7 @@ for i=1:N
         G2(:,i)=tF(g2);
         PERIOD(:,i)=tF(period);
 end
-
+toc(generation_time)
 t_period(1,:)=PERIOD;
 t_period(2,:)=G1;
 t_period(3,:)=S;
@@ -107,6 +112,7 @@ t_period(4,:)=G2;
 
 %% 5) Measurement---------------------------------------------------------%
 disp('Measurement---------------------------------------------------------')
+measure_time=tic;
 % start=zeros(N,size(ic,1));
 samples=zeros(N,snaps);
 p_value=zeros(N,snaps);
@@ -117,8 +123,9 @@ for i = 1:N
     samples(i,:)=SAMPLES;
     p_value(i,:)=P;
 end
-
+toc(measure_time)
 %% New IC for every cell 
+newic_time=tic;
 start=zeros(N,size(ic,1));
 for i=1:N
     statevalues=random_statevalues{1,i};
@@ -126,9 +133,11 @@ for i=1:N
 cellcyclestart = statevalues(lb,:); %New IC from simulated dataset
 start(i,:)=cellcyclestart;
 end
+toc(newic_time)
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+simul_time=tic;
 %--> Preallocation <---------%
 rndm_measurement = cell(1,N);%
 measurement = cell(1,N);     %
@@ -147,7 +156,7 @@ for i = 1:N
     tspan = horzcat(0,sorted_samples,period);
     TSPAN(i,:) = tspan;%Time vektor (discrete)
     simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
-    
+   
     %--------------------------------------------------------------------------
     % NEW SIMULATION (SNAPSHOTS)
 % Persiod hier bestimmen?
@@ -155,10 +164,10 @@ for i = 1:N
     measurement{i} = rndm_measurement{1,i}.statevalues;
     
     %--------------------DNA Simulation----------------------------------------
-
     y_DNA = M2M_DNAsimulation(tspan,period,g1,s)';
 
     DNA(:,i) = y_DNA;
+    
     %--------------------------------------------------------------------------
     measurement{i} = horzcat(measurement{i},y_DNA)'; %Add the DNA
     MEASUREMENT{i} = measurement{i};
@@ -170,18 +179,24 @@ end
 mydata = cell2mat(measurement);
 MYDATA = cell2mat(MEASUREMENT);
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
+toc(simul_time)
 %% 7) Error model (add noise to dataset) ---------------------------------%
 disp('Error model (add noise to dataset) ---------------------------------')
-
+error_time=tic;
 % This is necessary to gain realistic results
 errordata = M2M_error_model(mydata,sig);
-
+toc(error_time)
 %% Purge datasets ---------------------------------------------------------
+disp('Purge dataset ---------------------------------')
+purge_time=tic;
 [errordata,~,nzero] = M2M_purge(errordata);
 [rndmic, ~] = M2M_purge(rndmic);
 [y_0, ~] = M2M_purge(y_0);
 statenames = statenames(nzero);
+toc(purge_time)
 %% 8) Store the results in a struct
+disp('Store results in a struct---------------------------------')
+store_time=tic;
 storage=([]);
 storage.rndmic=rndmic;
 storage.mydata=mydata;
@@ -191,5 +206,6 @@ storage.t_period=t_period;
 storage.MYDATA=MYDATA;
 storage.time=time;
 storage.statenames=statenames;
+toc(store_time)
 end
 
