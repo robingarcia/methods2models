@@ -41,7 +41,11 @@ input.statenames=statenames;
 if exist('timeF','var')
     input.tF = timeF;
 else
+<<<<<<< HEAD
     timeF = linspace(0,1000,1*1000);%0:3000;
+=======
+    timeF = linspace(0,1000,2*1000);%0:3000;
+>>>>>>> bugfix_at_3119102
     input.tF = timeF;
 end
 

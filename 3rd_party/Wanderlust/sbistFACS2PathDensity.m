@@ -50,6 +50,7 @@ if isfield(opts,'path_bandwidths')
 else
 	% find rigth bandwidths in the different dimensions and take the mean
 	bws = zeros(d,d);
+<<<<<<< HEAD
 	for i=1:d
             for j=1:d
                     bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
@@ -57,6 +58,28 @@ else
             end
       end
 	gaussbandwidth = mean(bws,2);
+=======
+    %I = find_nan;
+    %J = find_nan;
+    if d==1
+        gaussbandwidth = kde(data);
+    else
+        for i=1:d
+            %if i ~= I
+            for j=1:d
+                
+                bandwidth = kde2d([data(:,i),data(:,j)]);   % Nx2? 2D -> nD?
+                bws(i,j) = bandwidth(1);
+                %else
+                %end
+                
+            end
+            %else
+            %end
+        end
+        gaussbandwidth = mean(bws,2);
+    end
+>>>>>>> bugfix_at_3119102
 end
 
 % Number of grid points in path scale and thus also transformed scale
@@ -104,12 +127,18 @@ else
 % mu = data(:,[1:length(opts.PathIndex)]);
 % Sigma = diag(gaussbandwidth([1:length(opts.PathIndex)]).*path_weights').^2;
 mu = data;
-Sigma = diag(gaussbandwidth.*path_weights').^2;
+Sigma = diag(gaussbandwidth(:).*path_weights(:)).^2;
 % [fh,jh,hh,fk,jk,hiik] = p_dimensional_Gaussian2(mu,Sigma,0);
 fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x-mu(n,:)')' * (Sigma\(x-mu(n,:)')) ),1:n);
 
 % function to get x coordinates dependent on s for the evaluation of gaussion on s
 % remove doublicates in the path coordinates
+% if any(isnan(path_coordinates))
+nan_coordinates = any(isnan(path_coordinates));
+path_coordinates = path_coordinates(:,~nan_coordinates);
+% path_coordinates = path_coordinates(:,nan_coordinates);
+% else
+% end
 path_coordinates(:,all(path_coordinates(:,(1:end-1)')==path_coordinates(:,(2:end)'))) = [];
 
 if size(path_coordinates,1)<2
@@ -125,9 +154,12 @@ end
 %fh_coords = @(s) mySpaceCurveInterpolation(path_coordinates,Sin,s);
 
 % interpolation with pchip
-pp = pchip(Sin',path_coordinates);
-fh_coords = @(s) ppval(pp,s);
-
+try
+    pp = pchip(Sin',path_coordinates); %Error here because NaN!
+    fh_coords = @(s) ppval(pp,s);
+catch
+    warning('Fehler')
+end
 
 % for fast parfor computation
 s_coords  = num2cell(fh_coords(Sout),1);
@@ -144,11 +176,20 @@ else
 end
 testmat = [test{:}]';%Zero? But why??????
 
+% set to uniform distribution if all are zero
+allzero = (testmat == 0);
+testmat(allzero) = eps(0);
+if any(allzero)
+   warning('There are %i points with zero density',sum(allzero(:))) 
+end
+
 end
 % weights for each datapoint test is the contribution of each single datapoint
 % as density on s 
-weights = trapz(Sout,testmat);%w;
-testmatnormed = testmat * diag(1./weights);
+weights = trapz(Sout,testmat*1000);%w;
+testmatnormed1 = log(testmat) + log(1000); 
+testmatnormed2  = bsxfun(@plus,testmatnormed1, -log(weights));
+testmatnormed = exp(testmatnormed2);
 
 s_single_cell = mat2cell(testmatnormed,length(Sout),ones(n,1));
 

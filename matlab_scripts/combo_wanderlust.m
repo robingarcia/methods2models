@@ -5,12 +5,13 @@ options.Ynames = statenames;
 load_options; %import t_period
 data = errordata';
 %% Wanderlust
-[G,w_data,~,~] = PathfromWanderlust(data,options,y_0);
+[G,w_data,~,~] = PathfromWanderlust(data,options,y_0);%Normalized data used here!
 w_path = G.y;
 %% FACS2PathDensity
 y_data = w_data;
 path = w_path;
-options.path_weights = ones(1,size(path,1))*100;
+options.path_weights    = ones(1,length(y_0))*1;%10;%20;
+options.path_bandwidths = ones(1,length(y_0))*(0.02)^0.5;%10;%20;
 PathDensity = sbistFACS2PathDensity(y_data,path,options);
 %% FACSDensityTrafo
 gamma = log(2)/mean(t_period(1,:));% growthrate

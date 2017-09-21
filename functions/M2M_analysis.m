@@ -4,6 +4,7 @@ function [results] = M2M_analysis(input,storage)
 
 
 %% Extract your data
+disp('Extract data')
 N=input.N;
 snaps=input.snaps;
 ic=storage.rndmic;
@@ -16,22 +17,32 @@ statenames=storage.statenames;
 %% Wanderlust analysis ----------------------------------------------------
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
+<<<<<<< HEAD
 w_path = pre_wanderlust(errordata,y_0,statenames,t_period);
+=======
+disp('Wanderlust analysis (all states)')
+[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+>>>>>>> bugfix_at_3119102
+
 
 
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
+disp('Pre computation')
 for j = 1% 1 measurement output
 summary = M2M_combinatorics(w_path,t_period,ic,errordata,statenames,j);
 end
 
 %% Functions and new datapoints -------------------------------------------
+disp('Functions and new datapoints')
 y= M2M_functions(summary,ic,N,snaps);
 
 %% 2 combinations ---------------------------------------------------------
+disp('2 combinations')
 [results_save] = M2M_twocombo(y,ic,N,snaps);
 
 %% New approach -----------------------------------------------------------
+disp('New approach')
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
 B = zeros(24,1);
 for i = 1:24
