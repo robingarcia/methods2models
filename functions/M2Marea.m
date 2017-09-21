@@ -52,7 +52,7 @@ best_additional = zeros(1,size(ic,2));
 
 
     % Wanderlust recalculate
-    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);%Wanderlust?
+    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);%Wanderlust function?
     x_wand = normdata(combo.a_E);
     y_wand = combo.Variance_A;
     ywant = moving_average(x_wand, y_wand, x, binsize);

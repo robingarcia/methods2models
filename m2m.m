@@ -41,7 +41,7 @@ input.statenames=statenames;
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = linspace(0,1000,20*1000);%0:3000;
+    timeF = linspace(0,1000,2*1000);%0:3000;
     input.tF = timeF;
 end
 

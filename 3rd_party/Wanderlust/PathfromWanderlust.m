@@ -55,8 +55,11 @@ ballsize = range(y_data,1)*alpha; % (mx?) Why range(y_data,1)???
 Y_Cor = bsxfun(@minus, y_data, y_coords);
 
 y_inball = bsxfun(@le, (Y_Cor).^2, ballsize);% lt -> le to jump over 0 column
-inball = all(y_inball,2); % 1 = within the ball, 0=not within ball
+inball = all(y_inball,2); % 1 = within the ball, 0=not within ball <<- set warning here
 
+if ~any(inball)
+   warning('no starting points for wanderlust') 
+end
 %-----------------------------
 if ~isfield(params,'s') || emptys
     params.s = find(inball);% index to the set of start points (param.s = empty?)

@@ -56,10 +56,10 @@ a_t=a.*exp(-[0:n-1]'.^2*pi^2*t_star/2);
 % now apply the inverse discrete cosine transform
 if (nargout>1)|(nargout==0)
     density=idct1d(a_t)/R;
+    density(density<0)=eps; % remove negatives due to round-off error
 end
 % take the rescaling of the data into account
 bandwidth=sqrt(t_star)*R;
-density(density<0)=eps; % remove negatives due to round-off error
 if nargout==0
     figure(1), plot(xmesh,density)
 end
