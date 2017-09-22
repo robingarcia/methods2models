@@ -40,37 +40,38 @@ function [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenam
 k=1;
 binsize = 0.1;
 
-best_comb = cell(size(ic,1)-2,5);
-y_wand = results_save.y_previous;
+best_comb = cell(size(ic,1)-size(results_save.best,2),5);
+y_wand = results_save.y_previous;% New function from previous combination
 bestcombo = results_save.best;
 number_species = minus(size(ic,1),size(bestcombo,2));
-x = linspace(0,1,size(y_wand,2));
+x = linspace(0,1,size(y_wand,2));%Normalized because from 0 to 1
 while k < number_species
 j = 1:size(ic,1);
 j = setdiff(j,bestcombo);%Exclude numbers that were already used
 best_additional = zeros(1,size(ic,2));
 
 
-    % Wanderlust recalculate
+    % Wanderlust recalculate the new combination
+    combo_time=tic;
     combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);%Wanderlust function?
-    x_wand = normdata(combo.a_E);
-    y_wand = combo.Variance_A;
-    ywant = moving_average(x_wand, y_wand, x, binsize);
+    toc(combo_time)
+    x_wand = normdata(combo.a_E);% Discrete data points
+    y_wand = combo.Variance_A;% Discrete data points
+    ywant = moving_average(x_wand, y_wand, x, binsize);% Calculate new line
 
-    B = trapz(x,ywant);
+    B = trapz(x,ywant);%Area under curve from previous combination
     
-    
+    % Find smallest area under curve
     for i = j
-        
-        best_additional(1,i) = trapz(x,y(i,:)-ywant);
-        
+        best_additional(1,i) = trapz(x,y(i,:)-ywant);%Substraction???
+%         best_additional(1,i) = trapz(x,min(ywant,y(i,:)));
     end
 
-best_additional(best_additional == 0) = NaN;
-[area,T] = min(best_additional);
+best_additional(best_additional == 0) = NaN;%Replace 0 with NaN in order to avoid 0 is detected as smallest value.
+[area,Track] = min(best_additional);
 best_comb{k,1} = bestcombo;% Best combination
-best_comb{k,2} = T;%
-best_comb{k,3} = area;
+best_comb{k,2} = Track;% New recommended protein
+best_comb{k,3} = area; % Area under the new curve
 best_comb{k,4} = best_additional;
 best_comb{k,5} = B;
 bestcombo = horzcat(best_comb{k,1},best_comb{k,2});%remove sort

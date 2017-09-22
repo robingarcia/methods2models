@@ -1,4 +1,4 @@
-function [summary] = M2M_combinatorics(w_path,t_period,ic,errordata,statenames,j)
+function [summary] = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j)
 % This function calculates the variance and the expectation for every state
 % 
 % 
@@ -54,9 +54,9 @@ a_Expectation = zeros(1,size(errordata,2));
     
 for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
 [~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
-% y_data = cmatrix * w_data';
+y_data = cmatrix * w_data';
 % y_data = cmatrix * w_data;
-y_data = cmatrix * errordata;
+% y_data = cmatrix * errordata;
 y_data = y_data';
 path = cmatrix * w_path;
 disp_var = ['Combination --->>:',num2str(options.PathIndex)];

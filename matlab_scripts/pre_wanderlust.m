@@ -1,4 +1,4 @@
-function [w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
+function [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
 % This function applies Wanderlust to all states of your model 
 % 
 % 
@@ -24,8 +24,8 @@ options.PathIndex   = 1:size(errordata,1);
 %% Calculate Wanderlust for all states ------------------------------------
 disp('Calculate Wanderlust for all states -------------------------------')
 data = errordata';
-[G,~,~,~] = PathfromWanderlust(data,options,y_0);
-
+[G,y_data,~,~] = PathfromWanderlust(data,options,y_0);
+w_data=y_data;
 % w_data = errordata;
 
 w_path = G.y; % Check these values first !!!

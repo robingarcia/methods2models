@@ -123,12 +123,13 @@ fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x
 
 % function to get x coordinates dependent on s for the evaluation of gaussion on s
 % remove doublicates in the path coordinates
-if any(isnan(path_coordinates))
-nan_coordinates = any(isnan(path_coordinates));
-path_coordinates = path_coordinates(:,~nan_coordinates);
-% path_coordinates = path_coordinates(:,nan_coordinates);
+% if any(isnan(path_coordinates)) %<-- from me
+% nan_coordinates = any(isnan(path_coordinates));
+% path_coordinates = path_coordinates(~nan_coordinates,:);%path_coordinates(:,~nan_coordinates);
+path_coordinates(isnan(path_coordinates))=[];
+% path_coordinates = path_coordinates(:,nan_coordinates);%<-- from me
 % else
-end
+% end
 path_coordinates(:,all(path_coordinates(:,(1:end-1)')==path_coordinates(:,(2:end)'))) = [];
 
 if size(path_coordinates,1)<2
