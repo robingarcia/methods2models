@@ -1,11 +1,14 @@
 
                             < M A T L A B (R) >
-                  Copyright 1984-2016 The MathWorks, Inc.
-                   R2016b (9.1.0.441655) 64-bit (glnxa64)
-                             September 7, 2016
+                  Copyright 1984-2017 The MathWorks, Inc.
+                   R2017a (9.2.0.556344) 64-bit (glnxa64)
+                               March 27, 2017
 
  
 To get started, type one of these: helpwin, helpdesk, or demo.
 For product information, visit www.mathworks.com.
  
+{Error using run (line 61)
+ex_batch not found.
+} 
 >> 
