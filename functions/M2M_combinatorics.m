@@ -77,7 +77,7 @@ newScale.pdf = @(a) 2*gamma*exp(-gamma.*a);
 newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);%Wanderlust
-options.doplots = 1; %0 = no plot , 1 = plot
+options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 
 combination{i,1} = options.PathIndex;% Necessary?

@@ -64,16 +64,16 @@ end
 if ~isfield(params,'s') || emptys
     params.s = find(inball);% index to the set of start points (param.s = empty?)
 end
-% Comment this part out!---------------------------------------------------
-	rect = [20 20 800 600];
-	fh= figure('Color','w','Position',rect);
-	psc = scatter(y_data(:,1),y_data(:,2),'ob');
-	title('Click on starting point for wanderlust')
-	xlabel(opts.Ynames(opts.PathIndex(1)))
-	ylabel(opts.Ynames(opts.PathIndex(2)))
-	hold on
-    psc = scatter(y_data(inball,1),y_data(inball,2),'or');
-%--------------------------------------------------------------------------
+% % Comment this part out!---------------------------------------------------
+% 	rect = [20 20 800 600];
+% 	fh= figure('Color','w','Position',rect);
+% 	psc = scatter(y_data(:,1),y_data(:,2),'ob');
+% 	title('Click on starting point for wanderlust')
+% 	xlabel(opts.Ynames(opts.PathIndex(1)))
+% 	ylabel(opts.Ynames(opts.PathIndex(2)))
+% 	hold on
+%     psc = scatter(y_data(inball,1),y_data(inball,2),'or');
+% %--------------------------------------------------------------------------
 
 % normalize data
 if (params.normalize)

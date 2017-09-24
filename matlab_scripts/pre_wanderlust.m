@@ -28,6 +28,6 @@ data = errordata';
 w_data=y_data;
 % w_data = errordata;
 
-w_path = G.y; % Check these values first !!!
+w_path = G.y; % Check these values first !!! (Result may contain NaN value)
 end
 
