@@ -10,8 +10,8 @@ w_path = G.y;
 %% FACS2PathDensity
 y_data = w_data;
 path = w_path;
-options.path_weights    = ones(1,length(y_0))*1;%10;%20;
-options.path_bandwidths = ones(1,length(y_0))*(0.02)^0.5;%10;%20;
+options.path_weights    = ones(1,length(y_0))*1;
+options.path_bandwidths = ones(1,length(y_0))*(0.02)^0.5;
 PathDensity = sbistFACS2PathDensity(y_data,path,options);
 % PathDensity = sbistFACS2PathDensity(data,path,options);
 %% FACSDensityTrafo

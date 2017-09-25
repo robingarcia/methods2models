@@ -124,7 +124,7 @@ fk = @(x) 1/( (2*pi)^(d/2) * (det(Sigma))^(1/2) ) .* arrayfun(@(n) exp(-0.5 * (x
 % function to get x coordinates dependent on s for the evaluation of gaussion on s
 % remove doublicates in the path coordinates
 % if any(isnan(path_coordinates)) %<-- from me
-nan_coordinates = any(isnan(path_coordinates));
+nan_coordinates = any(isnan(path_coordinates),1);%nxm n = outputs, m=100
 path_coordinates = path_coordinates(:,~nan_coordinates);
 % path_coordinates(isnan(path_coordinates))=[];
 % path_coordinates = path_coordinates(:,nan_coordinates);%<-- from me

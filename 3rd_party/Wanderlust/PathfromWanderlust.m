@@ -25,12 +25,11 @@ else
 end
 
 if isfield(params,'wanderlust_weights') 
-	%params.wanderlust_weights = ones(1,length(opts.PathIndex))*10;
     params.wanderlust_weights = ones(1,size(wdata,2))*1;
 end
 
 % prepare data for wanderlust  (nxd)
-data = wdata; % (Nxn)
+y_data = wdata; % (Nxn)
 
 % set start point
 emptys = 0;
@@ -40,17 +39,11 @@ end
 
 % dialog to set startpoint manually
 % --- Preparation -----------
-alpha = 0.1;%0.005;%0.01; %old value 0.009
-x_data = data'; % (nxN) ---------- all data
-%y_data = x_data;
-y_data = x_data; %cmatrix' * x_data; % (mxN) -------- measured data
-y_data = y_data'; % (mxN) -> (Nxm) 
+alpha = 0.01; 
 x_coords = start; % Initial conditions from Toettcher model
 y_coords = x_coords; %cmatrix' * x_coords; % IC for measured outputs
 y_coords = y_coords'; %
 ballsize = range(y_data,1)*alpha; % (mx?) Why range(y_data,1)???
-%ballsize(end)=ballsize(end)*alpha;
-%X_Cor = bsxfun(@minus, x_data, x_coords);% x - x_0
 
 Y_Cor = bsxfun(@minus, y_data, y_coords);
 
@@ -77,23 +70,13 @@ end
 
 % normalize data
 if (params.normalize)
-    % y_data produces negative values -> result: empty inball
 	y_data = y_data-repmat(prctile(y_data, 1, 1), size(y_data,1),1);
 	y_data = y_data./repmat(prctile((y_data), 99, 1),size(y_data,1),1);
-%     y_data = normdata(y_data);
-    %find_nan=find(isnan(y_data(1,:))); %Find all columns with NaN
-    %y_data(:,find_nan)=0;
-    %if isempty(find_nan)
-    %    find_nan = 0;
-    %else
-    %end
 end
 
 % weight the data
 y_data = y_data.*repmat(params.wanderlust_weights,size(y_data,1),1);
-%zero_val = find(y_data(1,:) == 0);
 % compute trajectory
-
 G = wanderlust(y_data,params);
 
 %% Visualize the result

@@ -54,10 +54,10 @@ end
 [h,Track] = sort(trap_area);% h= area under curve, Track = index of pos.
 best = C(Track,:);
 combi_store=cell(1,size(trap_area,2));
-for k = 1:size(Track,2)
-    disp(k)
-    j=Track(k);
-    disp(j)
+for k = 1:size(Track,2) 
+%     disp(k)
+    j=Track(k);%
+    disp(C(j,:))
     y_1 = y(C(j,1),:);
     y_2 = y(C(j,2),:);
     y_previous = min(y_1,y_2);

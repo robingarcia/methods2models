@@ -1,4 +1,4 @@
-function [storage] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
+function [input, data_gen] = M2M_data_generation(input)%(timeF,N,snaps,sig,mexmodel,doplots)
 % function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
 % This function generates data/errordata for your model
 %
@@ -39,6 +39,56 @@ function [storage] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 addpath(genpath('~/methods2models'));
+% filename = datestr(now,30);
+% statenames = cell(1,32);
+% load('~/methods2models/datasets/toettcher_statenames.mat');
+% input.statenames=statenames;
+% %Check inputs
+% if exist('timeF','var')
+%     input.tF = timeF;
+% else
+%     timeF = linspace(0,1000,2*1000);%0:3000;
+%     input.tF = timeF;
+% end
+% 
+% if exist('N','var')
+%     input.N = N;
+% else
+%     N = 2000;
+%     input.N = N;
+% end
+% 
+% if exist('snaps','var')
+%     input.snaps = snaps;
+% else 
+%     snaps = 2;
+%     input.snaps = snaps;
+% end
+% 
+% if exist('sig','var')
+%     input.sig = sig;
+% else 
+%     sig = 0.1;
+%     input.sig = sig;
+% end
+% 
+% if exist('mexmodel','var')
+%     mexmodel = eval(sprintf('@%s',mexmodel)); %!!!
+%     input.mexmodel = mexmodel;
+% else
+%     mexmodel = eval(sprintf('@%s','model_toettcher2008MEX'));
+%     input.mexmodel = mexmodel;
+% end
+% 
+% if exist('doplots','var')
+%     input.doplots = doplots;
+% else
+%     doplots = 0;
+%     input.doplots = doplots;
+% end
+% disp('This is your input:')
+% disp('-------------------')
+% disp(input)
 tF = input.tF;
 N = input.N;
 snaps = input.snaps;
@@ -197,15 +247,15 @@ toc(purge_time)
 %% 8) Store the results in a struct
 disp('Store results in a struct---------------------------------')
 store_time=tic;
-storage=([]);
-storage.rndmic=rndmic;
-storage.mydata=mydata;
-storage.errordata=errordata;
-storage.y_0=y_0;
-storage.t_period=t_period;
-storage.MYDATA=MYDATA;
-storage.time=time;
-storage.statenames=statenames;
+data_gen=([]);
+data_gen.rndmic=rndmic;
+data_gen.mydata=mydata;
+data_gen.errordata=errordata;
+data_gen.y_0=y_0;
+data_gen.t_period=t_period;
+data_gen.MYDATA=MYDATA;
+data_gen.time=time;
+data_gen.statenames=statenames;
 toc(store_time)
 end
 

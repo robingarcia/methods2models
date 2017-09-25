@@ -19,30 +19,40 @@ statenames=storage.statenames;
 % This corresponds to a model output of all simultaneously measured states.
 disp('Wanderlust analysis (all states)')
 time_pre=tic;
-[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
+[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period,input);
 % [w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
 toc(time_pre)
-
+all_states = ([]);
+all_states.w_data=w_data;
+all_states.w_path=w_path;
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
 disp('Combinatorics')
 time_combi=tic;
-for j = 1% 1 measurement output
-summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
+for j = 1% number # of measurement outputs
+w_summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
 end
 toc(time_combi)
+pre_computation=([]);
+pre_computation.w_summary=w_summary;
 %% Functions and new datapoints -------------------------------------------
 disp('Functions and new datapoints')
 m2mfun_time=tic;
-y= M2M_functions(summary,ic,N,snaps);
+y= M2M_functions(w_summary,ic,N,snaps);
 toc(m2mfun_time)
+new_functions=([]);
+new_functions.y=y;
 %% 2 combinations ---------------------------------------------------------
 disp('2 combinations')
 combi_time=tic;
 % [results_save] = M2M_twocombo(y,ic,N,snaps);
 [~,combi_store] = M2M_twocombo(y,ic,N,snaps);
 toc(combi_time)
-
+% for i=1:351
+% dual_combi(i,:)=combi_store{1,i}.best;
+% end
+two_combi=([]);
+two_combi.combi_store=combi_store;
 %% New approach (more combinations) ---------------------------------------
 disp('New approach (more combinations)')
 np_time=tic;
@@ -55,6 +65,7 @@ best_comb(empties(1),:)=[];%Remove empty cells
 BEST{i}=best_comb;
 toc(np_time)
 end
+BEST=BEST(~cellfun(@isempty,BEST));
 % Single values from cell to vector
 % areas=zeros(size(best_comb,1),1);
 % candidate=zeros(size(best_comb,1),1);
@@ -63,6 +74,8 @@ end
 %     candidate(i,1)=best_comb{i,2};
 % end
 toc(np_time)
+np_problem=([]);
+np_problem.BEST=BEST;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% New approach -----------------------------------------------------------
 % disp('New approach')
@@ -87,8 +100,14 @@ results = ([]);
 % results.f = f;
 % results.best_comb = best_comb;
 % results.B = B;
-results.BEST = BEST;
-results.input = input;
-results.storage= storage;
+results.all_states=all_states;
+results.pre_computation=pre_computation;
+results.new_functions=new_functions;
+results.two_combi=two_combi;
+results.np_problem=np_problem;
+% results.combi_store;
+% results.BEST = BEST;
+% results.input = input;
+% results.storage= storage;
 end
 
