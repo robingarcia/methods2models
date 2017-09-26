@@ -113,3 +113,4 @@ for k = 1:size(m2m_result.analysis.np_problem.BEST,2)
 end
 np_problem{i}=np_struct;
 end
+bar(np_struct.np_area)
