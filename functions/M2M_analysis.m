@@ -57,7 +57,7 @@ two_combi.combi_store=combi_store;
 disp('New approach (more combinations)')
 np_time=tic;
 BEST=cell(1,size(combi_store,2));
-for i= 1:size(combi_store,2)
+for i= 1:2%size(combi_store,2)
 results_save=combi_store{i};
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
 empties=find(cellfun(@isempty,best_comb));%Detect empty cells

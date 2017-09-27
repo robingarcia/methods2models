@@ -79,38 +79,45 @@ end
 % end
 % end
 
+%% Best and worse datapoints with DNA
+y=m2m_result.analysis.new_functions.y;
+for i = 1:27
+plot(y(i,:))
+
+hold on
+
+end
+legend(name([1:27]))
+%% Dual combination plot
+for i=1
+    figure(i)
+    plot(y(m2m_result.analysis.two_combi.combi_store{1,i}.best(1),:))
+    hold on
+    plot(y(m2m_result.analysis.two_combi.combi_store{1,i}.best(2),:))
+    hold on
+    plot(m2m_result.analysis.two_combi.combi_store{1,i}.y_previous)
+end
 %% Results
 np_struct=([]);
-np_problem=cell(size(m2m_result.analysis.two_combi.combi_store,2),1);
-% for i = 1:size(m2m_result.analysis.two_combi.combi_store,2)
-%     dual_combination(i,:)=m2m_result.analysis.two_combi.combi_store{1,i}.best;
-%     for j = 1:size(m2m_result.analysis.np_problem.BEST{1,1},1)
-% end
-% 
-% for i = 1%:size(m2m_result.analysis.np_problem.BEST,2)
-%     for j = 1:size(m2m_result.analysis.np_problem.BEST,2)
-%     np_combination(j,i)= m2m_result.analysis.np_problem.BEST{1,i}{j,2};
-%     end
-% end
-%--------------------------------------------
+np_problem=cell(size(m2m_result.analysis.np_problem.BEST,2),1);
 
-for i = 1:size(m2m_result.analysis.two_combi.combi_store,2)%351
+for i = 1:size(m2m_result.analysis.np_problem.BEST,2)
     dual_combination=m2m_result.analysis.two_combi.combi_store{1,i}.best;
     dual_area=m2m_result.analysis.two_combi.combi_store{1,i}.area;
     np_struct.dual_combination=dual_combination;
     np_struct.dual_area=dual_area;
-% end
 
-for k = 1:size(m2m_result.analysis.np_problem.BEST,2)
-    for j = 1:size(m2m_result.analysis.np_problem.BEST{1,1},1)
-    np_combination(j) = m2m_result.analysis.np_problem.BEST{1,k}{j,2};
-    np_area(j) = m2m_result.analysis.np_problem.BEST{1,k}{j,5};
+    np_combination = [m2m_result.analysis.np_problem.BEST{1,i}{:,2}];
+    np_area = [m2m_result.analysis.np_problem.BEST{1,i}{:,5}];
     np_struct.np_combination=np_combination;
     np_struct.np_area=np_area';
-    end
-%     np_struct.np_combination=np_combination;
-%     np_struct.np_area=np_area';
+
+    np_problem{i}=np_struct;
 end
-np_problem{i}=np_struct;
+
+for i =1:2
+    bar_data(:,i)=np_problem{i,1}.np_area;
 end
-bar(np_struct.np_area)
+% bar(np_struct.np_area)
+% bar3(np_struct.np_area)
+
