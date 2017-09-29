@@ -96,6 +96,7 @@ disp('Data generation ---------------------------------------------------')
 % [input,storage] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
 % save([filename '.mat'], 'storage','-v7.3');
 m2m_result.data_gen=storage;
+
 %% -----------------------Analysis-----------------------------------------
 disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
@@ -125,4 +126,7 @@ end
 
 %% Save the results
 save([filename '.mat'], 'm2m_result','-v7.3');
+
+%% Send notification
+% m2m_mail('robing@selfnet.de','Test33','Daten erstellung war erfolgreich')
 end

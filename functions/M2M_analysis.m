@@ -57,9 +57,13 @@ two_combi.combi_store=combi_store;
 disp('New approach (more combinations)')
 np_time=tic;
 BEST=cell(1,size(combi_store,2));
-for i= 1:2%size(combi_store,2)
+for i= 1:size(combi_store,2)
+    disp_var = ['Measurement combination ->>:',num2str(combi_store{i}.best)];
+    disp('###############################################################')
+    disp(disp_var)
+    disp('###############################################################')
 results_save=combi_store{i};
-[best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
+[best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames,combi_store,i);
 empties=find(cellfun(@isempty,best_comb));%Detect empty cells
 best_comb(empties(1),:)=[];%Remove empty cells
 BEST{i}=best_comb;

@@ -1,4 +1,4 @@
-function [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames)
+function [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames,combi_store,l)
 % This function calculates the area unter the curve 
 % 
 % 
@@ -45,7 +45,9 @@ y_wand = results_save.y_previous;% New function from previous combination
 bestcombo = results_save.best;
 number_species = minus(size(ic,1),size(bestcombo,2));
 x = linspace(0,1,size(y_wand,2));%Normalized because from 0 to 1
+old=combi_store{l}.best;
 while k < number_species
+    time_spec=tic;
 j = 1:size(ic,1);
 j = setdiff(j,bestcombo);%Exclude numbers that were already used
 best_additional = zeros(1,size(ic,2));
@@ -76,7 +78,16 @@ best_comb{k,4} = best_additional;
 best_comb{k,5} = B;
 bestcombo = horzcat(best_comb{k,1},best_comb{k,2});%remove sort
 k = k+1;
-disp(k)
+toc(time_spec)
+
+% clc
+disp('*******************************************************************')
+disp(['Old combination:>>' num2str(old)])
+disp(['Add:',num2str(k)])
+old=horzcat(old,k);
+disp(['New combination:<<' num2str(old)])
+disp(['Time:',num2str(toc(time_spec))])
+disp('*******************************************************************')
 end
 end
 
