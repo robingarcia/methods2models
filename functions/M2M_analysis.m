@@ -59,11 +59,16 @@ np_time=tic;
 BEST=cell(1,size(combi_store,2));
 for i= 1:size(combi_store,2)
     disp_var = ['Measurement combination ->>:',num2str(combi_store{i}.best)];
-    disp('###############################################################')
+    disp(['>>>',num2str(linspace(i,i,10)),'<<<'])
     disp(disp_var)
-    disp('###############################################################')
+    disp_from=[num2str(i), ' from ', num2str(size(combi_store,2))];
+    disp(disp_from)
+    disp(['>>>',num2str(linspace(size(combi_store,2),size(combi_store,2),10)),'<<<'])
+    m2m_mail('teb81338@stud.uni-stuttgart.de','New approach',evalc('disp(disp_from)'))
 results_save=combi_store{i};
-[best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames,combi_store,i);
+
+[best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
+
 empties=find(cellfun(@isempty,best_comb));%Detect empty cells
 best_comb(empties(1),:)=[];%Remove empty cells
 BEST{i}=best_comb;

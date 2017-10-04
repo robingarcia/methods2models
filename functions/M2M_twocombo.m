@@ -50,6 +50,8 @@ for i = 2 %Only 2 combinations are considered here
         trap_area(1,j) = trapz(x,y_previous);
     end
 end
+
+%% Smallest area under the curve for a particular combination
 % [h,Track] = min(trap_area);
 [h,Track] = sort(trap_area);% h= area under curve, Track = index of pos.
 best = C(Track,:);
@@ -69,6 +71,7 @@ for k = 1:size(Track,2)
     combi.y_previous=y_previous;
     combi_store{k}=combi;
 end
+results_save.track=Track; %Track is the position of the C-Matrix
 results_save.best = best;%Best combination 2 from 27
 results_save.h = h; %Area under curve
 results_save.y_previous = y_previous;
