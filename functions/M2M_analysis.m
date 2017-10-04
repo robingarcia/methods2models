@@ -70,7 +70,10 @@ results_save=combi_store{i};
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
 
 empties=find(cellfun(@isempty,best_comb));%Detect empty cells
+if ~isempty(empties)
 best_comb(empties(1),:)=[];%Remove empty cells
+else
+end
 BEST{i}=best_comb;
 toc(np_time)
 end
