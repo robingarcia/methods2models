@@ -101,6 +101,18 @@ m2m_mail('teb81338@stud.uni-stuttgart.de','Data generation',evalc('disp(m2m_resu
 else
    disp('No notification') 
 end
+
+% %% Testumgebung +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% % Analysis
+% [s_Exp,a_Exp,s_Var,a_Var] = M2M_analysis_temp(data,t_period,y_0,options);
+% 
+% %Area
+% C = WChooseK(z,2);% Two measurement outputs
+% [ output_args ] = M2M_area_temp(s_Exp,a_Exp,s_Var,a_Var,C);
+% 
+% 
+% [s_Exp,a_Exp,s_Var,a_Var] = M2M_analysis_temp(data,t_period,y_0,options);
+% %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %% -----------------------Analysis-----------------------------------------
 disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
@@ -110,6 +122,10 @@ m2m_mail('teb81338@stud.uni-stuttgart.de','Analysis',evalc('disp(m2m_result)'))
 else 
     disp('No notification')
 end
+
+%% -------------------------------Area---------------------------------------------
+% This part solves the np-problem
+
 % %% ------------------ Results ---------------------------------------------
 % disp('Results -----------------------------------------------------------')
 % size(results.BEST{1,1},1)

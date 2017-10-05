@@ -70,7 +70,7 @@ for i= [1,351]%size(combi_store,2)
     else
        disp('No notification')
     end
-results_save=combi_store{i};
+results_save=combi_store{i};%Use a combination here!
 
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
 
