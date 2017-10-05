@@ -57,7 +57,7 @@ two_combi.combi_store=combi_store;
 disp('New approach (more combinations)')
 np_time=tic;
 BEST=cell(1,size(combi_store,2));
-for i= 1:size(combi_store,2)
+for i= 350%1:size(combi_store,2)
     disp_var = ['Measurement combination ->>:',num2str(combi_store{i}.best)];
     disp(['>>>',num2str(linspace(i,i,10)),'<<<'])
     disp(disp_var)
