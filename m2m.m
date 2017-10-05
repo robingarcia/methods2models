@@ -97,7 +97,7 @@ disp('Data generation ---------------------------------------------------')
 % save([filename '.mat'], 'storage','-v7.3');
 m2m_result.data_gen=storage;
 if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Data generation',evalc(['disp(m2m_result)']))
+m2m_mail('teb81338@stud.uni-stuttgart.de','Data generation',evalc('disp(m2m_result)'))
 else
    disp('No notification') 
 end
@@ -106,7 +106,7 @@ disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
 if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Analysis',evalc(['disp(m2m_result)']))
+m2m_mail('teb81338@stud.uni-stuttgart.de','Analysis',evalc('disp(m2m_result)'))
 else 
     disp('No notification')
 end
@@ -136,7 +136,7 @@ end
 %% Save the results
 save([filename '.mat'], 'm2m_result','-v7.3');
 if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Workspace saved',evalc(['disp(m2m_result)']))
+m2m_mail('teb81338@stud.uni-stuttgart.de','Workspace saved',evalc('disp(m2m_result)'))
 else
    disp('No notification') 
 end
