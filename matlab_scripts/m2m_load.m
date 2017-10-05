@@ -41,3 +41,10 @@ else
     doplots = 0;
     input.doplots = doplots;
 end
+
+if exist('domail','var')
+    input.domail = domail;
+else
+    domail = 0;
+    input.domail = domail;
+end
