@@ -1,0 +1,106 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+\definecolor{mycolor2}{rgb}{0.85000,0.32500,0.09800}%
+\definecolor{mycolor3}{rgb}{0.92900,0.69400,0.12500}%
+\definecolor{mycolor4}{rgb}{0.49400,0.18400,0.55600}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=7.607cm,
+height=8cm,
+at={(0cm,0cm)},
+scale only axis,
+xmin=0.000,
+xmax=50.000,
+xlabel style={font=\color{white!15!black}},
+xlabel={Time (h)},
+ymin=0.000,
+ymax=5000.000,
+ylabel style={font=\color{white!15!black}},
+ylabel={Frequency},
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={Distribution of different cell cycle phases},
+xmajorgrids,
+ymajorgrids,
+legend style={legend cell align=left, align=left, draw=white!15!black}
+]
+\addplot[ybar interval, fill=mycolor1, fill opacity=0.600, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+27.500	409.000\\
+28.500	737.000\\
+29.500	363.000\\
+30.500	284.000\\
+31.500	240.000\\
+32.500	214.000\\
+33.500	193.000\\
+34.500	196.000\\
+35.500	161.000\\
+36.500	182.000\\
+37.500	212.000\\
+38.500	217.000\\
+39.500	225.000\\
+40.500	230.000\\
+41.500	291.000\\
+42.500	357.000\\
+43.500	261.000\\
+44.500	150.000\\
+45.500	73.000\\
+46.500	4.000\\
+47.500	1.000\\
+48.500	1.000\\
+};
+\addlegendentry{Cell-cycle period}
+
+\addplot[ybar interval, fill=mycolor2, fill opacity=0.600, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+9.500	157.000\\
+10.500	872.000\\
+11.500	449.000\\
+12.500	331.000\\
+13.500	265.000\\
+14.500	214.000\\
+15.500	200.000\\
+16.500	204.000\\
+17.500	197.000\\
+18.500	198.000\\
+19.500	208.000\\
+20.500	228.000\\
+21.500	305.000\\
+22.500	342.000\\
+23.500	363.000\\
+24.500	333.000\\
+25.500	120.000\\
+26.500	12.000\\
+27.500	2.000\\
+28.500	2.000\\
+};
+\addlegendentry{G1 phase}
+
+\addplot[ybar interval, fill=mycolor3, fill opacity=0.600, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+11.500	178.000\\
+12.500	4558.000\\
+13.500	264.000\\
+14.500	264.000\\
+};
+\addlegendentry{S phase}
+
+\addplot[ybar interval, fill=mycolor4, fill opacity=0.600, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+3.500	432.000\\
+4.500	2567.000\\
+5.500	1903.000\\
+6.500	98.000\\
+7.500	98.000\\
+};
+\addlegendentry{G2 phase}
+
+\end{axis}
+\end{tikzpicture}%

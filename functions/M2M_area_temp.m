@@ -15,7 +15,7 @@ x = linspace(0,1,n_cells);%Normalized because from 0 to 1
    y = ywant;%Wanted datapoints
    
    % Dual combinations
-   if   C<=2
+   if   size(C,2) <=2
         combi = ([]);
         trap_area = zeros(1,size(C,1));
         for j = 1:size(C,1)
