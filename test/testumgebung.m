@@ -13,17 +13,25 @@ options.gamma		= log(2)/mean(t_period(1,:));%Is this ok?
 C=WChooseK(1:27,1);
 % [Y,combi,cmatrix] = M2M_Cmatrix(27,2,size(data,2),data');
 for j=2 %j=???
-% [Y,combi,cmatrix] = M2M_Cmatrix(27,j,size(data,2),data');
+[Y,combi,cmatrix] = M2M_Cmatrix(27,j,size(data,2),data');
 % data=data*cmatrix;
-data=Y';
+c=zeros(1,28);
+c(1,combi)=1;
+c_data=c*data';
+c_y0=c*y_0;
+% data=Y';
 % y_0=cmatrix*y_0;
-y_0=y_0(combi,:);
-options.PathIndex   = 1:size(data,2);
+% y_0=y_0(combi,:);
+% options.PathIndex   = 1:size(data,2);
+options.PathIndex   = 1:size(c_data,1);
+
 statenames=statenames(combi);
 options.Ynames		= statenames;
 options.Yindex=combi;
 
-[s_Exp,a_Exp,s_Var,a_Var]=M2M_analysis_temp(data,t_period,y_0,options);
+% [s_Exp,a_Exp,s_Var,a_Var]=M2M_analysis_temp(data,t_period,y_0,options);
+[s_Exp,a_Exp,s_Var,a_Var]=M2M_analysis_temp(c_data,t_period,c_y0,options);
+
 end
 
 %% Area Testumgebung
