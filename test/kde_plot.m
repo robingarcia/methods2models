@@ -1,9 +1,11 @@
 %% KDE plot 
+mydata=storage.errordata;
 data=zeros(size(mydata,2),2);
 name=storage.statenames;
 combi=WChooseK(1:27,2);
 for i=1:5%size(combi,1)
-    figure(i)
+    f=figure(i);
+    set(f,'Visible','off');
     data(:,1)=mydata(combi(i,1),:)';
     data(:,2)=mydata(combi(i,2),:)';
     [bandwidth,density,X,Y]=kde2d(data);

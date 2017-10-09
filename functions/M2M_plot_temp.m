@@ -13,6 +13,91 @@ mkdir('~/bwSyncAndShare/Masterarbeit/fig/',dirname)
 % tex2standalone(save_path);  %Refurbished tex-file
 % matlab2tikz(['~/bwSyncAndShare/Masterarbeit/fig/',dirname '/' f.Name filename '.tex']);
 % tex2standalone(['~/bwSyncAndShare/Masterarbeit/fig/',dirname '/' f.Name filename '.tex']);
+
+%% Toettcher plot original (final)
+c = zeros(4, 31);
+c(1,[3 4 9 10 30]) = 1;    % CycBT
+c(2,[2 15 29]) = 1;        % CycAT
+c(3,[5 16 31]) = 1;        % CycET
+c(4,12) = 1;               % Cdc20A
+f=figure('Name','original_statevalues_');
+plot(timeF, c*original_statevalues,'LineWidth',2);
+legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
+xlabel('time (h)'), ylabel('concentration (AU)')
+fig=gcf;
+ax=gca;
+
+% +++++++++++Save
+file_name       = [f.Name filename];%Directory name of the file
+save_path       = [workpath,'/fig/',dirname '/' file_name '/' file_name '.tex'];
+
+matlab2tikz(save_path,'standalone',true);     %Raw tex-file
+matlab2tikz(['~/bwSyncAndShare/Masterarbeit/fig/',dirname '/' file_name '/' file_name '.tex'],'standalone',true);
+%++++++++++++Save
+%% Cell cycle phase distribution
+f=figure('Name','phasedistribution_');
+ax1=subplot(2,2,1);
+histogram(t_period(1,:))
+title('Periode')
+ax2=subplot(2,2,2);
+histogram(t_period(2,:))
+title('G1-Phase')
+ax3=subplot(2,2,3);
+histogram(t_period(3,:))
+title('S-Phase')
+ax4=subplot(2,2,4);
+histogram(t_period(4,:))
+title('G2-Phase')
+
+% +++++++++++Save
+file_name       = [f.Name filename];%Directory name of the file
+save_path       = [workpath,'/fig/',dirname '/' file_name '/' file_name '.tex'];
+
+matlab2tikz(save_path,'standalone',true);     %Raw tex-file
+matlab2tikz(['~/bwSyncAndShare/Masterarbeit/fig/',dirname '/' file_name '/' file_name '.tex'],'standalone',true);
+%++++++++++++Save
+
+%% Randomized IC (it works)
+ip = [1,2,3,5];
+a = floor(size(ip,2)^(1/2));
+b = ceil(size(ip,2)/a);
+
+% Loop counter
+loopcnt=0;
+sum=0;
+
+
+f=figure('Name','random_ic_');
+while(sum <size(ip,2))
+
+    for i = ip%1:size(ic,1)
+
+    sum = sum + 1;
+    disp(sum)
+
+
+    subplot(b,a,sum)
+    h=histogram(rndmic(i,:),2000);
+
+    title(statenames(i))
+    xlabel('Concentration (a.u.)')
+    ylabel('Number of cells')
+    xlim([0 1])
+    set(gca,'FontSize',12) 
+    end
+end
+% +++++++++++Save
+file_name       = [f.Name filename];%Directory name of the file
+save_path       = [workpath,'/fig/',dirname '/' file_name '/' file_name '.tex'];
+
+matlab2tikz(save_path,'standalone',true);     %Raw tex-file
+matlab2tikz(['~/bwSyncAndShare/Masterarbeit/fig/',dirname '/' file_name '/' file_name '.tex'],'standalone',true);
+%++++++++++++Save
+
+
+%% Snapshot generation
+
+
 %% Toettcher plot
 ic_default = model_toettcher2008MEX;
 % ic_default= M2M_purge(ic_default);

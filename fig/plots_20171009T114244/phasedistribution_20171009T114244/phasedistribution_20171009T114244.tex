@@ -1,0 +1,164 @@
+% This file was created by matlab2tikz.
+%
+%The latest updates can be retrieved from
+%  http://www.mathworks.com/matlabcentral/fileexchange/22022-matlab2tikz-matlab2tikz
+%where you can also make suggestions and rate matlab2tikz.
+%
+\documentclass[tikz]{standalone}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{pgfplots}
+\usepackage{grffile}
+\pgfplotsset{compat=newest}
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{arrows.meta}
+\usepgfplotslibrary{patchplots}
+\usepackage{amsmath}
+
+\begin{document}
+\definecolor{mycolor1}{rgb}{0.00000,0.44700,0.74100}%
+%
+\begin{tikzpicture}
+
+\begin{axis}[%
+width=1.952in,
+height=1.493in,
+at={(0.758in,2.554in)},
+scale only axis,
+xmin=20,
+xmax=50,
+ymin=0,
+ymax=400,
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={Periode}
+]
+\addplot[ybar interval, fill=mycolor1, fill opacity=0.6, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+27	77\\
+28	394\\
+29	222\\
+30	175\\
+31	147\\
+32	128\\
+33	115\\
+34	127\\
+35	82\\
+36	109\\
+37	158\\
+38	90\\
+39	65\\
+40	90\\
+41	21\\
+42	21\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=1.952in,
+height=1.493in,
+at={(3.327in,2.554in)},
+scale only axis,
+xmin=5,
+xmax=20,
+ymin=0,
+ymax=600,
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={G1-Phase}
+]
+\addplot[ybar interval, fill=mycolor1, fill opacity=0.6, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+6	126\\
+7	440\\
+8	268\\
+9	170\\
+10	144\\
+11	140\\
+12	115\\
+13	107\\
+14	140\\
+15	120\\
+16	97\\
+17	105\\
+18	28\\
+19	28\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=1.952in,
+height=1.493in,
+at={(0.758in,0.481in)},
+scale only axis,
+xmin=12,
+xmax=13.5,
+ymin=0,
+ymax=2000,
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={S-Phase}
+]
+\addplot[ybar interval, fill=mycolor1, fill opacity=0.6, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+12	265\\
+12.05	0\\
+12.1	0\\
+12.15	0\\
+12.2	0\\
+12.25	0\\
+12.3	0\\
+12.35	0\\
+12.4	0\\
+12.45	0\\
+12.5	1682\\
+12.55	0\\
+12.6	0\\
+12.65	0\\
+12.7	0\\
+12.75	0\\
+12.8	0\\
+12.85	0\\
+12.9	0\\
+12.95	0\\
+13	53\\
+13.05	53\\
+};
+\end{axis}
+
+\begin{axis}[%
+width=1.952in,
+height=1.493in,
+at={(3.327in,0.481in)},
+scale only axis,
+xmin=6,
+xmax=12,
+ymin=0,
+ymax=600,
+axis background/.style={fill=white},
+title style={font=\bfseries},
+title={G2-Phase}
+]
+\addplot[ybar interval, fill=mycolor1, fill opacity=0.6, draw=black, area legend] table[row sep=crcr] {%
+x	y\\
+7	47\\
+7.2	0\\
+7.4	232\\
+7.6	0\\
+7.8	0\\
+8	433\\
+8.2	0\\
+8.4	579\\
+8.6	0\\
+8.8	0\\
+9	514\\
+9.2	0\\
+9.4	191\\
+9.6	0\\
+9.8	0\\
+10	4\\
+10.2	4\\
+};
+\end{axis}
+\end{tikzpicture}%
+\end{document}

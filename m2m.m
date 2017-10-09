@@ -36,7 +36,9 @@ filename = datestr(now,30);
 timestamp{:}=filename;
 m2m_result=([]);
 m2m_result.filename=filename;
-addpath(genpath('~/methods2models'));
+global workpath;
+workpath='~/methods2models';%Root directory of the m2m-toolbox
+addpath(genpath(workpath));
 statenames = cell(1,32);
 load('~/methods2models/datasets/toettcher_statenames.mat');
 input.statenames=statenames;

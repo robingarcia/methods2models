@@ -11,14 +11,14 @@ sum=0;
 
 
 figure(1)
-    while(sum <size(ip,2))
+while(sum <size(ip,2))
 
-for i = ip%1:size(ic,1)
+    for i = ip%1:size(ic,1)
 %     while(sum <=size(ip,2))
     sum = sum + 1;
     disp(sum)
 
-    ax.XLim = [0 1];
+%     ax.XLim = [0 1];
 %     subplot(b,a,i)
     subplot(b,a,sum)
 %     h=histogram(ic(i,:),2000);
