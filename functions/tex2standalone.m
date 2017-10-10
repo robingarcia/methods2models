@@ -27,7 +27,6 @@ function tex2standalone(texname)
 % blubb.tex
 % }
 % \end{document}
-%
 %   +++++++++++++ ATTENTION +++++++++++++++
 % This function requires MATLAB 2017a or later!
 

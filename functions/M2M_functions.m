@@ -44,8 +44,9 @@ for i = 1:size(ic,1)           %For all 27 species
    y_sum = summary.Var_a(i,:); %Variance (age)
    ywant = moving_average(x_sum,y_sum,xwant,binsize);
    f{i} = griddedInterpolant(xwant,ywant,'cubic');% f = function
-   y(i,:) = f{i}(x);%Calculate the function
    
+%    y(i,:) = f{i}(x);%Calculate the function
+     y(i,:) = ywant;
 % h=figure(i);
 % ori=subplot(3,1,1);
 % scatter(normdata(summary.a_Est(i,:)),summary.Var_a(i,:),'r')
