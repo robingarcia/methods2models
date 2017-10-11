@@ -60,7 +60,7 @@ best_additional = zeros(1,size(ic,1));
 
     % Wanderlust recalculate the new combination (Time consuming step)
     combo_time=tic;
-    combo = combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);%Wanderlust function?
+    combo = M2M_combo_wanderlust(errordata(bestcombo,:),t_period,y_0(bestcombo),statenames);%Wanderlust function?
     toc(combo_time)
     x_wand = normdata(combo.a_E);% Discrete data points
     y_wand = combo.Variance_A;% Discrete data points

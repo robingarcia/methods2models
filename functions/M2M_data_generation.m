@@ -1,4 +1,4 @@
-function [input, data_gen] = M2M_data_generation(input)%(timeF,N,snaps,sig,mexmodel,doplots)
+function [input, data_gen] = M2M_data_generation(input)
 % function [rndmic,mydata,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(input)%(tF,N,snaps,sig,mexmodel)
 % This function generates data/errordata for your model
 %
@@ -19,7 +19,7 @@ function [input, data_gen] = M2M_data_generation(input)%(timeF,N,snaps,sig,mexmo
 %   snaps:        number: Number of snapshots
 %   time:         number: Timepoint of every single cell
 % [EXAMPLE]
-% Pending!
+% Pending! 
 
 %==========================================================================
 %     methods2models
@@ -39,80 +39,43 @@ function [input, data_gen] = M2M_data_generation(input)%(timeF,N,snaps,sig,mexmo
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 addpath(genpath('~/methods2models'));
-% filename = datestr(now,30);
-% statenames = cell(1,32);
-% load('~/methods2models/datasets/toettcher_statenames.mat');
-% input.statenames=statenames;
-% %Check inputs
-% if exist('timeF','var')
-%     input.tF = timeF;
-% else
-%     timeF = linspace(0,1000,2*1000);%0:3000;
-%     input.tF = timeF;
-% end
-% 
-% if exist('N','var')
-%     input.N = N;
-% else
-%     N = 2000;
-%     input.N = N;
-% end
-% 
-% if exist('snaps','var')
-%     input.snaps = snaps;
-% else 
-%     snaps = 2;
-%     input.snaps = snaps;
-% end
-% 
-% if exist('sig','var')
-%     input.sig = sig;
-% else 
-%     sig = 0.1;
-%     input.sig = sig;
-% end
-% 
-% if exist('mexmodel','var')
-%     mexmodel = eval(sprintf('@%s',mexmodel)); %!!!
-%     input.mexmodel = mexmodel;
-% else
-%     mexmodel = eval(sprintf('@%s','model_toettcher2008MEX'));
-%     input.mexmodel = mexmodel;
-% end
-% 
-% if exist('doplots','var')
-%     input.doplots = doplots;
-% else
-%     doplots = 0;
-%     input.doplots = doplots;
-% end
-% disp('This is your input:')
-% disp('-------------------')
-% disp(input)
 tF = input.tF;
 N = input.N;
 snaps = input.snaps;
 sig = input.sig;
 mexmodel = input.mexmodel;
 statenames=input.statenames;
+doplots=input.doplots;
 %% 2) Original statevalues -----------------------------------------------%
 disp('Original statevalues -----------------------------------------------')
 original_time=tic;
 [original_data,ic] = M2M_mexmodel(tF,[],mexmodel);
 original_statevalues = original_data.statevalues';
 toc(original_time)
+
+if doplots
+   M2M_mexmodelP(original_data,statenames)
+end
 %% x) Calculate start of the cell cycle
 disp('Calculate start of cell cylce -------------------------------------')
 start_time=tic;
 [~,lb,~] = M2M_start(original_statevalues);
-y_0 = original_statevalues(:,lb);%6=lb=lower bound
+y_0 = original_statevalues(:,lb);%lb=lower bound
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 toc(start_time)
+
+if doplots
+   M2M_startP(original_data,lb)
+end
 %% 3) Randomize IC -------------------------------------------------------%
 disp('Randomize IC -------------------------------------------------------')
 random_time=tic;
 rndmic = M2M_lognrnd_ic(N,ic); % Generate gaussian distributed ICs
 toc(random_time)
+
+if doplots
+   M2M_lognrnd_icP(rndmic,statenames)
+end
 %% 4) Data generation-----------------------------------------------------%
 disp('Data generation-----------------------------------------------------')
 generation_time=tic;
@@ -120,12 +83,14 @@ generation_time=tic;
 simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
 %------------------------------%
-for i = 1:N
+for i = 1:N %parfor?
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
-    random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues
-%     random_statevalues{i} = 
+    random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues 
 end
 
+if doplots
+   M2M_biovarianceP(simdata)
+end
 %% Start for every single cell (START)
 UB=zeros(1,N);
 LB=zeros(1,N);
@@ -138,6 +103,9 @@ for i=1:N
     PERIOD(:,i)=period;
 end
 
+if doplots
+   M2M_allstartP(simdata,UB,LB,PERIOD)
+end
 %% Cell cycle phases (DURATION)
 G1=zeros(1,N);
 S=zeros(1,N);
@@ -160,6 +128,9 @@ t_period(2,:)=G1;
 t_period(3,:)=S;
 t_period(4,:)=G2;
 
+if doplots
+   M2M_durationP(simdata,t_period)
+end
 %% 5) Measurement---------------------------------------------------------%
 disp('Measurement---------------------------------------------------------')
 measure_time=tic;
@@ -174,6 +145,9 @@ for i = 1:N
     p_value(i,:)=P;
 end
 toc(measure_time)
+if doplots
+    M2M_timepointsP(p_value,samples,snaps)
+end
 %% New IC for every cell 
 newic_time=tic;
 start=zeros(N,size(ic,1));
@@ -214,7 +188,7 @@ for i = 1:N
     measurement{i} = rndm_measurement{1,i}.statevalues;
     
     %--------------------DNA Simulation----------------------------------------
-    y_DNA = M2M_DNAsimulation(tspan,period,g1,s)';
+    y_DNA = M2M_DNAsimulation(tspan,g1,s)';
 
     DNA(:,i) = y_DNA;
     

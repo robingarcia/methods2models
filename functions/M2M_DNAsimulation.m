@@ -1,9 +1,9 @@
-function [y_DNA ] = M2M_DNAsimulation(time,T,G1,S)
+function [y_DNA] = M2M_DNAsimulation(time,G1,S)
 %This function simulates the DNA duplication during cell cycle (2N -> 4N)
 %The simulated DNA is needed in order to determine the start and the end of   
 %the cell cycle.
 % [SYNTAX]
-% [ y_DNA ] = DNAcontent(time,T,G1,S)
+% [ y_DNA ] = M2M_DNAsimulation(time,G1,S)
 % 
 % [INPUT]
 % time:       number: Time interval
@@ -31,11 +31,6 @@ function [y_DNA ] = M2M_DNAsimulation(time,T,G1,S)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
-% G1 = G1/T; % Neccessary??
-% S = S/T;   % Neccessary??
-
-% dS = T*(S-G1);  %Duration of S-Phase
-% G1 = T*G1;      % Duration G1-Phase
 slope = 2/S;   % Slope between 2N -> 4N
 y_DNA = zeros(1,length(time));
 f_3=@(time)(slope.*time+(2-(slope*G1)));

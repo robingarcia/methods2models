@@ -228,7 +228,7 @@ c(4,12) = 1;               % Cdc20A
 figure(2)
 plot(xSol.x, c*xSol.y, 'LineWidth', 2);
 %set(gca, 'YLim', [0.03 0.12])
-legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
+% legend('CycET', 'CycAT', 'CycBT', 'Cdc20A');
 xlabel('time (h)'), ylabel('concentration (AU)')
 title('MATLAB cell cycle model')
 

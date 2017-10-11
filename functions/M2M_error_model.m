@@ -3,7 +3,7 @@ function [errordata] = M2M_error_model(mydata,sig)
 %This function introduce noise into our dataset.
 % 
 % [SYNTAX]
-% [errordata] = error_model(mydata,sig)
+% [errordata] = M2M_error_model(mydata,sig)
 % 
 % [INPUT]
 % mydata:         number: Your dataset

@@ -53,7 +53,7 @@ s_Expectation = zeros(1,size(errordata,2));
 a_Expectation = zeros(1,size(errordata,2));
     
 for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
-[~,options.PathIndex,cmatrix] = Cmatrix(i,j,size(errordata,1),errordata);
+[~,options.PathIndex,cmatrix] = M2M_Cmatrix(i,j,size(errordata,1),errordata);
 y_data = cmatrix * w_data';%switch dimensions!
 % y_data = cmatrix * w_data;
 % y_data = cmatrix * errordata;

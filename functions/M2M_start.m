@@ -1,5 +1,6 @@
 function [ub,lb,period] = M2M_start(statevalues)
 %This function determines the start of the cell cycle
+% Please document this important function asap!!!
 %   Detailed explanation goes here
 mydesire=statevalues(12,1:end);%12th column
 find_result = find(mydesire<10^-3); %Find all values smaller than 10e-3

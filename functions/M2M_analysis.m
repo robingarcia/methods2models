@@ -20,7 +20,9 @@ domail=input.domail;
 % This corresponds to a model output of all simultaneously measured states.
 disp('Wanderlust analysis (all states)')
 time_pre=tic;
-[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period,input);
+[w_data,w_path] = M2M_pre_wanderlust(errordata,y_0,statenames,t_period);
+
+% [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period,input);
 % [w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
 toc(time_pre)
 all_states = ([]);
@@ -36,55 +38,13 @@ end
 toc(time_combi)
 pre_computation=([]);
 pre_computation.w_summary=w_summary;
-
-%##########################################################################
-%% Wanderlust and pre_computation in one function +++++++++++++++++++++++++++++++++
-% Use c-matrix here!!!
-C=WChooseK(1:size(ic,1),1);%1=all states ### --- C-MATRIX --- ###
-y=zeros(size(ic,1),N*snaps);
-load_options        % Load options for Wanderlust
-options.Ynames		= statenames(C);
-options.gamma		= log(2)/mean(t_period(1,:));%Is this ok?
-options.PathIndex   = 1:size(ic,1);
-
-C=WChooseK(1:size(ic,1),size(ic,1));%### --- C-MATRIX --- ###
-[G,y_data,~,~] = PathfromWanderlust(errordata(C,:)',options,y_0(C));
-path=G.y;
-
-% C=WChooseK(1:size(ic,1),1);%### --- C-MATRIX --- ###
-for i=1:size(y_data,2)
-    Y=M2M_analysis_temp(y_data(:,i)',path(i,:),options);
-    y(i,:)=Y;
-end
-
-best=([]);
-[best,y_previous]=M2M_area_temp(y,best);
-C=WChooseK(1:size(ic,1),2);%### --- C-MATRIX --- ###
-for i=1:size(best,2)
-    combi = (best{1,i}(2));
-    combi = [combi{:}];
-    % Update options
-    options.Ynames		= statenames(combi);
-    options.gamma		= log(2)/mean(t_period(1,:));%???
-    options.PathIndex   = 1:size(ic,1);%???
-
-    %Wanderlust
-    [G,y_data,~,~] = PathfromWanderlust(errordata(combi,:)',options,y_0(combi));
-    path=G.y;
-    %Function
-    Y=M2M_analysis_temp(y_data',path,options);
-    % Area under the curve
-    [best,y_previous]=M2M_area_temp(Y,best{1,i});
-end
-%##########################################################################
-
-% %% Functions and new datapoints -------------------------------------------
-% disp('Functions and new datapoints')
-% m2mfun_time=tic;
-% y= M2M_functions(w_summary,ic,N,snaps);
-% toc(m2mfun_time)
-% new_functions=([]);
-% new_functions.y=y;
+%% Functions and new datapoints -------------------------------------------
+disp('Functions and new datapoints')
+m2mfun_time=tic;
+y= M2M_functions(w_summary,ic,N,snaps);
+toc(m2mfun_time)
+new_functions=([]);
+new_functions.y=y;
 
 %% 2 combinations ---------------------------------------------------------
 disp('2 combinations')

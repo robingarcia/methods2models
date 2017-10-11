@@ -1,4 +1,4 @@
-function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots,domail)
+function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % This function calculates the best measurement combination 
 % 
 % 
@@ -31,61 +31,19 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots,domail)
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 profile on
-% set(0,'DefaultFigureWindowStyle','docked');
+% set(1,'DefaultFigureWindowStyle','docked');
 filename = datestr(now,30);
 timestamp{:}=filename;
 m2m_result=([]);
 m2m_result.filename=filename;
-global workpath;
+% global workpath;
 workpath='~/methods2models';%Root directory of the m2m-toolbox
 addpath(genpath(workpath));
 statenames = cell(1,32);
 load('~/methods2models/datasets/toettcher_statenames.mat');
 input.statenames=statenames;
+m2m_result.workpath=workpath;
 m2m_load
-% %Check inputs
-% if exist('timeF','var')
-%     input.tF = timeF;
-% else
-%     timeF = linspace(0,1000,2*1000);%0:3000;
-%     input.tF = timeF;
-% end
-% 
-% if exist('N','var')
-%     input.N = N;
-% else
-%     N = 2000;
-%     input.N = N;
-% end
-% 
-% if exist('snaps','var')
-%     input.snaps = snaps;
-% else 
-%     snaps = 2;
-%     input.snaps = snaps;
-% end
-% 
-% if exist('sig','var')
-%     input.sig = sig;
-% else 
-%     sig = 0.1;
-%     input.sig = sig;
-% end
-% 
-% if exist('mexmodel','var')
-%     mexmodel = eval(sprintf('@%s',mexmodel)); %!!!
-%     input.mexmodel = mexmodel;
-% else
-%     mexmodel = eval(sprintf('@%s','model_toettcher2008MEX'));
-%     input.mexmodel = mexmodel;
-% end
-% 
-% if exist('doplots','var')
-%     input.doplots = doplots;
-% else
-%     doplots = 0;
-%     input.doplots = doplots;
-% end
 mex_model{:}=mexmodel;
 m2m_result.input=input;
 disp('This is your input:')
@@ -98,33 +56,10 @@ disp('Data generation ---------------------------------------------------')
 % [input,storage] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
 % save([filename '.mat'], 'storage','-v7.3');
 m2m_result.data_gen=storage;
-if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Data generation',evalc('disp(m2m_result)'))
-else
-   disp('No notification') 
-end
-
-% %% Testumgebung +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-% % Analysis
-% [s_Exp,a_Exp,s_Var,a_Var] = M2M_analysis_temp(data,t_period,y_0,options);
-% 
-% %Area
-% C = WChooseK(z,2);% Two measurement outputs
-% [ output_args ] = M2M_area_temp(s_Exp,a_Exp,s_Var,a_Var,C);
-% 
-% 
-% [s_Exp,a_Exp,s_Var,a_Var] = M2M_analysis_temp(data,t_period,y_0,options);
-% %++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 %% -----------------------Analysis-----------------------------------------
 disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
-if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Analysis',evalc('disp(m2m_result)'))
-else 
-    disp('No notification')
-end
-
 %% -------------------------------Area---------------------------------------------
 % This part solves the np-problem
 
@@ -153,11 +88,4 @@ end
 
 %% Save the results
 save([filename '.mat'], 'm2m_result','-v7.3');
-if domail
-m2m_mail('teb81338@stud.uni-stuttgart.de','Workspace saved',evalc('disp(m2m_result)'))
-else
-   disp('No notification') 
-end
-%% Send notification
-% m2m_mail('robing@selfnet.de','Test33','Daten erstellung war erfolgreich')
 end

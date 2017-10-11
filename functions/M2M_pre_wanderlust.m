@@ -3,7 +3,7 @@ function [w_data,w_path] = M2M_pre_wanderlust(errordata,y_0,statenames,t_period)
 % 
 % 
 % [Syntax]
-% [w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period)
+% [w_data,w_path] = M2M_pre_wanderlust(errordata,y_0,statenames,t_period)
 % 
 % [INPUT]
 % errordata:          number: Your simulated data

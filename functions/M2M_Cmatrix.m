@@ -3,7 +3,7 @@ function[Y,combi,cmatrix] = M2M_Cmatrix(i,j,n, errordata)
 %This function selects your measurement.
 %
 % [SYNTAX]
-% [Y,combi,cmatrix] = Cmatrix(i,j,n, errordata)
+% [Y,combi,cmatrix] = M2M_Cmatrix(i,j,n, errordata)
 %
 %  [INPUT]
 %  i:             number: Number of combinations
