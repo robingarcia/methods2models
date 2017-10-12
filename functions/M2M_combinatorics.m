@@ -38,7 +38,7 @@ function [summary] = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,state
 %==========================================================================
 load_options
 options.Ynames		= statenames;
-
+species=size(ic,1);
 % Determine the max size---------------------------------------------------
 number = zeros(size(ic,1),1);
 for i = 1:size(ic,1)
@@ -52,7 +52,7 @@ Variance_A = zeros(1,size(errordata,2));
 s_Expectation = zeros(1,size(errordata,2));
 a_Expectation = zeros(1,size(errordata,2));
     
-for i=1:size(WChooseK(1:size(ic,1),j),1)%without DNA
+for i=1:size(WChooseK(1:species,j),1)%without DNA
 [~,options.PathIndex,cmatrix] = M2M_Cmatrix(i,j,size(errordata,1),errordata);
 y_data = cmatrix * w_data';%switch dimensions!
 % y_data = cmatrix * w_data;
@@ -79,6 +79,7 @@ newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);%Wanderlust
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
+% M2M_PlotBestERAVariance(data,NewPathDensity,options);
 
 combination{i,1} = options.PathIndex;% Necessary?
 s_Expectation(i,:) = cell2mat(NewPathDensity.s_single_cell_Expectation);

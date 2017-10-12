@@ -60,12 +60,12 @@ end
 disp('Calculate start of cell cylce -------------------------------------')
 start_time=tic;
 [~,lb,~] = M2M_start(original_statevalues);
-y_0 = original_statevalues(:,lb);%lb=lower bound
+y_0 = original_statevalues(:,lb);%lb=lower bound Why from original model???
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 toc(start_time)
 
 if doplots
-   M2M_startP(original_data,lb)
+   M2M_startP(original_data,lb,statenames)
 end
 %% 3) Randomize IC -------------------------------------------------------%
 disp('Randomize IC -------------------------------------------------------')
@@ -148,7 +148,7 @@ toc(measure_time)
 if doplots
     M2M_timepointsP(p_value,samples,snaps)
 end
-%% New IC for every cell 
+%% New IC for every cell (Why do you use y_0 and not start???)
 newic_time=tic;
 start=zeros(N,size(ic,1));
 for i=1:N
@@ -158,6 +158,9 @@ cellcyclestart = statevalues(lb,:); %New IC from simulated dataset
 start(i,:)=cellcyclestart;
 end
 toc(newic_time)
+if doplots
+   M2M_newICP() 
+end
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -174,10 +177,10 @@ for i = 1:N
     period=PERIOD(:,i);
     g1=G1(:,i);
     s=S(:,i);
-    [sorted_samples,idx]=sort(samples(i,:),2);
+    [sorted_samples,idx]=sort(samples(i,:),2);%Timepoints = snapshots
     IDX(i,:)=idx;
 
-    tspan = horzcat(0,sorted_samples,period);
+    tspan = horzcat(0,sorted_samples,period);%New time vector
     TSPAN(i,:) = tspan;%Time vektor (discrete)
     simIC = start(i,:); %Cdc20A =start = IC = t0 (with (1,:) only one period is used here)
    
@@ -200,20 +203,30 @@ for i = 1:N
     MEASUREMENT{i} = MEASUREMENT{i}(:,2:end-1);%Remove the first and the last values (Necessary?)
 
 end
-mydata = cell2mat(measurement);
-MYDATA = cell2mat(MEASUREMENT);
+mydata = cell2mat(measurement);%DNA
+MYDATA = cell2mat(MEASUREMENT);%DNA + time
 time = vertcat(TSPAN(:,2),TSPAN(:,3))';%Could result in an error if more than 2 snapshots...
 toc(simul_time)
+if doplots
+    M2M_measurementP(MYDATA,statenames)
+end
 %% 7) Error model (add noise to dataset) ---------------------------------%
+% sig = big(more noise), small(less noise)
 disp('Error model (add noise to dataset) ---------------------------------')
 error_time=tic;
 % This is necessary to gain realistic results
 errordata = M2M_error_model(mydata,sig);
 toc(error_time)
+
+if doplots
+    M2M_error_modelP(mydata,errordata,statenames)
+end
 %% Purge datasets ---------------------------------------------------------
 disp('Purge dataset ---------------------------------')
 purge_time=tic;
 [errordata,~,nzero] = M2M_purge(errordata);
+[mydata,~,~] = M2M_purge(mydata);
+[MYDATA,~,~] = M2M_purge(MYDATA);
 [rndmic, ~] = M2M_purge(rndmic);
 [y_0, ~] = M2M_purge(y_0);
 statenames = statenames(nzero);

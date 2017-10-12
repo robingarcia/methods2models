@@ -3,8 +3,8 @@ function M2M_biovarianceP(simdata)
 %   Detailed explanation goes here
 %% Biological variance
 for i=1:5
-    xlim([0 600])
-    plot(simdata{1,i}.time,simdata{1,i}.statevalues(:,2),'LineWidth',2),
+%     xlim([0 600])
+    plot(simdata{1,i}.time,simdata{1,i}.statevalues(:,6),'LineWidth',2),
     hold on
     grid on
     xlabel('time (h)'), ylabel('concentration (AU)')

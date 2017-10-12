@@ -24,7 +24,7 @@ dna_all = repmat(y_DNA_temp,1,period);
 
 
 figure
-for i = [6,12];%[1,2,3,5,6,12]%[1,2,3,5]
+for i = [6,12]%[1,2,3,5,6,12]%[1,2,3,5]
 grid on
 yyaxis left
 plot(original_statevalues(i,10:120),'LineWidth',2);

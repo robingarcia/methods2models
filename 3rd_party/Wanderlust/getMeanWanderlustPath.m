@@ -55,8 +55,8 @@ if doplots
 % subplot layout
 % possible combinations of dimensions in 2d
 C = nchoosek(1:d,2); %WChooseK ? 
-a = floor(size(C,1)^(1/2));
-b = ceil(size(C,1)/a);
+% a = floor(size(C,1)^(1/2));
+% b = ceil(size(C,1)/a);
 
 
 
@@ -64,8 +64,8 @@ rect = [20 20 800 600];
 G.fh = figure('Color','w','Position',rect);
 
 for i = 1:size(C,1)
-	
-    subplot(a,b,i)
+	figure(i)
+%     subplot(a,b,i)
 	[~,dens,X,Y] = kde2d(data(:,C(i,:)));
 	pcolor(X,Y,dens); shading interp							% density
 	hold on

@@ -35,12 +35,11 @@ function [samples, P] = M2M_timepoints(snaps,period)%(statevalues,snaps,start,pe
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
 
-%% Inverse method alorithm (Remove the loop --> 29.08.2017)
+%% Inverse method alorithm
 omega = log(2)/period; % period = period of the cell cycle
 P = rand(1,snaps);
 x=@(P,omega)((log(-2./(P-2))/omega));
 samples = x(P,omega);
-%         P_value(i,:) = P;   
 %% New simulated IC (extracted from a simulation = cellcycle start)
 % cellcyclestart = statevalues(start,:); %New IC from simulated dataset
 end
