@@ -4,14 +4,15 @@ function M2M_mexmodelP(original_data,statenames)
 
 %% Plot all important cyclines
     grid on
-    plot(original_data.time,original_data.statevalues(:,[2,3,5]),'LineWidth',2)
+    plot(original_data.time,original_data.statevalues(:,[2,3,5,12]),'LineWidth',0.5)
     xlim([0 100])
-    legend(statenames([2,3,5]))
+    legend(statenames([2,3,5,12]))
     xlabel('time (h)'), ylabel('concentration (AU)')
-    title('MATLAB cell cycle model')
+%     title('MATLAB cell cycle model')
     hold on
     grid on
     
-%     matlab2tikz
+%%     matlab2tikz
+matlab2tikz('original_toettcher.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
 end
 
