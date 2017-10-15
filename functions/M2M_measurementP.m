@@ -32,7 +32,7 @@ function M2M_measurementP(MYDATA,statenames,t_period)
 blubb=horzcat(t_period,t_period);
 timepoint=MYDATA(33,:);
 dna_points=MYDATA(32,:);
-for i=1:30
+for i=1:2000
     time=timepoint(:,i);
     dna_t=dna_points(:,i);
     p=blubb(1,i);

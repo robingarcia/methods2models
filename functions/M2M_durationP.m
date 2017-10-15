@@ -20,6 +20,34 @@ histogram(t_period(4,:),7,'FaceColor','y')
 xlabel('Period (h)'), ylabel('Number of cells')
 title('G2-Phase')
 
+%% Period
+histogram(t_period(1,:),'FaceColor','r')
+xlabel('Period (h)'), ylabel('Number of cells')
+title('Period')
+
+matlab2tikz('period_all.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+
+%% G1-Phase
+histogram(t_period(2,:),'FaceColor','g')
+xlabel('Period (h)'), ylabel('Number of cells')
+title('G1-Phase')
+
+matlab2tikz('g1_phase.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+
+%% S-Phase
+histogram(t_period(3,:),3,'FaceColor','b')
+xlabel('Period (h)'), ylabel('Number of cells')
+title('S-Phase')
+
+matlab2tikz('s_phase.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+
+%% G2-Phase
+histogram(t_period(4,:),7,'FaceColor','y')
+xlabel('Period (h)'), ylabel('Number of cells')
+title('G2-Phase')
+
+matlab2tikz('g2_phase.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+
 %% still buggy?
 % for i=1%[81,225]
 % %     xlim([900 1000])

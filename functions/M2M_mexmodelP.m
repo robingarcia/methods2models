@@ -4,7 +4,7 @@ function M2M_mexmodelP(original_data,statenames)
 
 %% Plot all important cyclines
     grid on
-    plot(original_data.time,original_data.statevalues(:,[2,3,5,12]),'LineWidth',0.5)
+    plot(original_data.time,original_data.statevalues(:,[2,3,5,12]),'LineWidth',1.0)
     xlim([0 100])
     legend(statenames([2,3,5,12]))
     xlabel('time (h)'), ylabel('concentration (AU)')
