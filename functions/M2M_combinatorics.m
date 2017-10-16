@@ -80,6 +80,7 @@ NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);%Wanderlust
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(data,NewPathDensity,options);
 % M2M_PlotBestERAVariance(data,NewPathDensity,options);
+M2M_PlotBest(data,NewPathDensity,options)
 
 combination{i,1} = options.PathIndex;% Necessary?
 s_Expectation(i,:) = cell2mat(NewPathDensity.s_single_cell_Expectation);

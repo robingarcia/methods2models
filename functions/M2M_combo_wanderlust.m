@@ -21,6 +21,10 @@ newScale.cdf = @(a) 2-2*exp(-gamma.*a);
 newScale.coDomain = [0,log(2)/gamma];
 NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);
 
+options.doplots = 0; %0 = no plot , 1 = plot
+PlotERAVariance(data,NewPathDensity,options);
+% M2M_PlotBestERAVariance(data,NewPathDensity,options);
+M2M_PlotBest(data,NewPathDensity,options);
 %% Data extraction and preparation
 s_E (1,:)=  cell2mat(NewPathDensity.s_single_cell_Expectation);
 a_E(1,:) = cell2mat(NewPathDensity.a_single_cell_Expectation);

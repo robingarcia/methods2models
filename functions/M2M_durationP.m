@@ -5,19 +5,19 @@ function M2M_durationP(simdata,t_period)
 figure
 subplot(2,2,1);
 histogram(t_period(1,:),'FaceColor','r')
-xlabel('Period (h)'), ylabel('Number of cells')
+xlabel('Time (h)'), ylabel('Number of cells')
 title('Period')
 subplot(2,2,2);
 histogram(t_period(2,:),'FaceColor','g')
-xlabel('Period (h)'), ylabel('Number of cells')
+xlabel('Time (h)'), ylabel('Number of cells')
 title('G1-Phase')
 subplot(2,2,3);
 histogram(t_period(3,:),3,'FaceColor','b')
-xlabel('Period (h)'), ylabel('Number of cells')
+xlabel('Time (h)'), ylabel('Number of cells')
 title('S-Phase')
 subplot(2,2,4);
 histogram(t_period(4,:),7,'FaceColor','y')
-xlabel('Period (h)'), ylabel('Number of cells')
+xlabel('Time (h)'), ylabel('Number of cells')
 title('G2-Phase')
 
 %% Period
