@@ -16,9 +16,9 @@ function M2M_error_modelP(mydata,errordata,statenames)
 % zlabel(statenames(32))
 
 %% scatter 2D
-scatter(mydata(5,1:500),mydata(32,1:500))
+scatter(mydata(5,1:500),mydata(32,1:500),'filled')
 hold on
-scatter(errordata(5,1:500),errordata(32,1:500))
+scatter(errordata(5,1:500),errordata(32,1:500),'filled')
 title(' $$\sigma=0.1$$','Interpreter','latex')
 xlabel(statenames(5))
 ylabel(statenames(32))

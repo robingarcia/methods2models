@@ -16,9 +16,9 @@ close all;
 %         sum = sum + 1;
 %         disp(sum)
 %         subplot(b,a,sum)
-        histogram(rndmic(2,:),2000);
+        histogram(rndmic(12,:),2000);
 
-        title(statenames(2))
+        title(statenames(12))
         xlabel('Concentration (a.u.)')
         ylabel('Number of cells')
         xlim([0 1])

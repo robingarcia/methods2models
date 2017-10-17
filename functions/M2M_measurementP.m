@@ -32,7 +32,7 @@ function M2M_measurementP(MYDATA,statenames,t_period)
 blubb=horzcat(t_period,t_period);
 timepoint=MYDATA(33,:);
 dna_points=MYDATA(32,:);
-for i=1:2000
+for i=1:100
     time=timepoint(:,i);
     dna_t=dna_points(:,i);
     p=blubb(1,i);
@@ -46,51 +46,54 @@ for i=1:2000
     
     hold on
     if  dna_t <= 2
-        hold on
+%         hold on
         yyaxis left
         scatter(MYDATA(33,i),MYDATA(12,i),'ro','filled')
         title(statenames(12))
         xlabel('Time [h]')
         ylabel('Concentration (a.u.)')
         
-        hold on
+%         hold on
         yyaxis right
         scatter(MYDATA(33,i),MYDATA(32,i),'r')
         ylabel('DNA')
         axis([0 max(MYDATA(end,:))+1 1.5 4.5])
         grid on
+%         hold off
     elseif (dna_t > 2) && (dna_t < 4)
         yyaxis left
-        hold on
+%         hold on
         scatter(MYDATA(33,i),MYDATA(12,i),'go','filled')
         title(statenames(12))
         xlabel('Time [h]')
         ylabel('Concentration (a.u.)')
         
-        hold on
+%         hold on
         yyaxis right
         scatter(MYDATA(33,i),MYDATA(32,i),'g')
         ylabel('DNA')
         axis([0 max(MYDATA(end,:))+1 1.5 4.5])
         grid on
+%         hold off
     else    
-        hold on
+%         hold on
         yyaxis left
         scatter(MYDATA(33,i),MYDATA(12,i),'bo','filled')
         title(statenames(12))
         xlabel('Time [h]')
         ylabel('Concentration (a.u.)')
         
-        hold on
+%         hold on
         yyaxis right
         scatter(MYDATA(33,i),MYDATA(32,i),'b')
         ylabel('DNA')
         axis([0 max(MYDATA(end,:))+1 1.5 4.5])
         grid on
+%         hold off
     end
-    hold off
+%     hold off
 end
-hold off
+% hold off
 % %% Plot all a histogram
 % for i=1:32
 %    figure(i)
@@ -99,6 +102,6 @@ hold off
 % end
 
 %% matlab2tikz
-matlab2tikz('cdc20a_plus_dna.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
+matlab2tikz( 'cdc20a_dna.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 end
 

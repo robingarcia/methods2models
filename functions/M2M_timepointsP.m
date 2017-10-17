@@ -20,7 +20,7 @@ grid on
 title('New distribution $$f(a)=2 \gamma e^{- \gamma a}$$','Interpreter','latex')
 xlabel('Periods (h)')
 ylabel('Number of cells')
-matlab2tikz( 'inversion.tex', 'height', '\fheight', 'width', '\fwidth' )
+matlab2tikz( 'inversion.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 %% Uniform distribution
 histogram(p_value(:,1));
 grid on
