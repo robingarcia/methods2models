@@ -9,8 +9,8 @@ fh(1) = figure('Color','w','Position',rect);
 subplot(1,2,1)
 % scatter(data(:,opts.PathIndex(1)),data(:,28),8,ERA.a_single_cell_Variance)
 
-scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.a_single_cell_Variance)
-% scatter(data(:,1),data(:,2),8,ERA.a_single_cell_Variance)
+% scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.a_single_cell_Variance)
+scatter(data(:,1),data(:,2),8,ERA.a_single_cell_Variance)
 
 % scatter(data(:,opts.PathIndex(1)),(1:size(data,1)),8,ERA.a_single_cell_Variance) %MY
 colormap('copper')
@@ -37,8 +37,8 @@ fh(2) = figure('Color','w','Position',rect);
 subplot(1,2,1)
 % scatter(data(:,opts.PathIndex(1)),data(:,28),8,ERA.s_single_cell_Variance)
 
-scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.s_single_cell_Variance)
-% scatter(data(:,1),data(:,2),8,ERA.s_single_cell_Variance)
+% scatter(data(:,opts.PathIndex(1)),data(:,opts.PathIndex(2)),8,ERA.s_single_cell_Variance)
+scatter(data(:,1),data(:,2),8,ERA.s_single_cell_Variance)
 
 % scatter(data(:,opts.PathIndex(1)),(1:size(data,1)),8,ERA.s_single_cell_Variance)%MY
 
