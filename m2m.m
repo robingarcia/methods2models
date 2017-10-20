@@ -56,22 +56,12 @@ disp('Data generation ---------------------------------------------------')
 % [input,storage] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
 % save([filename '.mat'], 'storage','-v7.3');
 m2m_result.data_gen=storage;
-%% -----------------------Analysis-----------------------------------------
+%% -----------------------Analysis (stable)----------------------------------------
 disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
-%% -------------------------------Area---------------------------------------------
-% This part solves the np-problem
-
-% %% ------------------ Results ---------------------------------------------
-% disp('Results -----------------------------------------------------------')
-% size(results.BEST{1,1},1)
-% size(storage.BEST,2)
-% for i = 1:size(storage.BEST,2)
-%    for j = 1:size(results.BEST{1,1},1)
-%        
-%    end
-% end
+%% -------------------------------Analysis (unstable)------------------------------
+[best] = M2M_analysis2(input,storage);
 %% Plots ------------------------------------------------------------------
 % M2M_plot
 if doplots

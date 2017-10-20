@@ -1,6 +1,6 @@
 function [y] = M2M_function_temp(expectation,variance)
 %UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%   Curve build with discrete values
 
 n_cells=size(variance,2);
 binsize =0.1;

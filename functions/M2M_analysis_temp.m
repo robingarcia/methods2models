@@ -2,6 +2,7 @@ function [Y] = M2M_analysis_temp(y_data,path,options)
 
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
+%   FUNCTION WITHOUT WANDERLUST!
 % %% Extract your variables
 options.PathIndex   = 1:size(y_data,1);
 %% FACS2Path Density

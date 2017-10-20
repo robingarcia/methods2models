@@ -34,8 +34,8 @@ function [best] = M2M_area_temp(y,best,y_update,k)
    % 2+n combinations
    else
        bestcombo=best{k,2};%IMPORTANT
-
-j = 1:27;% IMPORTANT
+%        bestcombo=[bestcombo{:}];%cell to double
+j = 1:size(y,1)-1;%27;% IMPORTANT (size(y,2))!!!
 j = setdiff(j,bestcombo);%Exclude numbers that were already used
 best_additional = zeros(1,27);
 
@@ -47,10 +47,10 @@ best_additional = zeros(1,27);
     end
 
 best_additional(best_additional == 0) = NaN;%Replace 0 with NaN in order to avoid 0 is detected as smallest value.
-[area,Track] = min(best_additional);
-best(k+1,1)={k+1};
-best(k+1,2)={horzcat(bestcombo,Track)}; % Track is the new protein
-best(k+1,3)={area};
+[~,Track] = min(best_additional);
+best(k+1,1)={k+1};%Round
+best(k+1,2)={horzcat(bestcombo,Track)}; % Track is the new protein/new combination
+% best(k+1,3)={area}; %best_additional(Track(1))
    end
 end
 
