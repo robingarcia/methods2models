@@ -41,8 +41,8 @@ best=([]);
 
 %% Calculate best combinations
 for i=1 %:size(best,2) %Uncomment for all combinations of two
-%     combi = (best{1,i}(1,2));
-%     combi = [combi{:}];
+    combi = (best{1,i}(1,2));
+    combi = [combi{:}];
     number_species = minus(size(ic,1),size(combi,2));
     k=1;
     while k <=  number_species

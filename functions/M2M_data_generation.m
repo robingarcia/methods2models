@@ -77,7 +77,7 @@ if doplots
    M2M_lognrnd_icP(rndmic,statenames)
 end
 %% 4) Data generation-----------------------------------------------------%
-disp('Data generation-----------------------------------------------------')
+disp('Population generation-----------------------------------------------------')
 generation_time=tic;
 %-----> Preallocation <--------%
 simdata = cell(1,N);           %
