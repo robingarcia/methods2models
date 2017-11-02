@@ -30,7 +30,7 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
-profile on
+% profile on
 % set(1,'DefaultFigureWindowStyle','docked');
 filename = datestr(now,30);
 timestamp{:}=filename;
@@ -61,7 +61,7 @@ disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
 %% -------------------------------Analysis (unstable)------------------------------
-[best] = M2M_analysis2(input,storage);
+% [best] = M2M_analysis2(input,storage);
 %% Plots ------------------------------------------------------------------
 % M2M_plot
 if doplots

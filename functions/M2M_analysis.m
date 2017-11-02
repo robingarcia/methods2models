@@ -18,6 +18,7 @@ domail=input.domail;
 %% Wanderlust analysis ----------------------------------------------------
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
+profile on
 disp('Wanderlust analysis (all states)')
 time_pre=tic;
 [w_data,w_path] = M2M_pre_wanderlust(errordata,y_0,statenames,t_period);
@@ -28,6 +29,7 @@ toc(time_pre)
 all_states = ([]);
 all_states.w_data=w_data;
 all_states.w_path=w_path;
+profile off
 %% Pre computation --------------------------------------------------------
 % Here, all states are calculated individually together with the DNA as a measurement parameter.
 disp('Combinatorics')
