@@ -62,6 +62,9 @@ pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
 %% -------------------------------Analysis (unstable)------------------------------
 % [best] = M2M_analysis2(input,storage);
+
+%% ----- Combination analysis -----------------------------------------------------
+%B=M2M_combination(errordata,t_period,statenames,y_0,options,[7,11]);
 %% Plots ------------------------------------------------------------------
 % M2M_plot
 if doplots
