@@ -31,7 +31,7 @@ path=G.y;
 
 % C=WChooseK(1:size(ic,1),1);%### --- C-MATRIX --- ###
 for i=1:size(y_data,2)
-    Y=M2M_analysis_temp(y_data(:,i)',path(i,:),options);
+    [Y,~,~]=M2M_analysis_temp(y_data(:,i)',path(i,:),options);
     y(i,:)=Y; %Y = function Var/Exp of age of all 28 species
 end
 %% Calculate smallest area under the curve
@@ -59,7 +59,7 @@ for i=1 %:size(best,2) %Uncomment for all combinations of two
     [G,y_data,~,~] = PathfromWanderlust(errordata(combi,:)',options,y_0(combi));
     path=G.y;
     %Function
-    Y=M2M_analysis_temp(y_data',path,options);%New functions (update)
+    [Y,~,~]=M2M_analysis_temp(y_data',path,options);%New functions (update)
     x = linspace(0,1,size(Y,2));%Normalized because from 0 to 1
     B=trapz(x,Y);
     best{1,i}(k,3)={B};

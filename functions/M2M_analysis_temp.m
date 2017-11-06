@@ -1,4 +1,4 @@
-function [Y] = M2M_analysis_temp(y_data,path,options)
+function [Y,NewPathDensity,newScale] = M2M_analysis_temp(y_data,path,options)
 
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
