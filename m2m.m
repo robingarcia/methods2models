@@ -13,6 +13,7 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %
 % [EXAMPLE]
 % results = m2m(0:1000,10000,10,0.01,'model_toettcher2008MEX',0)
+
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria

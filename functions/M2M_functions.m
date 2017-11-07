@@ -55,7 +55,8 @@ for i = 1:size(ic,1)           %For all 27 species
 % scatter(x,y(i,:),'b')
 % title(calc_fun,'Calculated function')
 % calc_cob=subplot(3,1,3);
-% scatter(normdata(summary.a_Est(i,:)),summary.Var_a(i,:),'r')
+% 
+
 % hold on
 % scatter(x,y(i,:),'b')
 % title(calc_cob,'Combined')
