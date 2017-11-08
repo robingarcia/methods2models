@@ -57,6 +57,16 @@ toc(combi_time)
 % for i=1:351
 % dual_combi(i,:)=combi_store{1,i}.best;
 % end
+for i=1:351 
+    best_area(i,1)=combi_store{1,i}.area;
+    best_name{i,1}=combi_store{1,i}.best;
+end
+
+if doplots
+    M2M_twocomboP(best_area,best_name,statenames)
+else
+end
+
 two_combi=([]);
 two_combi.combi_store=combi_store;
 %% New approach (more combinations) ---------------------------------------
