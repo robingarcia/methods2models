@@ -1,8 +1,8 @@
 %% Submit batch job
 addpath(genpath('~/methods2models/'));
 clust=parcluster('local');
-N=32; % for a quad-core computer
-job = batch(clust, @m2m, 1, {0:2000,2000,2,0.01,'model_toettcher2008MEX',0,0}, 'Pool', N-1);
+N=2; % for a quad-core computer
+job = batch(clust, @m2m, 1, {0:1000,1000,2,0.01,'model_toettcher2008MEX',0}, 'Pool', N-1);
 
 %% Query state of the job
 disp(get(job,'State'))
