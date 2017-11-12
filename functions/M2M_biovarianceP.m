@@ -17,6 +17,6 @@ legend(strcat('Cell No.',num2str(i')))
 
 %% Save with matlabtikz
 % matlab2tikz('biologicalvariance.tex','standalone',true, 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
-matlab2tikz('biologicalvariance.tex', 'height', '4cm', 'width', '8cm','floatFormat','%.3g' )
+% matlab2tikz('biologicalvariance.tex', 'height', '4cm', 'width', '8cm','floatFormat','%.3g' )
 end
 

@@ -37,7 +37,6 @@ filename = datestr(now,30);
 timestamp{:}=filename;
 m2m_result=([]);
 m2m_result.filename=filename;
-% global workpath;
 workpath='~/methods2models';%Root directory of the m2m-toolbox
 addpath(genpath(workpath));
 statenames = cell(1,32);
@@ -51,37 +50,26 @@ disp('This is your input:')
 disp('-------------------')
 disp(table(timeF,N,snaps,sig,mex_model,doplots,timestamp))
 
+
+
 %% Data generation --------------------------------------------------------
 disp('Data generation ---------------------------------------------------')
 [input,storage] = M2M_data_generation(input);
-% [input,storage] = M2M_data_generation(timeF,N,snaps,sig,mexmodel,doplots);
-% save([filename '.mat'], 'storage','-v7.3');
 m2m_result.data_gen=storage;
+
+
+
 %% -----------------------Analysis (stable)----------------------------------------
 disp('Analysis ----------------------------------------------------------')
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
-%% -------------------------------Analysis (unstable)------------------------------
-% [best] = M2M_analysis2(input,storage);
 
-%% ----- Combination analysis -----------------------------------------------------
-%B=M2M_combination(errordata,t_period,statenames,y_0,options,[7,11]);
-%% Plots ------------------------------------------------------------------
-% M2M_plot
-if doplots
-M2M_report(m2m_result)
-publish('M2M_report.m','pdf');
-else
-    disp('No report generated ===========================================')
-end
-%% Print the results
-% clc
-% fprintf('  Combination         Area')
-% format short
-% dataprint=[];
+
 
 %% Save the results
+cd([workpath '/' username '_results']);
 save([filename '.mat'], 'm2m_result','-v7.3');
+% resultID =fopen('result
 disp(['Workspace succesfully saved as:',filename,'.mat'])
 m2m_thankyou %Thank you message
 end

@@ -38,7 +38,7 @@ function [input, data_gen] = M2M_data_generation(input)
 %     You should have received a copy of the GNU General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %==========================================================================
-addpath(genpath('~/methods2models'));
+% addpath(genpath('~/methods2models'));
 tF = input.tF;
 N = input.N;
 snaps = input.snaps;
@@ -146,7 +146,7 @@ for i = 1:N
 end
 toc(measure_time)
 if doplots
-    M2M_timepointsP(p_value,samples,snaps)
+    M2M_timepointsP(p_value,samples)
 end
 %% New IC for every cell (Why do you use y_0 and not start???)
 newic_time=tic;
@@ -159,7 +159,7 @@ start(i,:)=cellcyclestart;
 end
 toc(newic_time)
 if doplots
-   M2M_newICP() 
+   M2M_newICP(simdata,LB,statenames) 
 end
 %% 6) Simulate the model--------------------------------------------------%
 disp('Simulate the model--------------------------------------------------')

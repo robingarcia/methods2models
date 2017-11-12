@@ -26,7 +26,7 @@ close all;
 %     end
     
     %% Matlab2tikz
-    matlab2tikz('random_ic.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+%     matlab2tikz('random_ic.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 
 end
 

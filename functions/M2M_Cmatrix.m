@@ -34,7 +34,7 @@ function[Y,combi,cmatrix] = M2M_Cmatrix(i,j,n, errordata)
 %==========================================================================
 
 x = 1:n-1; %Substract the DNA part
-C = WChooseK(x,j);% C-Code (MEX) from Jan Simon
+C = nchoosek(x,j);% C-Code (MEX) from Jan Simon WChooseK
 cmatrix = zeros(size(C,2), n); %Row= Measurement output
 measure_out = C(i,:); % i = Select the row
 for k = 1:length(measure_out)

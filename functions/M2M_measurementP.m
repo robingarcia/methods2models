@@ -103,6 +103,6 @@ hold off
 % end
 
 %% matlab2tikz
-matlab2tikz( 'cdc20a_dna.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+% matlab2tikz( 'cdc20a_dna.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 end
 

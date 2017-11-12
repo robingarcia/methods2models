@@ -38,6 +38,6 @@ grid on
 % zlabel(statenames(32))
 
 %% matlab2tikz
-matlab2tikz('error_model.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
+% matlab2tikz('error_model.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
 end
 

@@ -22,9 +22,9 @@ xlabel('Periods (h)')
 ylabel('Number of cells')
 % matlab2tikz( 'inversion.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 %% Uniform distribution
-histogram(p_value(:,1));
-grid on
-title('Uniform distribution')
-ylabel('Number of cells')
+% histogram(p_value(:,1));
+% grid on
+% title('Uniform distribution')
+% ylabel('Number of cells')
 end
 

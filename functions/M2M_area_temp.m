@@ -8,7 +8,7 @@ function [best] = M2M_area_temp(y,best,y_update,k)
    if   isempty(best)
         x = linspace(0,1,size(y,2));
         z = 1:size(y,1); %Number of parameters
-            C=WChooseK(z,2);% Two measurement outputs
+            C=nchoosek(z,2);% Two measurement outputs
             best=cell(1,size(C,1));
             trap_area = zeros(1,size(C,1));
             for j = 1:size(C,1)

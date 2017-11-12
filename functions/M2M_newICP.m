@@ -10,6 +10,6 @@ legend(statenames([2,3,5,12]))
 xlabel('time (h)')
 ylabel('Concentration (AU)')
 grid on
-matlab2tikz('new_ic.tex', 'height', '\fheight', 'width', '\fwidth' )
+% matlab2tikz('new_ic.tex', 'height', '\fheight', 'width', '\fwidth' )
 end
 

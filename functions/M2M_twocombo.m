@@ -17,6 +17,7 @@ function [results_save,combi_store] = M2M_twocombo(y,ic,N,snaps)
 %
 % [EXAMPLE]
 % Pending
+
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria
@@ -40,7 +41,7 @@ combi = ([]);
 z = 1:size(ic,1);% Number of parameters
 for i = 2 %Only 2 combinations are considered here
     results_save.i = i;
-    C = WChooseK(z,i);% Two measurement outputs
+    C = nchoosek(z,i);% Two measurement outputs
 
     trap_area = zeros(1,size(C,1));
     for j = 1:size(C,1)

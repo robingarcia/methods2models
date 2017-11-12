@@ -13,6 +13,6 @@ function M2M_mexmodelP(original_data,statenames)
     grid on
     
 %%     matlab2tikz
-matlab2tikz('original_toettcher.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
+% matlab2tikz('original_toettcher.tex','height', '4cm', 'width', '8cm','floatFormat','%.3g' )
 end
 

@@ -19,7 +19,7 @@ NewPathDensity = sbistFACSDensityTrafo(PathDensity,newScale);%Wanderlust
 options.doplots = 0; %0 = no plot , 1 = plot
 PlotERAVariance(y_data,NewPathDensity,options);
 % M2M_statisticP(NewPathDensity);
-M2M_transformationP(NewPathDensity,newScale)
+% M2M_transformationP(NewPathDensity,newScale)
 %% Output
 % s_Exp=NewPathDensity.s_single_cell_Expectation;
 a_Exp=NewPathDensity.a_single_cell_Expectation;

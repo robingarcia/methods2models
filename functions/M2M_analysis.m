@@ -73,7 +73,7 @@ two_combi.combi_store=combi_store;
 disp('New approach (more combinations)')
 np_time=tic;
 BEST=cell(1,size(combi_store,2));
-for i= 1%[1,351]%size(combi_store,2)
+for i= 1
     disp_var = ['Measurement combination ->>:',num2str(combi_store{i}.best)];
     disp(['>>>',num2str(linspace(i,i,10)),'<<<'])
     disp(disp_var)
@@ -81,7 +81,7 @@ for i= 1%[1,351]%size(combi_store,2)
     disp(disp_from)
     disp(['>>>',num2str(linspace(size(combi_store,2),size(combi_store,2),10)),'<<<'])
     if domail
-    m2m_mail('teb81338@stud.uni-stuttgart.de','New approach',evalc('disp(disp_from)'))
+    sendmail(mail,'New approach',evalc('disp(disp_from)'))
     else
        disp('No notification')
     end
@@ -120,26 +120,10 @@ np_problem.BEST=BEST;
 % toc(np_time)
 % %% Save area --------------------------------------------------------------
 results = ([]);
-% results.names = statenames;
-% results.ic = ic;
-% results.time = time;
-% results.N = N;
-% results.snaps = snaps;
-% results.data = data;
-% results.errordata = errordata;
-% results.y_0 = y_0;
-% results.t_period = t_period;
-% results.f = f;
-% results.best_comb = best_comb;
-% results.B = B;
 results.all_states=all_states;
 results.pre_computation=pre_computation;
 results.new_functions=new_functions;
 results.two_combi=two_combi;
 results.np_problem=np_problem;
-% results.combi_store;
-% results.BEST = BEST;
-% results.input = input;
-% results.storage= storage;
 end
 

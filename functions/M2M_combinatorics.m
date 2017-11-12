@@ -39,20 +39,20 @@ function [summary] = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,state
 load_options
 options.Ynames		= statenames;
 species=size(ic,1);
-% Determine the max size---------------------------------------------------
-number = zeros(size(ic,1),1);
-for i = 1:size(ic,1)
-    number(i,1)=size(WChooseK(1:size(ic,1),i),1);
-end
+% % Determine the max size---------------------------------------------------
+% number = zeros(size(ic,1),1);
+% for i = 1:size(ic,1)
+%     number(i,1)=size(WChooseK(1:size(ic,1),i),1);%nchoosek
+% end
 %% Preallocation area =====================================================
-combination = cell(number(j,1),1); %Combination names
+combination = cell(size(ic,1),1); %Combination names
 data = errordata';
 Variance_S = zeros(1,size(errordata,2));
 Variance_A = zeros(1,size(errordata,2));
 s_Expectation = zeros(1,size(errordata,2));
 a_Expectation = zeros(1,size(errordata,2));
     
-for i=1:size(WChooseK(1:species,j),1)%without DNA
+for i=1:species%size(WChooseK(1:species,j),1)%without DNA nchoosek
 [~,options.PathIndex,cmatrix] = M2M_Cmatrix(i,j,size(errordata,1),errordata);
 y_data = cmatrix * w_data';%switch dimensions!
 % y_data = cmatrix * w_data;
