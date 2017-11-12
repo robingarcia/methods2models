@@ -1,0 +1,6 @@
+# ignor temporary files
+*~
+# data file 
+data.mat
+*.mat
+#*.txt

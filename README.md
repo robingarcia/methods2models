@@ -1,5 +1,5 @@
 # methods2models
-![m2m logo](https://github.com/robingarcia/methods2models/blob/master/fig/m2m_logo_320.jpg)
+![m2m logo](https://github.com/robingarcia/methods2models/blob/master/m2m_logo_320.jpg)
 
 ## What does this software do?
 

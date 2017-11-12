@@ -12,7 +12,7 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % results:            struct: Results
 %
 % [EXAMPLE]
-% results = m2m(0:1000,10000,10,0.01,'model_toettcher2008MEX',0)
+% results = m2m(0:800,100,12,0.001,'model_toettcher2008MEX',0)
 
 %==========================================================================
 %     methods2models
@@ -43,7 +43,8 @@ m2m_result.filename=filename;
 % workpath='~/methods2models';%Root directory of the m2m-toolbox
 % addpath(genpath(workpath));
 statenames = cell(1,32);
-load('~/methods2models/datasets/toettcher_statenames.mat');
+load toettcher_statenames.mat;
+% load('~/methods2models/datasets/toettcher_statenames.mat');
 input.statenames=statenames;
 m2m_result.workpath=workpath;
 m2m_result.storepath=storepath;
@@ -54,8 +55,6 @@ m2m_result.input=input;
 disp('Data generation ---------------------------------------------------')
 [input,storage] = M2M_data_generation(input);
 m2m_result.data_gen=storage;
-
-
 
 % %% -----------------------Analysis (stable)----------------------------------------
 % disp('Analysis ----------------------------------------------------------')
