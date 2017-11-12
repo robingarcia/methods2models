@@ -66,6 +66,6 @@ for i=1 %:size(best,2) %Uncomment for all combinations of two
     disp(k)
     end
 end
-
+best = best(~cellfun(@isempty,best)); %Purge empty cells
 end
 

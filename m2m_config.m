@@ -3,10 +3,21 @@
 disp('#####################################')
 disp('Welcome to m2m toolbox configuration.')
 disp('#####################################')
-workpath = input('Toolbox location? (e.g: ~/path/to/your/toolbox)');
-cd(workpath);
 username = input('Your username [johndoe]:');
-mkdir([username '_results']);
+if isempty(username)
+   username = 'johndoe';
+else
+end
+workpath = input('Toolbox location? (e.g: ~/path/to/your/toolbox)');
+storepath = input('Storage location? (e.g: ~/path/to/your/store)');
+cd(storepath);
+% username = input('Your username [johndoe]:');
+
+mkdir(['m2mresults_' username]);
+cd(['m2mresults_' username]);
+mkdir input;
+mkdir output;
+cd(workpath);
 domail = input('Do you want notification mails [0=no]:');
 if domail 
     mail = input('Mail adress:');
@@ -23,4 +34,5 @@ if domail
     props.setProperty('mail.smtp.socketFactory.port','587');
     sendmail(mail,'Msg from m2m toolbox','Success!');
 else
+    save('config.mat', 'username','workpath','storepath','-v7.3');
 end

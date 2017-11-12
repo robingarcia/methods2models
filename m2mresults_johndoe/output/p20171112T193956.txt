@@ -1,0 +1,5 @@
+       Time:        1000
+          N:        2000
+      snaps:           2
+        sig:      0.1000
+      model:model_toettcher2008MEX

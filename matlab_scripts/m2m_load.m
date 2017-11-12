@@ -48,3 +48,18 @@ else
     domail = 0;
     input.domail = domail;
 end
+
+%% Store parameters
+parameterID = fopen(['p' filename '.txt'],'w');%Save used parameters
+fprintf(parameterID,'%12s', 'Time:');
+fprintf(parameterID,'%12.0f\n',timeF(end));
+fprintf(parameterID,'%12s', 'N:');
+fprintf(parameterID,'%12.0f\n',N);
+fprintf(parameterID,'%12s', 'snaps:');
+fprintf(parameterID,'%12.0f\n',snaps);
+fprintf(parameterID,'%12s', 'sig:');
+fprintf(parameterID,'%12.4f\n',sig);
+fprintf(parameterID,'%12s', 'model:');
+fprintf(parameterID,'%12s\n',func2str(mexmodel));
+fclose(parameterID);
+type(['p' filename '.txt']);
