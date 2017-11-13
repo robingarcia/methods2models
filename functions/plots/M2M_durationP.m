@@ -46,6 +46,9 @@ histogram(t_period(4,:),7,'FaceColor','y')
 xlabel('Period (h)'), ylabel('Number of cells')
 title('G2-Phase')
 
+
+%% Stacked Phases
+barh(t_period(1:20,2:4),'stacked');
 % matlab2tikz('g2_phase.tex','height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 
 %% still buggy?

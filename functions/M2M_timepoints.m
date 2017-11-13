@@ -1,21 +1,17 @@
 function [samples, P] = M2M_timepoints(snaps,period)%(statevalues,snaps,start,period)
-% This is an template for output generation
-% This function generates the snapshots
+% This function generates the snapshots. 
 % 
 % [SYNTAX]
-% [START, samples,T] = M2M_timepoints(random_statevalues,t_iqm,o)
+% [samples,P] = M2M_timepoints(snaps,period)
 % 
 % [INPUTS]
-% random_statevalues
-% t_iqm
-% o
+% snaps         Number of snapshots
+% period        Cell cycle length
+% 
 % 
 % [OUTPUTS]
-% START        New IC's 
-% samples
-% T
-% G
-% GAMMMA
+% samples       New random numbers which follows a particular distribution
+% P             Uniform distributed random numbers
 
 %==========================================================================
 %     methods2models

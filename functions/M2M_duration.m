@@ -1,6 +1,22 @@
 function [g1_phase,s_phase,g2_phase] = M2M_duration(statevalues,ub,lb,period)
-%UNTITLED Summary of this function goes here
+%This function calculates the duration of the cell cycle phases.
 %   Detailed explanation goes here
+% [Syntax]
+% [g1_phase,s_phase,g2_phase] = M2M_duration(statevalues,ub,lb,period)
+% 
+% [INPUT]
+% statevalues        double| your statevalues
+% ub                 double| upper bound
+% lb                 double| lower bound
+% period             double| Period of the cell cycle [h]
+% 
+% [OUTPUT]
+% g1_phase           double| Length of the G1-Phase [h]
+% s_phase            double| Length of the S-Phase [h]
+% g2_phase           double| Length of the G2-Phase [h]
+%
+% [EXAMPLE]
+% Pending!
 
 %==========================================================================
 %     methods2models

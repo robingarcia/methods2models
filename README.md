@@ -23,7 +23,10 @@ This software gives you the (best) protein combination that allows you to analyz
 - cellcyclemodel.txt (For more help vist: [http://www.intiquan.com](www.intiquan.com))
 
 ### Output files
-- yyyymmddThhmmss.mat
+- pyyyymmddThhmmss.txt (Your parameters which were used for this simulation)
+- ryyyymmddThhmmss.txt (Your results)
+- wyyyymmddThhmmss.mat (Your workspace)
+
 
 ## Example
 $ m2m(0:1000,1000,2,0.01,'model_toettcher2008MEX',0);
