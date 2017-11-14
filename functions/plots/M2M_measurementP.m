@@ -287,6 +287,50 @@ for i=1:100
     end    
 end
 hold off
+
+%% Separate picture Cdc20A
+figure(1)
+x_logi = (MYDATA(32,1:4000) <=2);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(12,x_logi);
+plot(x_1,y_1,'r.')
+hold on
+grid on
+x_logi = (MYDATA(32,1:4000) > 2 & MYDATA(32,1:4000) <4);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(12,x_logi);
+plot(x_1,y_1,'g.')
+x_logi = (MYDATA(32,1:4000) >=4);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(12,x_logi);
+plot(x_1,y_1,'b.')
+legend('G1-Phase','S-Phase','G2-Phase','Location','northwest')
+xlabel('Zeit [h]')
+ylabel('Konzentration (a.u.)')
+hold off
+matlab2tikz( 'cdc20a.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
+%% Separate picture DNA
+figure(1)
+x_logi = (MYDATA(32,1:4000) <=2);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(32,x_logi);
+plot(x_1,y_1,'r.')
+hold on
+grid on
+x_logi = (MYDATA(32,1:4000) > 2 & MYDATA(32,1:4000) <4);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(32,x_logi);
+plot(x_1,y_1,'g.')
+x_logi = (MYDATA(32,1:4000) >=4);
+x_1 = MYDATA(33,x_logi);
+y_1 = MYDATA(32,x_logi);
+plot(x_1,y_1,'b.')
+legend('G1-Phase','S-Phase','G2-Phase','Location','southeast')
+xlabel('Zeit [h]')
+ylabel('Konzentration (a.u.)')
+axis([0 max(MYDATA(end,:))+1 1.5 4.5])
+hold off
+matlab2tikz( 'dna.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 %% matlab2tikz
 % matlab2tikz( 'cdc20a_dna.tex', 'height', '\fheight', 'width', '\fwidth','floatFormat','%.3g' )
 end

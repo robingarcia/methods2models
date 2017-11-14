@@ -1,10 +1,5 @@
-function  [results_mex,IC]=M2M_mexmodel(time_vector, IC,mexmodel)
-%%This is an MEX-model implementation of the IQM-model 
-%This function creates a MEX-Model (C-Code) from a IQM-Model
-% To run this function some prerequisites are required:
-% 
-% 1) Model stored as IQM-Model (yourmodel.txt)
-% Check the docs of IQM toolbox how to create a IQM-Model
+function  [results_mex,IC]=M2M_mexmodel(time_vector, IC,mexmodel) 
+%This function use your MEX model for simulation
 % 
 % [SYNTAX]
 % [results_mex] = M2M_mexmodel(time_vector, IC)
@@ -15,6 +10,11 @@ function  [results_mex,IC]=M2M_mexmodel(time_vector, IC,mexmodel)
 % 
 % [OUTPUTS]
 % results_mex         struct:Results of the simulation
+%
+% [EXAMPLE]
+% IC = mexmodel();
+% results_mex = mexmodel(0:1000,IC);
+
 %==========================================================================
 %     methods2models
 %     Copyright (C) 2017  Robin Garcia Victoria

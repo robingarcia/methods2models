@@ -20,6 +20,17 @@ function [input, data_gen] = M2M_data_generation(input)
 %   time:         number: Timepoint of every single cell
 % [EXAMPLE]
 % Pending! 
+% 
+% [Structure]
+% M2M_data_generation
+% |-- M2M_DNAsimulation
+% |-- M2M_duration
+% |-- M2M_error_model
+% |-- M2M_lognrnd
+% |-- M2M_mexmodel
+% |-- M2M_purge
+% |-- M2M_start
+% `-- M2M_timepoints
 
 %==========================================================================
 %     methods2models

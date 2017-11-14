@@ -1,0 +1,33 @@
+m2m_Toolbox
+|-- M2M_analysis
+|   |-- M2Marea
+|   |   |-- M2M_combo_wanderlust
+|   |   |   |-- PathfromWanderlust
+|   |   |   |   |-- getMeanWanderlustPath
+|   |   |   |   `-- wanderlust
+|   |   |   |-- sbistFACS2PathDensity
+|   |   |   `-- sbistFACSDensityTrafo
+|   |   `-- moving_average
+|   |-- M2M_combinatorics
+|   |   |-- M2M_Cmatrix
+|   |   |-- sbistFACS2PATHDensity
+|   |   `-- sbistFACSDensityTrafo
+|   |-- M2M_functions
+|   |   |-- moving_average
+|   |   `-- normdata
+|   |-- M2M_pre_wanderlust
+|   |   `-- PathfromWanderlust
+|   |       |-- getMeanWanderlustPath
+|   |       `-- wanderlust
+|   `-- M2M_twocombo
+`-- M2M_data_generation
+    |-- M2M_DNAsimulation
+    |-- M2M_duration
+    |-- M2M_error_model
+    |-- M2M_lognrnd
+    |-- M2M_mexmodel
+    |-- M2M_purge
+    |-- M2M_start
+    `-- M2M_timepoints
+
+9 directories, 21 files

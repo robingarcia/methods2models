@@ -13,6 +13,39 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %
 % [EXAMPLE]
 % results = m2m(0:800,100,12,0.001,'model_toettcher2008MEX',0)
+%
+% [Structure]
+% m2m_Toolbox
+% |-- M2M_analysis
+% |   |-- M2Marea
+% |   |   |-- M2M_combo_wanderlust
+% |   |   |   |-- PathfromWanderlust
+% |   |   |   |   |-- getMeanWanderlustPath
+% |   |   |   |   `-- wanderlust
+% |   |   |   |-- sbistFACS2PathDensity
+% |   |   |   `-- sbistFACSDensityTrafo
+% |   |   `-- moving_average
+% |   |-- M2M_combinatorics
+% |   |   |-- M2M_Cmatrix
+% |   |   |-- sbistFACS2PATHDensity
+% |   |   `-- sbistFACSDensityTrafo
+% |   |-- M2M_functions
+% |   |   |-- moving_average
+% |   |   `-- normdata
+% |   |-- M2M_pre_wanderlust
+% |   |   `-- PathfromWanderlust
+% |   |       |-- getMeanWanderlustPath
+% |   |       `-- wanderlust
+% |   `-- M2M_twocombo
+% `-- M2M_data_generation
+%     |-- M2M_DNAsimulation
+%     |-- M2M_duration
+%     |-- M2M_error_model
+%     |-- M2M_lognrnd
+%     |-- M2M_mexmodel
+%     |-- M2M_purge
+%     |-- M2M_start
+%     `-- M2M_timepoints
 
 %==========================================================================
 %     methods2models
@@ -56,16 +89,20 @@ disp('Data generation ---------------------------------------------------')
 [input,storage] = M2M_data_generation(input);
 m2m_result.data_gen=storage;
 
-% %% -----------------------Analysis (stable)----------------------------------------
-% disp('Analysis ----------------------------------------------------------')
-% pre_results=M2M_analysis(input,storage);
-% m2m_result.analysis=pre_results;
+%% -----------------------Analysis (stable)----------------------------------------
+disp('Analysis ----------------------------------------------------------')
+pre_results=M2M_analysis(input,storage);
+m2m_result.analysis=pre_results;
 
 %% ----- Analysis (unstable) ------------------------------------------------------
-best = M2M_analysis2(input,storage);
-m2m_result.best=best;
+% best = M2M_analysis2(input,storage);
+% m2m_result.best=best;
 %% Result processing section ------------------------------------------------------
 m2m_processing
 %% Save the results
 m2m_save;
+%% Print the result
+Result = horzcat(add_combi,add_area);
+disp(table(Result)); %Display the result
+m2m_thankyou %Thank you message
 end

@@ -4,3 +4,8 @@
 fList=fList';
 
 % Check integrity of the functions
+if 
+    disp('Function ok!')
+else
+    disp('Function broken!')
+end
