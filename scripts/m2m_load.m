@@ -2,28 +2,28 @@
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = linspace(0,1000,2*1000);
+    timeF = linspace(0,1000,1000);
     input.tF = timeF;
 end
 
 if exist('N','var')
     input.N = N;
 else
-    N = 2000;
+    N = 500;%300
     input.N = N;
 end
 
 if exist('snaps','var')
     input.snaps = snaps;
 else 
-    snaps = 2;
+    snaps = 2;%2
     input.snaps = snaps;
 end
 
 if exist('sig','var')
     input.sig = sig;
 else 
-    sig = 0.1;
+    sig = 0.02;
     input.sig = sig;
 end
 
@@ -41,14 +41,6 @@ else
     doplots = 0;
     input.doplots = doplots;
 end
-
-if exist('domail','var')
-    input.domail = domail;
-else
-    domail = 0;
-    input.domail = domail;
-end
-
 %% Store parameters
 parameterID = fopen(['p' filename '.txt'],'w');%Save used parameters
 fprintf(parameterID,'%12s', 'Time:');

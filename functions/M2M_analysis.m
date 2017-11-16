@@ -14,7 +14,6 @@ y_0=storage.y_0;
 t_period=storage.t_period;
 % time=storage.time;
 statenames=storage.statenames;
-domail=input.domail;
 %% Wanderlust analysis ----------------------------------------------------
 % Here the trajectories for all states are calculated. 
 % This corresponds to a model output of all simultaneously measured states.
@@ -80,11 +79,7 @@ for i= 1
     disp_from=[num2str(i), ' from ', num2str(size(combi_store,2))];
     disp(disp_from)
     disp(['>>>',num2str(linspace(size(combi_store,2),size(combi_store,2),10)),'<<<'])
-    if domail
-    sendmail(mail,'New approach',evalc('disp(disp_from)'))
-    else
-       disp('No notification')
-    end
+
 results_save=combi_store{i};%Use a combination here!
 
 [best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
