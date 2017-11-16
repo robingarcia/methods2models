@@ -3,13 +3,18 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % 
 % 
 % [Syntax]
-% [results] = m2m
+% [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % 
 % [INPUT]
-% See:                userinput
+% timeF                 Simulation time
+% N                     Number of cells
+% snaps                 Number of snapshots
+% sig                   Sigma (for error model)
+% mexmodel              MEX file of your model
+% doplots               0=no, 1=yes
 % 
 % [OUTPUT]
-% results:            struct: Results
+% results:              struct: Results
 %
 % [EXAMPLE]
 % results = m2m(0:800,100,12,0.001,'model_toettcher2008MEX',0)
@@ -47,23 +52,6 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %     |-- M2M_start
 %     `-- M2M_timepoints
 
-%==========================================================================
-%     methods2models
-%     Copyright (C) 2017  Robin Garcia Victoria
-% 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU General Public License for more details.
-% 
-%     You should have received a copy of the GNU General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%==========================================================================
 % profile on
 m2m_init;
 addpath(genpath(workpath));
