@@ -1,0 +1,202 @@
+
+aa = 
+
+  <a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with fields:
+
+     filename: '20171117T135905'
+     workpath: '~/methods2models'
+    storepath: '~/methods2models'
+     username: 'johndoe'
+        input: [1×1 struct]
+     data_gen: [1×1 struct]
+     analysis: [1×1 struct]
+
+cd m2mresults_johndoe/output/
+ls -l
+total 30284
+-rw-rw-r-- 1 robin robin        9 Nov 17 12:55 20171117T124316.log
+-rw-rw-r-- 1 robin robin      135 Nov 16 17:03 p20171116T170306.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 17:54 p20171116T175417.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:02 p20171116T180246.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:03 p20171116T180341.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:07 p20171116T180719.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:12 p20171116T181249.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:26 p20171117T092658.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:37 p20171117T093749.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:39 p20171117T093937.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:40 p20171117T094005.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:58 p20171117T095838.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:59 p20171117T095958.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:00 p20171117T100018.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:01 p20171117T100136.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:44 p20171117T104418.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:46 p20171117T104619.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:47 p20171117T104737.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:49 p20171117T104939.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:53 p20171117T105333.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:54 p20171117T105411.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:55 p20171117T105500.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:57 p20171117T105750.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:02 p20171117T110224.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:03 p20171117T110318.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:05 p20171117T110507.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 12:10 p20171117T121041.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 13:57 p20171117T135742.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 13:59 p20171117T135905.txt
+-rw-rw-r-- 1 robin robin      784 Nov 17 10:04 path.csv
+-rw-rw-r-- 1 robin robin      840 Nov 16 18:19 r20171116T181249.txt
+-rw-rw-r-- 1 robin robin      840 Nov 17 09:44 r20171117T094005.txt
+-rw-rw-r-- 1 robin robin      840 Nov 17 14:06 r20171117T135905.txt
+-rw-rw-r-- 1 robin robin 12086972 Nov 16 18:19 w20171116T181249.mat
+-rw-rw-r-- 1 robin robin  6697363 Nov 17 09:44 w20171117T094005.mat
+-rw-rw-r-- 1 robin robin 12086736 Nov 17 14:06 w20171117T135905.mat
+
+type 20171117T124316.log
+
+Success!
+clc
+ls -l
+total 30284
+-rw-rw-r-- 1 robin robin        9 Nov 17 12:55 20171117T124316.log
+-rw-rw-r-- 1 robin robin      135 Nov 16 17:03 p20171116T170306.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 17:54 p20171116T175417.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:02 p20171116T180246.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:03 p20171116T180341.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:07 p20171116T180719.txt
+-rw-rw-r-- 1 robin robin      135 Nov 16 18:12 p20171116T181249.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:26 p20171117T092658.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:37 p20171117T093749.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:39 p20171117T093937.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:40 p20171117T094005.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:58 p20171117T095838.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 09:59 p20171117T095958.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:00 p20171117T100018.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:01 p20171117T100136.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:44 p20171117T104418.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:46 p20171117T104619.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:47 p20171117T104737.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:49 p20171117T104939.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:53 p20171117T105333.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:54 p20171117T105411.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:55 p20171117T105500.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 10:57 p20171117T105750.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:02 p20171117T110224.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:03 p20171117T110318.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 11:05 p20171117T110507.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 12:10 p20171117T121041.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 13:57 p20171117T135742.txt
+-rw-rw-r-- 1 robin robin      135 Nov 17 13:59 p20171117T135905.txt
+-rw-rw-r-- 1 robin robin      784 Nov 17 10:04 path.csv
+-rw-rw-r-- 1 robin robin      840 Nov 16 18:19 r20171116T181249.txt
+-rw-rw-r-- 1 robin robin      840 Nov 17 09:44 r20171117T094005.txt
+-rw-rw-r-- 1 robin robin      840 Nov 17 14:06 r20171117T135905.txt
+-rw-rw-r-- 1 robin robin 12086972 Nov 16 18:19 w20171116T181249.mat
+-rw-rw-r-- 1 robin robin  6697363 Nov 17 09:44 w20171117T094005.mat
+-rw-rw-r-- 1 robin robin 12086736 Nov 17 14:06 w20171117T135905.mat
+
+type r20171117T135905.txt
+
++++++++++++++++++++++++++++++
+17-Nov-2017 14:06:09
++++++++++++++++++++++++++++++
+ Combination        Area
+ -----------  ----------
+    7   11      8.77
+ -----------  ----------
+   12         2.0000
+   22         4.0000
+   21        15.0000
+   19        27.0000
+   14        13.0000
+    9        25.0000
+   26         3.0000
+    8        17.0000
+    5        20.0000
+   18         1.0000
+    6        10.0000
+   23        24.0000
+   16         9.0277
+    7         7.9787
+   12         9.3426
+    4         3.5861
+    3         3.2411
+    2         2.2939
+    2         2.0561
+    2         1.9187
+    2         1.4166
+    1         1.6841
+    1         1.1237
+    1         0.9940
+    1         1.2286
+ -----------  ----------
+ Combination        Area
+#############################
+++++++++No warranty++++++++
+#############################
+clc
+bar([2.34,9.45,3])
+getenv('PROCESSOR_ARCHITECTURE')
+
+ans =
+
+  0×0 empty <a href="matlab:helpPopup char" style="font-weight:bold">char</a> array
+
+getenv('USERNAME')
+
+ans =
+
+  0×0 empty <a href="matlab:helpPopup char" style="font-weight:bold">char</a> array
+
+clc
+feature memstats
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('feature')" style="font-weight:bold">feature</a>
+Feature memstats not found
+} 
+dos('vol')
+zsh:1: command not found: vol
+
+ans =
+
+   127
+
+clc
+feature('numcores')
+MATLAB detected: 2 physical cores.
+MATLAB detected: 4 logical cores.
+MATLAB was assigned: 4 logical cores by the OS.
+MATLAB is using: 2 logical cores.
+MATLAB is not using all logical cores because hyper-threading is enabled.
+
+ans =
+
+     2
+
+getenv('PROCESSOR_IDENTIFIER')
+
+ans =
+
+  0×0 empty <a href="matlab:helpPopup char" style="font-weight:bold">char</a> array
+
+clc
+clear
+clc
+getenv('PROCESSOR_IDENTIFIER')
+
+ans =
+
+  0×0 empty <a href="matlab:helpPopup char" style="font-weight:bold">char</a> array
+
+clc
+ [a b] = dos('systeminfo') 
+
+a =
+
+   127
+
+
+b =
+
+    'zsh:1: command not found: systeminfo
+     '
+
+exit

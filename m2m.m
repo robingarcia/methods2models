@@ -17,7 +17,7 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % results:              struct: Results
 %
 % [EXAMPLE]
-% results = m2m(0:800,100,12,0.001,'model_toettcher2008MEX',0)
+% results = m2m(0:800,500,2,0.02,'model_toettcher2008MEX',0)
 %
 % [Structure]
 % m2m_Toolbox
@@ -53,6 +53,8 @@ function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 %     `-- M2M_timepoints
 
 % profile on
+time_m2m=tic;
+diary;
 m2m_init;
 addpath(genpath(workpath));
 addpath(genpath([storepath '/' 'm2mresults_' username]));
@@ -74,14 +76,16 @@ m2m_result.username=username;
 m2m_result.input=input;
 %% Data generation --------------------------------------------------------
 disp('Data generation ---------------------------------------------------')
+time_datagen=tic;
 [input,storage] = M2M_data_generation(input);
 m2m_result.data_gen=storage;
-
+toc(time_datagen);
 %% -----------------------Analysis (stable)----------------------------------------
 disp('Analysis ----------------------------------------------------------')
+time_analysis=tic;
 pre_results=M2M_analysis(input,storage);
 m2m_result.analysis=pre_results;
-
+toc(time_analysis);
 %% ----- Analysis (unstable) ------------------------------------------------------
 % best = M2M_analysis2(input,storage);
 % m2m_result.best=best;
@@ -93,4 +97,6 @@ m2m_save;
 Result = horzcat(add_combi,add_area);
 disp(table(Result)); %Display the result
 m2m_thankyou %Thank you message
+diary([filename '.log']);
+toc(time_m2m);
 end

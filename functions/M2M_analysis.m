@@ -90,7 +90,7 @@ best_comb(empties(1),:)=[];%Remove empty cells
 else
 end
 BEST{i}=best_comb;
-toc(np_time)
+%toc(np_time)
 end
 BEST=BEST(~cellfun(@isempty,BEST));
 % Single values from cell to vector

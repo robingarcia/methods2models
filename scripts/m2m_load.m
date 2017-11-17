@@ -2,7 +2,7 @@
 if exist('timeF','var')
     input.tF = timeF;
 else
-    timeF = linspace(0,1000,1000);
+    timeF = 0:800;%linspace(0,800,801);
     input.tF = timeF;
 end
 
