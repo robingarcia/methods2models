@@ -65,8 +65,10 @@ m2m_result=([]);
 m2m_result.filename=filename;
 % workpath='~/methods2models';%Root directory of the m2m-toolbox
 % addpath(genpath(workpath));
-statenames = cell(1,32);
-load toettcher_statenames.mat;
+% statenames = cell(1,32);
+statenames = mexmodel('states')';
+statenames{1,end+1}='DNA';
+% load toettcher_statenames.mat;
 % load('~/methods2models/datasets/toettcher_statenames.mat');
 input.statenames=statenames;
 m2m_result.workpath=workpath;

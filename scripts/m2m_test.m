@@ -17,7 +17,7 @@ end
 if exist('N','var')
     input.N = N;
 else
-    N = 100;%300
+    N = 300;%300
     input.N = N;
 end
 
@@ -49,7 +49,9 @@ else
     doplots = 0;
     input.doplots = doplots;
 end
-load toettcher_statenames.mat;
+% load toettcher_statenames.mat;
+statenames = mexmodel('states')';
+statenames{1,end+1}='DNA';
 input.statenames=statenames;
 disp(input)
 %% Generate dataset
@@ -65,3 +67,4 @@ diary([filename '.log'])
 disp('Success!')
 diary off
 toc
+clear

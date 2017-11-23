@@ -70,7 +70,7 @@ end
 %% x) Calculate start of the cell cycle
 disp('Calculate start of cell cylce -------------------------------------')
 start_time=tic;
-[~,lb,~] = M2M_start(original_statevalues);
+[~,lb,~] = M2M_start(original_statevalues,statenames);
 y_0 = original_statevalues(:,lb);%lb=lower bound Why from original model???
 y_0(end+1)=2; % DNA = 2N at Cellcycle start
 toc(start_time)
@@ -95,6 +95,7 @@ simdata = cell(1,N);           %
 random_statevalues = cell(1,N);%
 %------------------------------%
 for i = 1:N %parfor?
+%     disp(i)
     simdata{i} = M2M_mexmodel(tF,rndmic(:,i),mexmodel); %C-Model (MEX-File)
     random_statevalues{i} = simdata{1,i}.statevalues;%Extract the statevalues 
 end
@@ -108,7 +109,7 @@ LB=zeros(1,N);
 PERIOD=zeros(1,N);
 for i=1:N
     statevalues=random_statevalues{1,i}';
-    [ub,lb,period]=M2M_start(statevalues);
+    [ub,lb,period]=M2M_start(statevalues,statenames);
     UB(:,i)=ub;
     LB(:,i)=lb;
     PERIOD(:,i)=period;
