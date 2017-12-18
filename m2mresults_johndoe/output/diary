@@ -1,0 +1,590 @@
+            tF: [1×801 double]
+             N: 100
+         snaps: 1
+           sig: 0.0200
+      mexmodel: @model_toettcher2008MEX
+       doplots: 0
+    statenames: {1×32 cell}
+
+Original statevalues -----------------------------------------------
+Elapsed time is 0.046914 seconds.
+Calculate start of cell cylce -------------------------------------
+Elapsed time is 0.003547 seconds.
+Randomize IC -------------------------------------------------------
+Elapsed time is 0.021916 seconds.
+Population generation-----------------------------------------------------
+Elapsed time is 3.173491 seconds.
+Measurement---------------------------------------------------------
+Elapsed time is 0.006523 seconds.
+Elapsed time is 0.003683 seconds.
+Simulate the model--------------------------------------------------
+Elapsed time is 0.182862 seconds.
+Error model (add noise to dataset) ---------------------------------
+Elapsed time is 0.001315 seconds.
+Purge dataset ---------------------------------
+Elapsed time is 0.002720 seconds.
+Store results in a struct---------------------------------
+Elapsed time is 0.000289 seconds.
+        rndmic: [27×100 double]
+        mydata: [28×100 double]
+     errordata: [28×100 double]
+           y_0: [28×1 double]
+      t_period: [4×100 double]
+        MYDATA: [29×100 double]
+          time: [1×200 double]
+    statenames: {1×28 cell}
+
+Starting parallel pool (parpool) using the 'local' profile ...
+connected to 2 workers.
+
+ans =
+
+    'distributed sparse knn graph computed: 14.2804'
+
+0.99494...0.98737...0.99508...0.99963...0.99970...1.00000...
+7 realignment iterations, 0.99221...0.98955...0.99566...0.99939...0.99992...
+6 realignment iterations, 0.99166...0.99076...0.99716...0.99987...0.99980...1.00000...
+7 realignment iterations, 0.99235...0.98981...0.99623...0.99971...0.99948...0.99992...
+7 realignment iterations, 0.99514...0.98666...0.99634...0.99966...0.99970...1.00000...
+7 realignment iterations, 0.99697...0.99802...0.99959...0.99978...1.00000...
+6 realignment iterations, 0.99266...0.99068...0.99588...0.99964...0.99970...1.00000...
+7 realignment iterations, 0.99013...0.99158...0.99738...0.99948...0.99978...1.00000...
+7 realignment iterations, 0.99106...0.99105...0.99781...0.99880...0.99950...1.00000...
+7 realignment iterations, 0.99137...0.99121...0.99633...0.99955...0.99968...1.00000...
+7 realignment iterations, 0.99337...0.98896...0.99651...0.99906...0.99928...1.00000...
+7 realignment iterations, 0.99101...0.99449...0.99623...0.99954...0.99994...
+6 realignment iterations, 0.99091...0.99108...0.99594...0.99882...0.99930...0.99999...
+7 realignment iterations, 0.99246...0.99288...0.99632...0.99916...0.99951...1.00000...
+7 realignment iterations, 0.99154...0.99273...0.99623...0.99924...0.99986...0.99994...
+7 realignment iterations, 0.99333...0.98819...0.99582...0.99984...0.99897...0.99961...0.99999...
+8 realignment iterations, 0.99176...0.99180...0.99546...0.99922...0.99970...1.00000...
+7 realignment iterations, 0.99105...0.99051...0.99741...0.99972...0.99975...1.00000...
+7 realignment iterations, 0.99175...0.99267...0.99696...0.99897...0.99918...0.99977...0.99992...
+8 realignment iterations, 0.99229...0.98967...0.99593...0.99920...0.99984...0.99993...
+7 realignment iterations, 0.99111...0.99351...0.99693...0.99941...1.00000...
+6 realignment iterations, 0.99145...0.99173...0.99560...0.99918...0.99978...1.00000...
+7 realignment iterations, 0.99143...0.99088...0.99702...0.99905...0.99935...1.00000...
+7 realignment iterations, 0.99258...0.99277...0.99642...0.99941...0.99975...1.00000...
+7 realignment iterations, 0.99204...0.99194...0.99671...0.99972...0.99980...1.00000...
+7 realignment iterations, 0.99061...0.99075...0.99670...0.99938...0.99930...0.99980...0.99999...
+8 realignment iterations, 0.99093...0.99118...0.99626...0.99923...0.99968...1.00000...
+7 realignment iterations, 0.99170...0.99247...0.99664...0.99910...0.99969...1.00000...
+7 realignment iterations, 0.99136...0.99247...0.99602...0.99902...0.99933...0.99986...0.99999...
+8 realignment iterations, 0.99299...0.98905...0.99641...0.99977...0.99896...0.99971...0.99999...
+8 realignment iterations, Elapsed time is 20.481374 seconds.
+    1.5211
+
+                s_single_cell: {1×100 cell}
+                            s: [200×1 double]
+                       f_spdf: [function_handle]
+                f_spdf_single: [function_handle]
+                       f_scdf: [function_handle]
+                   f_scdf_inv: [function_handle]
+                      f_sdpdf: [function_handle]
+                    bandwidth: [1×27 double]
+                            N: 100
+    s_single_cell_Expectation: {1×100 cell}
+       s_single_cell_Variance: [1×100 double]
+                            a: [200×1 double]
+                a_single_cell: {1×100 cell}
+                  a_all_cells: [200×1 double]
+                f_apdf_single: [function_handle]
+                     f_TauInv: [function_handle]
+                  f_prefactor: [function_handle]
+    a_single_cell_Expectation: {1×100 cell}
+       a_single_cell_Variance: [1×100 double]
+
+         pdf: @(a)2*gamma*exp(-gamma.*a)
+         cdf: @(a)2-2*exp(-gamma.*a)
+    coDomain: [0 34.9400]
+
+
+       Time:         800
+          N:         500
+      snaps:           2
+        sig:      0.0200
+      model:model_toettcher2008MEX
+clc
+model
+{Undefined function or variable 'model'.
+} 
+clc
+mexmodel
+
+mexmodel =
+
+  <a href="matlab:helpPopup function_handle" style="font-weight:bold">function_handle</a> with value:
+
+    @model_toettcher2008MEX
+
+mexmodel()
+
+ans =
+
+    0.1057
+    0.3831
+    0.4828
+    0.1206
+    0.0530
+    0.2762
+    0.7238
+    0.1080
+         0
+         0
+    0.8231
+    0.2304
+    0.8655
+    0.1345
+    0.1285
+    0.0317
+    0.0036
+    0.9964
+    0.2915
+    0.8453
+    0.6937
+    0.3063
+    0.4802
+    0.5198
+    0.1310
+    0.8690
+    0.0000
+    0.0000
+         0
+         0
+    0.0000
+
+clc
+mexmodel('statenames')
+
+ans =
+
+  109×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    'kse_p'
+    'kse_pp'
+    'kde_p'
+    'kdea_pp'
+    'kdeb_pp'
+    'kdee_pp'
+    'kasse'
+    'kdisse'
+    'katf_p'
+    'katfa_pp'
+    'katfd_pp'
+    'katfe_pp'
+    'kitf_p'
+    'kitfa_pp'
+    'kitfb_pp'
+    'Jatf'
+    'Jitf'
+    'ksb_p'
+    'ksb_pp'
+    'kdb_p'
+    'kdbh_pp'
+    'kdbc_pp'
+    'kassb'
+    'kdissb'
+    'kwee_p'
+    'kwee_pp'
+    'k25_p'
+    'k25_pp'
+    'kafb'
+    'kifb'
+    'Jafb'
+    'Jifb'
+    'ksa_p'
+    'ksa_pp'
+    'kda_p'
+    'kda_pp'
+    'kda_ppp'
+    'kassa'
+    'kdissa'
+    'ksi_p'
+    'ksi_pp'
+    'kdi_p'
+    'kdia_pp'
+    'kdib_pp'
+    'kdid_pp'
+    'kdie_pp'
+    'k14di'
+    'kafi'
+    'kifi_p'
+    'kifib_pp'
+    'Jafi'
+    'Jifi'
+    'kaie'
+    'kiie'
+    'Jaie'
+    'Jiie'
+    'ks20_p'
+    'ks20_pp'
+    'n20'
+    'J20'
+    'kd20'
+    'ka20'
+    'ki20'
+    'Ja20'
+    'Ji20'
+    'kah1_p'
+    'kah1_pp'
+    'kih1_p'
+    'kih1a_pp'
+    'kih1b_pp'
+    'kih1d_pp'
+    'kih1e_pp'
+    'Jah1'
+    'Jih1'
+    'kawee_p'
+    'kawee_pp'
+    'kiwee_p'
+    'kiwee_pp'
+    'Jawee'
+    'Jiwee'
+    'ka25_p'
+    'ka25_pp'
+    'ki25_p'
+    'ki25_pp'
+    'Ja25'
+    'Ji25'
+    'KEZ'
+    'ks21_p'
+    'ks21_pp'
+    'kd21_p'
+    'kass21d'
+    'kass21e'
+    'kdiss21d'
+    'kdiss21e'
+    'ks25'
+    'kd25'
+    'Kp53b'
+    'Kp53a'
+    'ki25_ppp'
+    'ksh1'
+    'ksAPC'
+    'kswee'
+    'ksTFB'
+    'ksTFE'
+    'ksTFI'
+    'ksd'
+    'kdd'
+    't_d'
+    't_r'
+
+clc
+model_toettcher2008MEX('states')
+
+ans =
+
+  31×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    'CycD'
+    'CycA'
+    'CycB'
+    'pB'
+    'CycE'
+    'APC'
+    'APCP'
+    'CKI'
+    'BCKI'
+    'pBCKI'
+    'Cdc20i'
+    'Cdc20A'
+    'Cdh1'
+    'Cdh1i'
+    'TriA'
+    'TriE'
+    'Wee1'
+    'Wee1i'
+    'Cdc25'
+    'Cdc25i'
+    'TFB'
+    'TFBi'
+    'TFE'
+    'TFEi'
+    'TFI'
+    'TFIi'
+    'p21'
+    'TriD21'
+    'TriA21'
+    'TriB21'
+    'TriE21'
+
+model_toettcher2008MEX('statenames')
+
+ans =
+
+  109×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    'kse_p'
+    'kse_pp'
+    'kde_p'
+    'kdea_pp'
+    'kdeb_pp'
+    'kdee_pp'
+    'kasse'
+    'kdisse'
+    'katf_p'
+    'katfa_pp'
+    'katfd_pp'
+    'katfe_pp'
+    'kitf_p'
+    'kitfa_pp'
+    'kitfb_pp'
+    'Jatf'
+    'Jitf'
+    'ksb_p'
+    'ksb_pp'
+    'kdb_p'
+    'kdbh_pp'
+    'kdbc_pp'
+    'kassb'
+    'kdissb'
+    'kwee_p'
+    'kwee_pp'
+    'k25_p'
+    'k25_pp'
+    'kafb'
+    'kifb'
+    'Jafb'
+    'Jifb'
+    'ksa_p'
+    'ksa_pp'
+    'kda_p'
+    'kda_pp'
+    'kda_ppp'
+    'kassa'
+    'kdissa'
+    'ksi_p'
+    'ksi_pp'
+    'kdi_p'
+    'kdia_pp'
+    'kdib_pp'
+    'kdid_pp'
+    'kdie_pp'
+    'k14di'
+    'kafi'
+    'kifi_p'
+    'kifib_pp'
+    'Jafi'
+    'Jifi'
+    'kaie'
+    'kiie'
+    'Jaie'
+    'Jiie'
+    'ks20_p'
+    'ks20_pp'
+    'n20'
+    'J20'
+    'kd20'
+    'ka20'
+    'ki20'
+    'Ja20'
+    'Ji20'
+    'kah1_p'
+    'kah1_pp'
+    'kih1_p'
+    'kih1a_pp'
+    'kih1b_pp'
+    'kih1d_pp'
+    'kih1e_pp'
+    'Jah1'
+    'Jih1'
+    'kawee_p'
+    'kawee_pp'
+    'kiwee_p'
+    'kiwee_pp'
+    'Jawee'
+    'Jiwee'
+    'ka25_p'
+    'ka25_pp'
+    'ki25_p'
+    'ki25_pp'
+    'Ja25'
+    'Ji25'
+    'KEZ'
+    'ks21_p'
+    'ks21_pp'
+    'kd21_p'
+    'kass21d'
+    'kass21e'
+    'kdiss21d'
+    'kdiss21e'
+    'ks25'
+    'kd25'
+    'Kp53b'
+    'Kp53a'
+    'ki25_ppp'
+    'ksh1'
+    'ksAPC'
+    'kswee'
+    'ksTFB'
+    'ksTFE'
+    'ksTFI'
+    'ksd'
+    'kdd'
+    't_d'
+    't_r'
+
+clc
+mexmodel('statenames')
+
+ans =
+
+  109×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    'kse_p'
+    'kse_pp'
+    'kde_p'
+    'kdea_pp'
+    'kdeb_pp'
+    'kdee_pp'
+    'kasse'
+    'kdisse'
+    'katf_p'
+    'katfa_pp'
+    'katfd_pp'
+    'katfe_pp'
+    'kitf_p'
+    'kitfa_pp'
+    'kitfb_pp'
+    'Jatf'
+    'Jitf'
+    'ksb_p'
+    'ksb_pp'
+    'kdb_p'
+    'kdbh_pp'
+    'kdbc_pp'
+    'kassb'
+    'kdissb'
+    'kwee_p'
+    'kwee_pp'
+    'k25_p'
+    'k25_pp'
+    'kafb'
+    'kifb'
+    'Jafb'
+    'Jifb'
+    'ksa_p'
+    'ksa_pp'
+    'kda_p'
+    'kda_pp'
+    'kda_ppp'
+    'kassa'
+    'kdissa'
+    'ksi_p'
+    'ksi_pp'
+    'kdi_p'
+    'kdia_pp'
+    'kdib_pp'
+    'kdid_pp'
+    'kdie_pp'
+    'k14di'
+    'kafi'
+    'kifi_p'
+    'kifib_pp'
+    'Jafi'
+    'Jifi'
+    'kaie'
+    'kiie'
+    'Jaie'
+    'Jiie'
+    'ks20_p'
+    'ks20_pp'
+    'n20'
+    'J20'
+    'kd20'
+    'ka20'
+    'ki20'
+    'Ja20'
+    'Ji20'
+    'kah1_p'
+    'kah1_pp'
+    'kih1_p'
+    'kih1a_pp'
+    'kih1b_pp'
+    'kih1d_pp'
+    'kih1e_pp'
+    'Jah1'
+    'Jih1'
+    'kawee_p'
+    'kawee_pp'
+    'kiwee_p'
+    'kiwee_pp'
+    'Jawee'
+    'Jiwee'
+    'ka25_p'
+    'ka25_pp'
+    'ki25_p'
+    'ki25_pp'
+    'Ja25'
+    'Ji25'
+    'KEZ'
+    'ks21_p'
+    'ks21_pp'
+    'kd21_p'
+    'kass21d'
+    'kass21e'
+    'kdiss21d'
+    'kdiss21e'
+    'ks25'
+    'kd25'
+    'Kp53b'
+    'Kp53a'
+    'ki25_ppp'
+    'ksh1'
+    'ksAPC'
+    'kswee'
+    'ksTFB'
+    'ksTFE'
+    'ksTFI'
+    'ksd'
+    'kdd'
+    't_d'
+    't_r'
+
+clc
+mexmodel('states')
+
+ans =
+
+  31×1 <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+    'CycD'
+    'CycA'
+    'CycB'
+    'pB'
+    'CycE'
+    'APC'
+    'APCP'
+    'CKI'
+    'BCKI'
+    'pBCKI'
+    'Cdc20i'
+    'Cdc20A'
+    'Cdh1'
+    'Cdh1i'
+    'TriA'
+    'TriE'
+    'Wee1'
+    'Wee1i'
+    'Cdc25'
+    'Cdc25i'
+    'TFB'
+    'TFBi'
+    'TFE'
+    'TFEi'
+    'TFI'
+    'TFIi'
+    'p21'
+    'TriD21'
+    'TriA21'
+    'TriB21'
+    'TriE21'
+
+clc
+open m2m_load.m
+clc
+cd ..
+cd ..
+clc
+m2m_test
