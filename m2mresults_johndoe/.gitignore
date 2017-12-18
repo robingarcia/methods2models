@@ -3,6 +3,4 @@
 # data file 
 data.mat
 *.mat
-#*.txt
-*.log
-diary
+*.txt

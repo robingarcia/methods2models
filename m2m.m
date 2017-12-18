@@ -1,129 +1,104 @@
-function [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
+function [m2m_result] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % This function calculates the best measurement combination 
 % 
 % 
 % [Syntax]
-% [results] = m2m
+% [results] = m2m(timeF,N,snaps,sig,mexmodel,doplots)
 % 
 % [INPUT]
-% See:                userinput
+% timeF                 Simulation time
+% N                     Number of cells
+% snaps                 Number of snapshots
+% sig                   Sigma (for error model)
+% mexmodel              MEX file of your model
+% doplots               0=no, 1=yes
 % 
 % [OUTPUT]
-% results:            struct: Results
+% results:              struct: Results
 %
 % [EXAMPLE]
-% Pending
-profile on
-addpath(genpath('~/methods2models'));
-statenames = cell(1,32);
-load('~/methods2models/datasets/toettcher_statenames.mat');
+% results = m2m(0:800,500,2,0.02,'model_toettcher2008MEX',0)
+%
+% [Structure]
+% m2m_Toolbox
+% |-- M2M_analysis
+% |   |-- M2Marea
+% |   |   |-- M2M_combo_wanderlust
+% |   |   |   |-- PathfromWanderlust
+% |   |   |   |   |-- getMeanWanderlustPath
+% |   |   |   |   `-- wanderlust
+% |   |   |   |-- sbistFACS2PathDensity
+% |   |   |   `-- sbistFACSDensityTrafo
+% |   |   `-- moving_average
+% |   |-- M2M_combinatorics
+% |   |   |-- M2M_Cmatrix
+% |   |   |-- sbistFACS2PATHDensity
+% |   |   `-- sbistFACSDensityTrafo
+% |   |-- M2M_functions
+% |   |   |-- moving_average
+% |   |   `-- normdata
+% |   |-- M2M_pre_wanderlust
+% |   |   `-- PathfromWanderlust
+% |   |       |-- getMeanWanderlustPath
+% |   |       `-- wanderlust
+% |   `-- M2M_twocombo
+% `-- M2M_data_generation
+%     |-- M2M_DNAsimulation
+%     |-- M2M_duration
+%     |-- M2M_error_model
+%     |-- M2M_lognrnd
+%     |-- M2M_mexmodel
+%     |-- M2M_purge
+%     |-- M2M_start
+%     `-- M2M_timepoints
 
-% kk
-% mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
-%Check inputs
-if exist('timeF','var')
-    input.tF = timeF;
-else
-    timeF = 0:1000;%linspace(0,1000,1*1000);%0:3000;
-    input.tF = timeF;
-end
-
-if exist('N','var')
-    input.N = N;
-else
-    N = 100;
-    input.N = N;
-end
-
-if exist('snaps','var')
-    input.snaps = snaps;
-else 
-    snaps = 20;
-    input.snaps = snaps;
-end
-
-if exist('sig','var')
-    input.sig = sig;
-else 
-    sig = 0.1;
-    input.sig = sig;
-end
-
-if exist('mexmodel','var')
-    mexmodel = eval(sprintf('@%s',mexmodel)); %!!!
-    input.mexmodel = mexmodel;
-else
-    mexmodel = eval(sprintf('@%s','model_toettcher2008MEX'));
-    input.mexmodel = mexmodel;
-end
-
-if exist('doplots','var')
-    input.doplots = doplots;
-else
-    doplots = 0;
-    input.doplots = doplots;
-end
-
-% mexmodel = eval(sprintf('@%s',mexmodelname)); %!!!
-input = ([]);
-input.tF = timeF;
-input.N = N;
-input.snaps = snaps;
-input.sig = sig;
-input.mexmodel = mexmodel;
-%input.doplots = doplots;
-
-%% Model generation -------------------------------------------------------
-%M2M_mexmodel(input);
+% profile on
+time_m2m=tic;
+diary;
+m2m_init;
+addpath(genpath(workpath));
+addpath(genpath([storepath '/' 'm2mresults_' username]));
+cd([storepath '/' 'm2mresults_' username '/output']);
+filename = datestr(now,30);
+m2m_load
+m2m_result=([]);
+m2m_result.filename=filename;
+% workpath='~/methods2models';%Root directory of the m2m-toolbox
+% addpath(genpath(workpath));
+% statenames = cell(1,32);
+statenames = mexmodel('states')';
+statenames{1,end+1}='DNA';
+% load toettcher_statenames.mat;
+% load('~/methods2models/datasets/toettcher_statenames.mat');
+input.statenames=statenames;
+m2m_result.workpath=workpath;
+m2m_result.storepath=storepath;
+m2m_result.username=username;
+% m2m_load
+m2m_result.input=input;
 %% Data generation --------------------------------------------------------
-[ic,data,errordata,y_0,t_period,N,snaps,time] = M2M_data_generation(timeF,N,snaps,sig,mexmodel);
-minmax(t_period(1,:))
-minmax(t_period(2,:))
-minmax(t_period(3,:))
-minmax(t_period(4,:))
-
-%% Purge datasets ---------------------------------------------------------
-[errordata,~,nzero] = M2M_purge(errordata);
-[ic, ~] = M2M_purge(ic);
-[y_0, ~] = M2M_purge(y_0);
-statenames = statenames(nzero);
-
-%% Wanderlust analysis ----------------------------------------------------
-[w_data,w_path] = pre_wanderlust(errordata,y_0,statenames,t_period);
-
-
-%% Pre computation --------------------------------------------------------
-for j = 1% 1 measurement output
-summary = M2M_combinatorics(w_data,w_path,t_period,ic,errordata,statenames,j);
-end
-
-%% Functions and new datapoints -------------------------------------------
-[y,f] = M2M_functions(summary,ic,N,snaps);
-
-%% 2 combinations ---------------------------------------------------------
-[results_save] = M2M_twocombo(y,ic,N,snaps);
-
-%% New approach -----------------------------------------------------------
-[best_comb] = M2Marea(results_save,errordata,y,ic,y_0,t_period,statenames);
-B = zeros(24,1);
-for i = 1:24
-    B(i,1)=best_comb{i,5};
-end
-%% Plots ------------------------------------------------------------------
-% M2M_plot
-%% Save area --------------------------------------------------------------
-results = ([]);
-results.names = statenames;
-results.ic = ic;
-results.time = time;
-results.N = N;
-results.snaps = snaps;
-results.data = data;
-results.errordata = errordata;
-results.y_0 = y_0;
-results.t_period = t_period;
-results.f = f;
-results.best_comb = best_comb;
-results.B = B;
-results.input = input;
+disp('Data generation ---------------------------------------------------')
+time_datagen=tic;
+[input,storage] = M2M_data_generation(input);
+m2m_result.data_gen=storage;
+toc(time_datagen);
+%% -----------------------Analysis (stable)----------------------------------------
+disp('Analysis ----------------------------------------------------------')
+time_analysis=tic;
+pre_results=M2M_analysis(input,storage);
+m2m_result.analysis=pre_results;
+toc(time_analysis);
+%% ----- Analysis (unstable) ------------------------------------------------------
+% best = M2M_analysis2(input,storage);
+% m2m_result.best=best;
+%% Result processing section ------------------------------------------------------
+m2m_processing
+%% Save the results
+m2m_save;
+%% Print the result
+Result = horzcat(add_combi,add_area);
+disp(table(Result)); %Display the result
+m2m_thankyou %Thank you message
+diary([filename '.log']);
+toc(time_m2m);
 end
